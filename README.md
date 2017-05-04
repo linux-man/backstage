@@ -26,7 +26,7 @@ Move nodes: Left click + drag
 
 Select several nodes: Control + Left click
 
-Connect nodes: Right click + drag + drop
+Connect nodes: Right click + drag + drop (maximum of 4 connections from node)
 
 Delete connection: Right click over the connection semi-circle
 
@@ -38,13 +38,17 @@ Resize window: drag resize button at top-right
 
 Change tracks number: plus/minus buttons
 
-There are 2 play/pause buttons. The upper is the global play/pause. It starts all the SELECTED nodes.
+There are 2 play/pause buttons. The upper is the global play/pause. It starts all the SELECTED nodes. It pauses all the PLAYING nodes. Same goes the the Stop button.
 
-The bottom buttons only affect the last selected node. This way you can start playing or stop something during the show.
+The bottom buttons only affect the last selected node. This way you can start or stop playing something during the show. The "Fast Forward" button gives a way to end and jump to the next connected nodes.
+
+At the "Gear" submenu you can compress your project to export to other computer, change the default duration of new Text, Rect and Image nodes (starts at 5 seconds) and change theme.
+
+The "Eye" is for on/off fullscreen.
 
 Accepted formats: jpg, png, gif, bmp, avi, mp4, mov, ogg, mkv, wav, mp3, au, aiff.
 
-There could be some more explanations (I should write a wiki), but for now, play with it. It's easy! Really!!
+There could be some more explanations (I really should write a wiki), but for now, play with it. It's easy! Really!!
 
 ### Requirements
 

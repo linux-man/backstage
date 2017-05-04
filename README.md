@@ -54,17 +54,17 @@ Resize window: drag resize button at top-right
 
 Change tracks number: plus/minus buttons
 
-There are 2 play/pause buttons. The upper is the global play/pause. It starts all the SELECTED nodes. It pauses all the PLAYING nodes. Same goes the the Stop button.
+There are 2 play/pause buttons. The upper is the global play/pause. It starts all the SELECTED nodes. It pauses all the PLAYING nodes. Same goes for the Stop button.
 
-The bottom buttons only affect the last selected node. This way you can start or stop playing something during the show. The "Fast Forward" button gives a way to end and jump to the next connected nodes.
+The bottom buttons only affect the last selected node. This way you can start or stop playing something during the show. The "Fast Forward" button allows to end and jump to the next connected nodes.
 
-At the "Gear" submenu you can compress your project to export to other computer, change the default duration of new Text, Rect and Image nodes (starts at 5 seconds) and change theme.
+At the "Gear" submenu you can compress your project to export to other computer, change the default duration of new Text, Rect and Image nodes (default is 5 seconds) and change theme.
 
-The "Eye" is for on/off fullscreen.
+The "Eye" turn fullscreen on/off. You can't do that when playing.
 
 Accepted formats: jpg, png, gif, bmp, avi, mp4, mov, ogg, mkv, wav, mp3, au, aiff.
 
-There could be some more explanations (I really should write a wiki), but for now, play with it. It's easy! Really!!
+There are more to tell (I really should write a wiki), but for now, play with it. It's easy! Really!!
 
 ### Requirements
 
@@ -76,7 +76,7 @@ Codecs
 
 Main window can be maximized on Windows. It shouldn't be. The GLWindow is misbehaving.
 
-Java has a tendency to crash when a monitor is connected/disconnected. Looks like a long time [bug](https://www.google.pt/search?q=sun.awt.image.BufImgSurfaceData+cannot+be+cast+to+sun.java2d.xr.XRSurfaceData).
+On Linux, Java has a tendency to crash when a monitor is connected/disconnected. Looks like a long time [bug](https://www.google.pt/search?q=sun.awt.image.BufImgSurfaceData+cannot+be+cast+to+sun.java2d.xr.XRSurfaceData).
 
 Processing Video uses Gstreamer 0.10. It will be nice to install [gstreamer0.10-plugins-ugly](https://launchpad.net/ubuntu/xenial/+package/gstreamer0.10-plugins-ugly) and [libx264-146](https://launchpad.net/ubuntu/xenial/+package/libx264-146) on Debian/Ubuntu/Mint.
 

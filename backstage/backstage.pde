@@ -66,6 +66,7 @@ void setup() {
   createGUI();
   initializeCp();
   initializeDrop();
+  if(args != null) loadProject(new File(args[0]));
 }
 
 void draw() {

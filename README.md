@@ -16,13 +16,29 @@ The Control Panel IS NOT a timeline. It's a media manager where you organize and
 
 There are 6 types.
 
-Link, Text and Rect are created using the menu.
+Link (Arrow), Text (T) and Rect (Square) are created using the menu.
 
 To add Image, Audio and Video you can also drag and drop the wanted files.
 
 Initially you have 4 tracks. It's important to understand that at each time only one node can be active (playing) on each track.
 
+This can be annoying but is also usefull. One example:
+
+You want to do a slideshow with music. Drop a audio file on the first (bottom) track, then drop your 100 images on another track (leave the audio track free). The hard part is to connect all images, one after another.
+
+You want to start the music at the first image. Create a Link node, put it before the audio. It's the start node. Connect it to the audio and to the first image.
+
+Open the audio properties. Choose loop.
+
+How to stop the audio after the last image? Just connect the last image to another link node and put it on the first track. When the link "starts" the audio is stopped. If nothing is playing the show ends. If you want to stop at the end of the music, do the opposite. If you want a never ending slideshow, connect the last image to the first.
+
+Select the first Link node. Press play.
+
+### Interface
+
 Move nodes: Left click + drag
+
+Move around: Left click + drag on empty space
 
 Select several nodes: Control + Left click
 

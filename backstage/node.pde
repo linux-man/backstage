@@ -170,7 +170,7 @@ class Node {
     cp.textAlign(CENTER, CENTER);
     cp.fill(0);
     cp.text(label, x + w / 2, y + h / 4);
-    cp.image(icon, x + 16, y + h / 2);println("->" + notes + "<-");
+    cp.image(icon, x + 16, y + h / 2);
     if(!controlPanel.isVisible() && index == nodes.size() - 1 && mouseOver && notes.length() > 0) {
       cp.fill(color(red(overColor), green(overColor), blue(overColor), 232));
       cp.rect(cp.width - 240 - translation, 24, 240, 160);

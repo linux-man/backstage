@@ -14,6 +14,10 @@
  * =========================================================
  */
 
+synchronized public void cp_key(PApplet appc, GWinData data, KeyEvent kevent) { //_CODE_:cp:599046:
+  cp.key = cp.keyCode == ESC ? 0 : cp.key;
+} //_CODE_:cp:769550:
+
 public void cp_close(GWindow window) { //_CODE_:cp:952494:
   prefs.putInt("Width", cp.width);
   prefs.putInt("Scheme", colorScheme);
@@ -231,6 +235,7 @@ public void createGUI(){
   cp = GWindow.getWindow(this, "Control Panel", 0, 0, 600, 296, JAVA2D);
   cp.noLoop();
   cp.setActionOnClose(G4P.CLOSE_WINDOW);
+  cp.addKeyHandler(this, "cp_key");
   cp.addOnCloseHandler(this, "cp_close");
   buttonAddMedia = new GButton(cp, 96, 96, 48, 24);
   buttonAddMedia.setIcon("media.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);

@@ -85,3 +85,7 @@ void end() {
 void movieEvent(Movie m) {
   m.read();
 }
+
+void keyPressed(){
+  key = keyCode == ESC ? 0 : key;
+}

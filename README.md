@@ -76,6 +76,8 @@ Codecs
 
 Main window can be maximized on Windows. It shouldn't be. The GLWindow is misbehaving.
 
+If you install Backstage you can open a project by double clicking the file. On Windows, a console window is opened. You can close it. That happens because Processing apps must be run on their working directories. I couldn't find a registry key to force that, so I had to open a command line and run Backstage after a "change dir". If someone knows how to avoid this please tell me.
+
 On Linux, Java has a tendency to crash when a monitor is connected/disconnected. Looks like a long time [bug](https://www.google.pt/search?q=sun.awt.image.BufImgSurfaceData+cannot+be+cast+to+sun.java2d.xr.XRSurfaceData).
 
 Processing Video uses Gstreamer 0.10. It will be nice to install [gstreamer0.10-plugins-ugly](https://launchpad.net/ubuntu/xenial/+package/gstreamer0.10-plugins-ugly) and [libx264-146](https://launchpad.net/ubuntu/xenial/+package/libx264-146) on Debian/Ubuntu/Mint.
@@ -83,6 +85,8 @@ Processing Video uses Gstreamer 0.10. It will be nice to install [gstreamer0.10-
 Installed codecs are really important. On Windows you can try [K-Lite Codec Pack](https://www.codecguide.com/download_kl.htm)
 
 Ogg audio files are loaded by the Video library. You might have to "play" the video outside the window (choosing big or negative left/top values and small width/height).
+
+Sometimes at start the theme is not correctly applied.
 
 ### Acknowledgements:
 

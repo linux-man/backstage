@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Backstage
+Comment=Multimedia show manager
+Exec=/opt/backstage/backstage
+Terminal=false
+Type=Application
+Icon=backstage
+Categories=AudioVideo;
+MimeType=application/stage

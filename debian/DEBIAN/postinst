@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Link to the binary
+ln -sf '/opt/backstage/backstage' '/usr/local/bin/backstage'

@@ -4,7 +4,7 @@ License: GPL-3.0
 Vendor: Caldas Lopes <joao.caldas.lopes@gmail.com>
 Architecture: amd64
 Maintainer: Caldas Lopes <joao.caldas.lopes@gmail.com>
-Depends: openjdk8-jre | oracle-java8-installer, libgstreamer0.10-0, libgstreamer-plugins-base0.10-0
+Depends: openjdk-8-jre | oracle-java8-installer, libgstreamer0.10-0, libgstreamer-plugins-base0.10-0
 Section: Contrib
 Priority: extra
 Homepage: https://github.com/linux-man/backstage#readme

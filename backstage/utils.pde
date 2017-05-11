@@ -14,9 +14,19 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
+//OPENGL
+//*
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.newt.Screen;
 import com.jogamp.newt.MonitorDevice;
+
+int getPrimaryWidth() {
+  return Screen.getAllScreens().iterator().next().getPrimaryMonitor().getCurrentMode().getSurfaceSize().getResolution().getWidth();
+}
+
+int getPrimaryHeight() {
+  return Screen.getAllScreens().iterator().next().getPrimaryMonitor().getCurrentMode().getSurfaceSize().getResolution().getHeight();
+}
 
 MonitorDevice secondaryDevice() {
   try {
@@ -27,14 +37,6 @@ MonitorDevice secondaryDevice() {
       System.err.println("Get monitor devices error");
       return null;
   }
-}
-
-int getPrimaryWidth() {
-  return Screen.getAllScreens().iterator().next().getPrimaryMonitor().getCurrentMode().getSurfaceSize().getResolution().getWidth();
-}
-
-int getPrimaryHeight() {
-  return Screen.getAllScreens().iterator().next().getPrimaryMonitor().getCurrentMode().getSurfaceSize().getResolution().getHeight();
 }
 
 void switchFullScreen() {
@@ -53,6 +55,38 @@ void switchFullScreen() {
     buttonShow.setIcon("eye_slash.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
   }
 }
+//*/
+
+//JAVA2D
+/*
+import java.awt.GraphicsEnvironment;
+import java.awt.GraphicsDevice;
+
+GraphicsDevice[] screens() {
+  GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+  return env.getScreenDevices();
+}
+
+int getPrimaryWidth() {
+  return screens()[0].getDisplayMode().getWidth();
+}
+
+int getPrimaryHeight() {
+  return screens()[0].getDisplayMode().getHeight();
+}
+
+void switchFullScreen() {
+  if(((SmoothCanvas) (surface).getNative()).getFrame().getState() == 0) {
+    ((SmoothCanvas) (surface).getNative()).getFrame().setState(1);
+    buttonShow.setIcon("eye.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
+  }
+  else {
+    ((SmoothCanvas) (surface).getNative()).getFrame().setState(0);
+    buttonShow.setIcon("eye_slash.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
+  }
+  cp.getSurface().setAlwaysOnTop(((SmoothCanvas) (surface).getNative()).getFrame().getState() == 0 && screens().length == 1);
+}
+//*/
 
 boolean isDim(String s) {
   if(s.endsWith("%")) {

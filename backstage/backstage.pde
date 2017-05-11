@@ -37,8 +37,15 @@ GTabManager tm;
 PApplet main = this;
 
 void settings() {
+//OPENGL
+//*
   size(640, 480, P2D);
   //PJOGL.setIcon("stage.png");
+//*/
+//JAVA2D
+/*
+  fullScreen(2);
+//*/
 }
 
 void setup() {
@@ -53,7 +60,6 @@ void setup() {
   screenHeight = getPrimaryHeight();
   projectPath = Paths.get(System.getProperty("user.home")).resolve("presentation.stage");
   prevProjectPath = projectPath;
-  surface.setLocation(screenWidth - 640, screenHeight - 480);
   iconImage = loadImage("picture_w.png");
   iconVideo = loadImage("media_w.png");
   iconAudio = loadImage("audio_w.png");
@@ -67,6 +73,14 @@ void setup() {
   initializeCp();
   initializeDrop();
   if(args != null) loadProject(new File(args[0]));
+//OPENGL
+//*
+  surface.setLocation(screenWidth - 640, screenHeight - 480);
+//*/
+//JAVA2D
+/*
+  switchFullScreen();
+//*/
 }
 
 void draw() {

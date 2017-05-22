@@ -314,5 +314,5 @@ void updateTime(Node last) {
   float xi = buttonNodeNext.getX() + buttonNodeNext.getWidth();
   float xf = cp.width - buttonNodeSlider.getWidth();
   last.presentTime = int((buttonNodeSlider.getX() - xi) / (xf - xi) * last.endTime);
-  if(last.presentTime > last.endTime - 500) last.presentTime -= 500;//Prevent strange behaviour when dragging/clicking slider at the end
+  if(last.presentTime > last.endTime - 100) last.presentTime -= 100;//Prevent strange behaviour when dragging/clicking slider at the end
 }

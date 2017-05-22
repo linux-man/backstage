@@ -1,5 +1,7 @@
 # Backstage
 
+![Screenshot](https://raw.githubusercontent.com/linux-man/backstage/master/screenshot.jpg)
+
 #### License [GPL-3+](LICENSE)
 
 if you find bugs, go to [github](https://github.com/linux-man/backstage/issues).

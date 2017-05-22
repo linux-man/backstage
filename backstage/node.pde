@@ -226,7 +226,7 @@ class Node {
   
   void gotoEndPause() {
     onEndPause = true;
-    presentTime = endTime - 1;
+    presentTime = endTime - 100;
     turn();
   }
 

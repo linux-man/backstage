@@ -125,15 +125,19 @@ class Node {
       float dif =  min(200, max(20, x1 - x2 + abs(y1 - y2)));
       cp.bezier(x1, y1, x1 + dif, y1, x2 - dif, y2, x2, y2);
     }
-    for(int n = 0; n < next.length; n++) {
-      int x1 = x + w + h / next.length / 2;
-      int y1 = round(y + (n + 1 / 2.0) * h  / next.length);
-      int x2 = nodes.get(next[n]).x;
-      int y2 = nodes.get(next[n]).y + nodes.get(next[n]).h / 2;
-      float dif =  min(200, max(20, x1 - x2 + abs(y1 - y2)));
-      if(selected) cp.strokeWeight(3);
-      else cp.strokeWeight(2);
-      cp.bezier(x1, y1, x1 + dif, y1, x2 - dif, y2, x2, y2);
+    for(int n = next.length - 1; n >= 0; n--) {
+      try {
+        int x1 = x + w + h / next.length / 2;
+        int y1 = round(y + (n + 1 / 2.0) * h  / next.length);
+        int x2 = nodes.get(next[n]).x;
+        int y2 = nodes.get(next[n]).y + nodes.get(next[n]).h / 2;
+        float dif =  min(200, max(20, x1 - x2 + abs(y1 - y2)));
+        if(selected) cp.strokeWeight(3);
+        else cp.strokeWeight(2);
+        cp.bezier(x1, y1, x1 + dif, y1, x2 - dif, y2, x2, y2);
+      } catch (Exception e) {
+        removeConnector(n);
+      }
     }
     cp.strokeWeight(1);
     cp.fill(fillColor);

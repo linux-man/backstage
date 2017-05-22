@@ -123,6 +123,7 @@ class Text extends Node {
     dListEndTransition.setItems(t, 0);
     dListBeginTransition.setSelected(beginTransitionType);
     dListEndTransition.setSelected(endTransitionType);
+    textArea.setText(text);
     dListTextAlignHor.setSelected(textAlignHor);
     dListTextAlignVer.setSelected(textAlignVer);
     textTextSize.setText(dimToString(textSize));

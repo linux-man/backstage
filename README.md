@@ -10,7 +10,7 @@ Binaries will be at [Releases](https://github.com/linux-man/backstage/releases).
 
 This program was born from the tiredness of using Powerpoint/Media player/Quicktime/VLC/Image viewer/whatever... to manage music, image and video projection.
 
-You got a Control Panel at the primary display and do the projection at the secondary.
+You use a Control Panel on the primary display and do the projection at the secondary.
 
 The Control Panel IS NOT a timeline. It's a media manager where you organize and connect the different media - the Nodes.
 
@@ -26,7 +26,7 @@ This can be annoying but is also usefull. One example:
 
 You want to do a slideshow with music. Drop a audio file on the first (bottom) track, then drop your 100 images on another track (leave the audio track free). The hard part is to connect all images, one after another.
 
-You want to start the music at the first image. Create a Link node, put it before the audio. It's the start node. Connect it to the audio and to the first image.
+To start the music at the first image, create a Link node, put it before the audio. It's the start node. Connect it to the audio and to the first image.
 
 Open the audio properties. Choose loop.
 

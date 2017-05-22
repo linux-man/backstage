@@ -104,6 +104,7 @@ void saveProject(File file) {
           jsonNode.setBoolean("centered", ((Rect)no).centered);
           jsonNode.setFloat("nX", ((Rect)no).nX); jsonNode.setFloat("nY", ((Rect)no).nY); jsonNode.setFloat("nW", ((Rect)no).nW); jsonNode.setFloat("nH", ((Rect)no).nH);
           jsonNode.setFloat("beginTransitionDuration", ((Rect)no).beginTransitionDuration); jsonNode.setFloat("endTransitionDuration", ((Rect)no).endTransitionDuration);
+          jsonNode.setInt("beginTransitionType", ((Rect)no).beginTransitionType); jsonNode.setInt("endTransitionType", ((Rect)no).endTransitionType);
           jsonNode.setInt("bColor", ((Rect)no).bColor);
           break;
         case "Text":

@@ -99,7 +99,7 @@ synchronized public void cp_draw(PApplet appc, GWinData data) {
         if(!draggingSlider) {
           float xi = buttonNodeNext.getX() + buttonNodeNext.getWidth();
           float xf = cp.width - buttonNodeSlider.getWidth();
-          buttonNodeSlider.moveTo(xi + float(last.presentTime) / last.endTime * (xf - xi), buttonNodeSlider.getY());
+          if(last.endTime != 0) buttonNodeSlider.moveTo(xi + float(last.presentTime) / last.endTime * (xf - xi), buttonNodeSlider.getY());
         }
       }
       else {

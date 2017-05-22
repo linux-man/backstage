@@ -200,7 +200,7 @@ class Node {
   void finalizeTurn() {
     onEndPause = false;
     presentTime = 0;
-    if(beginPaused) paused = true;
+    paused = beginPaused;
     prevMillis = millis();
     playing = true;
   }
@@ -211,28 +211,31 @@ class Node {
   }
 
   void finalizePlay() {
-    if(!paused) presentTime += millis() - prevMillis;
-    prevMillis = millis();
-    if(presentTime >= endTime) {
-      if(loop && !onEndPause) presentTime = 0;
-      else end(false);
+    int presentMillis = millis();
+    if(!paused) {
+      presentTime += presentMillis - prevMillis;
+      if(presentTime >= endTime) {
+        if(loop && !onEndPause) presentTime = 0;
+        else end(false);
+      }
     }
+    prevMillis = presentMillis;
   }
 
   void end(boolean fullStop) {
-    if(!fullStop && endPaused && !onEndPause) gotoEndPause();
+    if(!fullStop && endPaused && !onEndPause) gotoEndPause(); //<>//
     else finalizeEnd(fullStop);
   }
   
   void gotoEndPause() {
     onEndPause = true;
-    presentTime = endTime - 100;
     turn();
   }
 
   void finalizeEnd(boolean fullStop) {
     playing = false;
     paused = false;
+    onEndPause = false;
     stage[track] = null;
     if(!fullStop) {
       for(int n: next) {

@@ -123,16 +123,13 @@ class Video extends Node {
     image(video, x, y, w, h);
 
     finalizePlay();
-    if(presentTime == 0 && loop) video.jump(beginAt);
+    if(loop && presentTime == 0 && !paused) video.jump(beginAt);
   }
 
-  void end(boolean fullStop) {
-    if(endPaused && !onEndPause) gotoEndPause();
-    else {
-      video.jump(beginAt);
-      video.stop();
-      finalizeEnd(fullStop);
-    }
+  void finalizeEnd(boolean fullStop) {
+    video.jump(beginAt);
+    video.stop();
+    super.finalizeEnd(fullStop);
   }
 
   void load() {
@@ -158,64 +155,64 @@ class Video extends Node {
     labelPath.setVisible(true);
     textPath.setVisible(true);
     labelLabel.moveTo(8, 48);
-    textLabel.moveTo(64, 48);
+    textLabel.moveTo(72, 48);
     labelX.setVisible(true);
     labelX.moveTo(8, 72);
     textX.setVisible(true);
-    textX.moveTo(64, 72);
+    textX.moveTo(72, 72);
     labelY.setVisible(true);
     labelY.moveTo(8, 96);
     textY.setVisible(true);
-    textY.moveTo(64, 96);
+    textY.moveTo(72, 96);
     labelW.setVisible(true);
-    labelW.moveTo(120, 72);
+    labelW.moveTo(128, 72);
     textW.setVisible(true);
-    textW.moveTo(176, 72);
+    textW.moveTo(192, 72);
     labelH.setVisible(true);
-    labelH.moveTo(120, 96);
+    labelH.moveTo(128, 96);
     textH.setVisible(true);
-    textH.moveTo(176, 96);
+    textH.moveTo(192, 96);
     cboxCentered.setVisible(true);
     cboxCentered.moveTo(8, 120);
     cboxAspectRatio.setVisible(true);
-    cboxAspectRatio.moveTo(120, 120);
+    cboxAspectRatio.moveTo(128, 120);
     buttonBegin.setVisible(true);
     buttonBegin.moveTo(8, 144);
     textBegin.setVisible(true);
-    textBegin.moveTo(64, 144);
+    textBegin.moveTo(72, 144);
     buttonEnd.setVisible(true);
-    buttonEnd.moveTo(120, 144);
+    buttonEnd.moveTo(128, 144);
     textEnd.setVisible(true);
-    textEnd.moveTo(176, 144);
+    textEnd.moveTo(192, 144);
     labelDuration.moveTo(8, 168);
     textDuration.setEnabled(false);
-    textDuration.moveTo(64, 168);
+    textDuration.moveTo(72, 168);
     cboxLoop.setVisible(true);
-    cboxLoop.moveTo(120, 168);
+    cboxLoop.moveTo(128, 168);
     labelVolume.setVisible(true);
     labelVolume.moveTo(8, 192);
     sliderVolume.setVisible(true);
-    sliderVolume.moveTo(64, 192);
+    sliderVolume.moveTo(72, 192);
     buttonColor.setVisible(false);
     sketchColor.setVisible(false);
-    cboxBeginPaused.moveTo(232, 48);
-    cboxEndPaused.moveTo(344, 48);
+    cboxBeginPaused.moveTo(248, 48);
+    cboxEndPaused.moveTo(368, 48);
     cboxBeginTransition.setVisible(true);
-    cboxBeginTransition.moveTo(232, 72);
+    cboxBeginTransition.moveTo(248, 72);
     cboxEndTransition.setVisible(true);
-    cboxEndTransition.moveTo(344, 72);
+    cboxEndTransition.moveTo(368, 72);
     labelBeginTransition.setVisible(true);
-    labelBeginTransition.moveTo(232, 96);
+    labelBeginTransition.moveTo(248, 96);
     textBeginTransition.setVisible(true);
-    textBeginTransition.moveTo(288, 96);
+    textBeginTransition.moveTo(312, 96);
     labelEndTransition.setVisible(true);
-    labelEndTransition.moveTo(344, 96);
+    labelEndTransition.moveTo(368, 96);
     textEndTransition.setVisible(true);
-    textEndTransition.moveTo(400, 96);
+    textEndTransition.moveTo(432, 96);
     dListBeginTransition.setVisible(true);
-    dListBeginTransition.moveTo(232, 120);
+    dListBeginTransition.moveTo(248, 120);
     dListEndTransition.setVisible(true);
-    dListEndTransition.moveTo(344, 120);
+    dListEndTransition.moveTo(368, 120);
     labelText.setVisible(false);
     textArea.setVisible(false);
     labelTextAlign.setVisible(false);
@@ -225,8 +222,8 @@ class Video extends Node {
     textTextSize.setVisible(false);
     labelTextFont.setVisible(false);
     dListTextFont.setVisible(false);
-    labelNotes.moveTo(232, 144);
-    notesArea.moveTo(232, 160);
+    labelNotes.moveTo(248, 144);
+    notesArea.moveTo(248, 160);
     tm.addControls(textPath, textLabel, textX, textY, textW, textH, textBegin, textEnd, textBeginTransition, textEndTransition, notesArea);
   }
   

@@ -193,12 +193,12 @@ class Node {
   }
 
   void initializeTurn() {
+    paused = false;
     if(stage[track] != null) stage[track].end(true); 
     stage[track] = this;
   }
   
   void finalizeTurn() {
-    onEndPause = false;
     presentTime = 0;
     paused = beginPaused;
     prevMillis = millis();
@@ -218,6 +218,7 @@ class Node {
         if(loop && !onEndPause) presentTime = 0;
         else end(false);
       }
+      onEndPause = false;
     }
     prevMillis = presentMillis;
   }
@@ -229,6 +230,7 @@ class Node {
   
   void gotoEndPause() {
     onEndPause = true;
+    presentTime = endTime;
     turn();
   }
 

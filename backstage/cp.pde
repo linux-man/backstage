@@ -187,8 +187,8 @@ synchronized public void cp_mouse(PApplet appc, GWinData data, MouseEvent mevent
         if(!last.playing) return;
         updateTime(last);
         switch(last.type) {
-          case "Video": ((Video)last).video.jump(((Video)last).beginAt + ((Video)last).presentTime/ 1000.0); break;
-          case "Audio": ((Audio)last).audio.cue(int(((Video)last).beginAt * 1000 + ((Video)last).presentTime)); break;
+          case "Video": ((Video)last).video.jump(((Video)last).beginAt + last.presentTime/ 1000.0); break;
+          case "Audio": ((Audio)last).audio.cue(int(((Audio)last).beginAt * 1000 + last.presentTime)); break;
         } 
       }
       if(dragging) {
@@ -314,5 +314,5 @@ void updateTime(Node last) {
   float xi = buttonNodeNext.getX() + buttonNodeNext.getWidth();
   float xf = cp.width - buttonNodeSlider.getWidth();
   last.presentTime = int((buttonNodeSlider.getX() - xi) / (xf - xi) * last.endTime);
-  if(last.presentTime > last.endTime - 100) last.presentTime -= 100;//Prevent strange behaviour when dragging/clicking slider at the end
+  if(last.presentTime > last.endTime - 1000) last.presentTime = last.endTime - 1000;//Prevent strange behaviour when dragging/clicking slider at the end
 }

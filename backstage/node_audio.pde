@@ -60,19 +60,16 @@ class Audio extends Node {
     else audio.setGain(volumeToDecibel(volume));
 
     finalizePlay();
-    if(presentTime == 0 && loop) audio.cue(int(beginAt * 1000));
+    if(loop && presentTime == 0 && !paused) audio.play(int(beginAt * 1000));
   }
 
-  void end(boolean fullStop) {
-    if(endPaused && !onEndPause) gotoEndPause();
-    else {
-      audio.setGain(-144);//Sometimes audio just keep playing! (when you drag slider/click at the end)
-      audio.cue(int(beginAt * 1000));
-      audio.pause();
-      finalizeEnd(fullStop);
-    }
+  void finalizeEnd(boolean fullStop) {
+    audio.setGain(-144);//Sometimes audio just keep playing! (when you drag slider/click at the end)
+    audio.cue(int(beginAt * 1000));
+    audio.pause();
+    super.finalizeEnd(fullStop);
   }
-  
+
   void load() {
     super.load();
     textPath.setText(path);
@@ -85,7 +82,7 @@ class Audio extends Node {
     labelPath.setVisible(true);
     textPath.setVisible(true);
     labelLabel.moveTo(8, 48);
-    textLabel.moveTo(64, 48);
+    textLabel.moveTo(72, 48);
     labelX.setVisible(false);
     textX.setVisible(false);
     labelY.setVisible(false);
@@ -99,36 +96,36 @@ class Audio extends Node {
     buttonBegin.setVisible(true);
     buttonBegin.moveTo(8, 72);
     textBegin.setVisible(true);
-    textBegin.moveTo(64, 72);
+    textBegin.moveTo(72, 72);
     buttonEnd.setVisible(true);
-    buttonEnd.moveTo(120, 72);
+    buttonEnd.moveTo(128, 72);
     textEnd.setVisible(true);
-    textEnd.moveTo(176, 72);
+    textEnd.moveTo(192, 72);
     labelDuration.moveTo(8, 96);
     textDuration.setEnabled(false);
-    textDuration.moveTo(64, 96);
+    textDuration.moveTo(72, 96);
     cboxLoop.setVisible(true);
-    cboxLoop.moveTo(120, 96);
+    cboxLoop.moveTo(128, 96);
     labelVolume.setVisible(true);
     labelVolume.moveTo(8, 120);
     sliderVolume.setVisible(true);
-    sliderVolume.moveTo(64, 120);
+    sliderVolume.moveTo(72, 120);
     buttonColor.setVisible(false);
     sketchColor.setVisible(false);
-    cboxBeginPaused.moveTo(232, 48);
-    cboxEndPaused.moveTo(344, 48);
+    cboxBeginPaused.moveTo(248, 48);
+    cboxEndPaused.moveTo(368, 48);
     cboxBeginTransition.setVisible(true);
-    cboxBeginTransition.moveTo(232, 72);
+    cboxBeginTransition.moveTo(248, 72);
     cboxEndTransition.setVisible(true);
-    cboxEndTransition.moveTo(344, 72);
+    cboxEndTransition.moveTo(368, 72);
     labelBeginTransition.setVisible(true);
-    labelBeginTransition.moveTo(232, 96);
+    labelBeginTransition.moveTo(248, 96);
     textBeginTransition.setVisible(true);
-    textBeginTransition.moveTo(288, 96);
+    textBeginTransition.moveTo(312, 96);
     labelEndTransition.setVisible(true);
-    labelEndTransition.moveTo(344, 96);
+    labelEndTransition.moveTo(368, 96);
     textEndTransition.setVisible(true);
-    textEndTransition.moveTo(400, 96);
+    textEndTransition.moveTo(432, 96);
     dListBeginTransition.setVisible(false);
     dListEndTransition.setVisible(false);
     labelText.setVisible(false);
@@ -140,8 +137,8 @@ class Audio extends Node {
     textTextSize.setVisible(false);
     labelTextFont.setVisible(false);
     dListTextFont.setVisible(false);
-    labelNotes.moveTo(232, 144);
-    notesArea.moveTo(232, 160);
+    labelNotes.moveTo(248, 144);
+    notesArea.moveTo(248, 160);
     tm.addControls(textPath, textLabel, textBegin, textEnd, textBeginTransition, textEndTransition, notesArea);
   }
   

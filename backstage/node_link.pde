@@ -29,7 +29,7 @@ class Link extends Node {
     labelPath.setVisible(false);
     textPath.setVisible(false);
     labelLabel.moveTo(8, 24);
-    textLabel.moveTo(64, 24);
+    textLabel.moveTo(72, 24);
     labelX.setVisible(false);
     textX.setVisible(false);
     labelY.setVisible(false);
@@ -46,14 +46,14 @@ class Link extends Node {
     textEnd.setVisible(false);
     labelDuration.moveTo(8, 48);
     textDuration.setEnabled(true);
-    textDuration.moveTo(64, 48);
+    textDuration.moveTo(72, 48);
     cboxLoop.setVisible(false);
     labelVolume.setVisible(false);
     sliderVolume.setVisible(false);
     buttonColor.setVisible(false);
     sketchColor.setVisible(false);
-    cboxBeginPaused.moveTo(232, 24);
-    cboxEndPaused.moveTo(344, 24);
+    cboxBeginPaused.moveTo(248, 24);
+    cboxEndPaused.moveTo(368, 24);
     cboxBeginTransition.setVisible(false);
     cboxEndTransition.setVisible(false);
     labelBeginTransition.setVisible(false);
@@ -71,8 +71,8 @@ class Link extends Node {
     textTextSize.setVisible(false);
     labelTextFont.setVisible(false);
     dListTextFont.setVisible(false);
-    labelNotes.moveTo(232, 144);
-    notesArea.moveTo(232, 160);
+    labelNotes.moveTo(248, 144);
+    notesArea.moveTo(248, 160);
     tm.addControls(textLabel, textDuration, notesArea);
   }
 }

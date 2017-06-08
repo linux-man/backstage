@@ -515,7 +515,7 @@ public void createGUI(){
   aboutPanel.setOpaque(true);
   labelTitle = new GLabel(cp, 8, 24, 184, 24);
   labelTitle.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
-  labelTitle.setText("Backstage v.1.2");
+  labelTitle.setText("Backstage v.1.3");
   labelTitle.setOpaque(false);
   buttonGithub = new GButton(cp, 8, 120, 72, 24);
   buttonGithub.setIcon("github.png", 1, GAlign.WEST, GAlign.CENTER, GAlign.MIDDLE);

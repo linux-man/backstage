@@ -201,6 +201,7 @@ class Node {
   void finalizeTurn() {
     presentTime = 0;
     paused = beginPaused;
+    onEndPause = false;
     prevMillis = millis();
     playing = true;
   }
@@ -218,7 +219,6 @@ class Node {
         if(loop && !onEndPause) presentTime = 0;
         else end(false);
       }
-      onEndPause = false;
     }
     prevMillis = presentMillis;
   }

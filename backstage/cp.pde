@@ -311,6 +311,7 @@ void moveSlider(int x) {
 }
 
 void updateTime(Node last) {
+  last.onEndPause = false;
   float xi = buttonNodeNext.getX() + buttonNodeNext.getWidth();
   float xf = cp.width - buttonNodeSlider.getWidth();
   last.presentTime = int((buttonNodeSlider.getX() - xi) / (xf - xi) * last.endTime);

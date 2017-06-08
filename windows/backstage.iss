@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Backstage"
-#define MyAppVersion "1.2"
+#define MyAppVersion "1.3"
 #define MyAppPublisher "Caldas Lopes"
 #define MyAppURL "https://github.com/linux-man/backstage"
 #define MyAppExeName "backstage.exe"

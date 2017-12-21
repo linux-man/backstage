@@ -132,8 +132,8 @@ class Node {
         int x2 = nodes.get(next[n]).x;
         int y2 = nodes.get(next[n]).y + nodes.get(next[n]).h / 2;
         float dif =  min(200, max(20, x1 - x2 + abs(y1 - y2)));
-        if(selected) cp.strokeWeight(3);
-        else cp.strokeWeight(2);
+        if(selected) cp.strokeWeight(5);
+        else cp.strokeWeight(3);
         cp.bezier(x1, y1, x1 + dif, y1, x2 - dif, y2, x2, y2);
       } catch (Exception e) {
         removeConnector(n);

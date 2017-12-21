@@ -27,8 +27,8 @@ void dropEvent(DropEvent dropEvt) {
   if(dropEvt.isFile()) {
     File file = dropEvt.file();
     if (file != null) {
-      if(file.isFile()) insertMedia(dropEvt.x(), dropEvt.y(), file);
-      else if(file.isDirectory()) for(File f : dropEvt.listFiles(file, true)) insertMedia(dropEvt.x(), dropEvt.y(), f);
+      if(file.isFile()) insertMedia(-translation + dropEvt.x(), dropEvt.y(), file);
+      else if(file.isDirectory()) for(File f : dropEvt.listFiles(file, true)) insertMedia(-translation + dropEvt.x(), dropEvt.y(), f);
     }
   }
 }

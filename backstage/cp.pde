@@ -300,6 +300,7 @@ void buttonsEnabled(boolean e) {
   buttonShow.setEnabled(e);
   buttonPlay.setEnabled(e);
   buttonStop.setEnabled(e);
+  buttonNext.setEnabled(e);
   buttonAbout.setEnabled(e);
   buttonTracksMinus.setEnabled(e);
   buttonTracksPlus.setEnabled(e);

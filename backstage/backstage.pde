@@ -93,8 +93,8 @@ void turn() {
   else {for(Node no: stage) if(no != null && !(paused  ^ no.paused)) no.turn();}
 }
 
-void end() {
-  for(Node no: stage) if(no != null) no.end(true);
+void end(boolean fullStop) {
+  for(Node no: stage) if(no != null) no.end(fullStop);
 }
 
 void movieEvent(Movie m) {

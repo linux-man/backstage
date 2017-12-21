@@ -21,7 +21,7 @@ synchronized public void cp_key(PApplet appc, GWinData data, KeyEvent kevent) { 
 public void cp_close(GWindow window) { //_CODE_:cp:952494:
   prefs.putInt("Width", cp.width);
   prefs.putInt("Scheme", colorScheme);
-  end();
+  end(true);
   exit();
 } //_CODE_:cp:952494:
 
@@ -77,7 +77,7 @@ public void buttonEnd_click(GButton source, GEvent event) { //_CODE_:buttonEnd:7
 public void buttonLoad_click(GButton source, GEvent event) { //_CODE_:buttonLoad:996884:
   if(playing) return;
   buttonFiles_click(source, event);
-  end();
+  end(true);
   loadProject(openDialog("Load project"));
 } //_CODE_:buttonLoad:996884:
 
@@ -99,6 +99,7 @@ public void buttonFiles_click(GButton source, GEvent event) { //_CODE_:buttonFil
   buttonShow.setVisible(!buttonShow.isVisible());
   buttonPlay.setVisible(!buttonPlay.isVisible());
   buttonStop.setVisible(!buttonStop.isVisible());
+  buttonNext.setVisible(!buttonNext.isVisible());
   buttonAbout.setVisible(!buttonAbout.isVisible());
   buttonNew.setVisible(!buttonNew.isVisible());
   buttonLoad.setVisible(!buttonLoad.isVisible());
@@ -108,7 +109,7 @@ public void buttonFiles_click(GButton source, GEvent event) { //_CODE_:buttonFil
 public void buttonNew_click(GButton source, GEvent event) { //_CODE_:buttonNew:590597:
   if(playing) return;
   buttonFiles_click(source, event);
-  end();
+  end(true);
   clearNodes();
   projectPath = Paths.get(System.getProperty("user.home")).resolve("presentation.stage");
   prevProjectPath = projectPath;
@@ -121,6 +122,7 @@ public void buttonConfig_click(GButton source, GEvent event) { //_CODE_:buttonCo
   buttonShow.setVisible(!buttonShow.isVisible());
   buttonPlay.setVisible(!buttonPlay.isVisible());
   buttonStop.setVisible(!buttonStop.isVisible());
+  buttonNext.setVisible(!buttonNext.isVisible());
   buttonAbout.setVisible(!buttonAbout.isVisible());
   buttonZip.setVisible(!buttonZip.isVisible());
   buttonDefaultDuration.setVisible(!buttonDefaultDuration.isVisible());
@@ -138,7 +140,7 @@ public void buttonNodeNext_click(GButton source, GEvent event) { //_CODE_:button
 } //_CODE_:buttonNodeNext:885533:
 
 public void buttonStop_click(GButton source, GEvent event) { //_CODE_:buttonStop:304432:
-  end();
+  end(true);
 } //_CODE_:buttonStop:304432:
 
 public void buttonPlay_click(GButton source, GEvent event) { //_CODE_:buttonPlay:935524:
@@ -169,6 +171,7 @@ public void buttonAdd_click(GButton source, GEvent event) { //_CODE_:buttonAdd:4
   buttonShow.setVisible(!buttonShow.isVisible());
   buttonPlay.setVisible(!buttonPlay.isVisible());
   buttonStop.setVisible(!buttonStop.isVisible());
+  buttonNext.setVisible(!buttonNext.isVisible());
   buttonAbout.setVisible(!buttonAbout.isVisible());
   buttonAddLink.setVisible(!buttonAddLink.isVisible());
   buttonAddText.setVisible(!buttonAddText.isVisible());
@@ -221,6 +224,10 @@ public void buttonGithub_click(GButton source, GEvent event) { //_CODE_:buttonGi
 public void buttonAboutOk_click(GButton source, GEvent event) { //_CODE_:buttonAboutOk:426945:
   aboutPanel.setVisible(false);
 } //_CODE_:buttonAboutOk:426945:
+
+public void buttonNext_click(GButton source, GEvent event) { //_CODE_:buttonNext:814019:
+  end(false);
+} //_CODE_:buttonNext:814019:
 
 
 
@@ -507,7 +514,7 @@ public void createGUI(){
   buttonDefaultDuration = new GButton(cp, 48, 48, 48, 24);
   buttonDefaultDuration.setIcon("clock.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
   buttonDefaultDuration.addEventHandler(this, "buttonDefaultDuration_click");
-  buttonAbout = new GButton(cp, 288, 0, 48, 24);
+  buttonAbout = new GButton(cp, 336, 0, 48, 24);
   buttonAbout.setIcon("help.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
   buttonAbout.addEventHandler(this, "buttonAbout_click");
   aboutPanel = new GPanel(cp, 24, 56, 200, 152, "About");
@@ -537,6 +544,9 @@ public void createGUI(){
   aboutPanel.addControl(labelCopyright);
   aboutPanel.addControl(buttonAboutOk);
   aboutPanel.addControl(labelGPL);
+  buttonNext = new GButton(cp, 288, 0, 48, 24);
+  buttonNext.setIcon("fast_forward.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
+  buttonNext.addEventHandler(this, "buttonNext_click");
   cp.loop();
 }
 
@@ -626,3 +636,4 @@ GButton buttonGithub;
 GLabel labelCopyright; 
 GButton buttonAboutOk; 
 GLabel labelGPL; 
+GButton buttonNext; 

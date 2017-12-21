@@ -300,4 +300,9 @@ class Node {
     beginTransition = cboxBeginTransition.isSelected();
     endTransition = cboxEndTransition.isSelected();
   }
+  
+  void clear() {
+    g.removeCache(icon);
+    icon = null;
+  }
 }

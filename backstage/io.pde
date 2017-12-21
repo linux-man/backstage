@@ -21,7 +21,7 @@ import java.util.zip.*;
 void loadProject(File file) {
   if (file != null && file.exists()) {
     JSONObject json = loadJSONObject(file);
-    nodes.clear();
+    clearNodes();
     projectPath = Paths.get(file.getPath());
     prevProjectPath = Paths.get(json.getString("projectPath", projectPath.toString()));
     cp.setTitle("Control Panel - " + projectPath.toString());
@@ -238,7 +238,7 @@ void insertMedia(int x, int y, File file) {
       path,
       loop, beginTransition, endTransition,
       beginTransitionDuration, endTransitionDuration, volume, beginAt, endAt));
-      break;    
+      break;
     case "Video": 
       nodes.add(new Video(label, notes, duration, beginPaused, endPaused, index, x, y, next,
       path,
@@ -247,4 +247,14 @@ void insertMedia(int x, int y, File file) {
       beginTransitionType, endTransitionType));
       break;
   }
+}
+
+void clearNodes() {
+  for(int n = 0; n < stage.length; n++) stage[n] = null;
+  for(Node no: nodes) {
+    no.clear();
+    no = null;
+  }
+  nodes.clear();
+  System.gc();
 }

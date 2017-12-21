@@ -248,4 +248,11 @@ class Video extends Node {
     if(beginAt < 0 || beginAt >= duration) beginAt = 0;
     if(endAt <= 0 || endAt > duration || endAt <= beginAt) endAt = duration;
   }
+
+  void clear() {
+    super.clear();
+    video.stop();
+    video.dispose();
+    video = null;
+  }
 }

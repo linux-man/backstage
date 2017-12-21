@@ -203,4 +203,10 @@ class Image extends Node {
     beginTransitionType = dListBeginTransition.getSelectedIndex();
     endTransitionType = dListEndTransition.getSelectedIndex();
   }
+
+  void clear() {
+    super.clear();
+    g.removeCache(image);
+    image = null;
+  }
 }

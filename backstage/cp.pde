@@ -240,6 +240,7 @@ synchronized public void cp_mouse(PApplet appc, GWinData data, MouseEvent mevent
             if(G4P.selectOption(cp, "Are you sure?", "Delete node " + last.label, G4P.QUERY, G4P.YES_NO) == G4P.OK){
               for(Node no: stage) if(no == last) no.end(true);
               for(Node no: nodes) no.removeConnector(nodes.size()-1);
+              nodes.get(nodes.size()-1).clear();
               nodes.remove(nodes.size()-1);
             }
           }

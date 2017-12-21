@@ -109,7 +109,7 @@ public void buttonNew_click(GButton source, GEvent event) { //_CODE_:buttonNew:5
   if(playing) return;
   buttonFiles_click(source, event);
   end();
-  nodes.clear();
+  clearNodes();
   projectPath = Paths.get(System.getProperty("user.home")).resolve("presentation.stage");
   prevProjectPath = projectPath;
   cp.setTitle("Control Panel");

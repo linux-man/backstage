@@ -153,4 +153,10 @@ class Audio extends Node {
     if(beginAt < 0 || beginAt >= duration) beginAt = 0;
     if(endAt <= 0 || endAt > duration || endAt <= beginAt) endAt = duration;
   }
+
+  void clear() {
+    super.clear();
+    audio.close();
+    audio = null;
+  }
 }

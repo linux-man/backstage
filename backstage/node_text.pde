@@ -80,10 +80,10 @@ class Text extends Node {
     else if(endTransition && endTransitionDuration > 0 && presentTime > endTime - endTransitionDuration * 1000) {
       switch(endTransitionType) {
         case 0: c = color(red(bColor), green(bColor), blue(bColor), alpha(bColor) * (endTime - presentTime) / endTransitionDuration / 1000); break;
-        case 1: x = -pW +  (pX + pW) * (endTime - presentTime) / beginTransitionDuration / 1000; break;
-        case 2: x = width +  (pX  - width) * (endTime - presentTime) / beginTransitionDuration / 1000; break;
-        case 3: y = -pH +  (pY + pH) * (endTime - presentTime) / beginTransitionDuration / 1000; break;
-        case 4: y = height +  (pY  - height) * (endTime - presentTime) / beginTransitionDuration / 1000; break;
+        case 1: x = -pW +  (pX + pW) * (endTime - presentTime) / endTransitionDuration / 1000; break;
+        case 2: x = width +  (pX  - width) * (endTime - presentTime) / endTransitionDuration / 1000; break;
+        case 3: y = -pH +  (pY + pH) * (endTime - presentTime) / endTransitionDuration / 1000; break;
+        case 4: y = height +  (pY  - height) * (endTime - presentTime) / endTransitionDuration / 1000; break;
       }
     }
 

@@ -79,15 +79,15 @@ class Rect extends Node {
       switch(endTransitionType) {
         case 0: c = color(red(bColor), green(bColor), blue(bColor), alpha(bColor) * (endTime - presentTime) / endTransitionDuration / 1000); break;
         case 1:
-          w = pW * (endTime - presentTime) / beginTransitionDuration / 1000;
-          h = pH * (endTime - presentTime) / beginTransitionDuration / 1000;
+          w = pW * (endTime - presentTime) / endTransitionDuration / 1000;
+          h = pH * (endTime - presentTime) / endTransitionDuration / 1000;
           x = pX + (pW - w) / 2;
           y = pY + (pH - h) / 2;
           break;
-        case 2: x = -pW +  (pX + pW) * (endTime - presentTime) / beginTransitionDuration / 1000; break;
-        case 3: x = width +  (pX  - width) * (endTime - presentTime) / beginTransitionDuration / 1000; break;
-        case 4: y = -pH +  (pY + pH) * (endTime - presentTime) / beginTransitionDuration / 1000; break;
-        case 5: y = height +  (pY  - height) * (endTime - presentTime) / beginTransitionDuration / 1000; break;
+        case 2: x = -pW +  (pX + pW) * (endTime - presentTime) / endTransitionDuration / 1000; break;
+        case 3: x = width +  (pX  - width) * (endTime - presentTime) / endTransitionDuration / 1000; break;
+        case 4: y = -pH +  (pY + pH) * (endTime - presentTime) / endTransitionDuration / 1000; break;
+        case 5: y = height +  (pY  - height) * (endTime - presentTime) / endTransitionDuration / 1000; break;
       }
     }
 

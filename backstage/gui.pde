@@ -136,7 +136,7 @@ public void buttonScheme_click(GButton source, GEvent event) { //_CODE_:buttonSc
 
 public void buttonNodeNext_click(GButton source, GEvent event) { //_CODE_:buttonNodeNext:885533:
   Node last = nodes.get(nodes.size() - 1);
-  if(last.selected && last.playing) last.end(false);
+  if(last.selected && last.playing) last.next();
 } //_CODE_:buttonNodeNext:885533:
 
 public void buttonStop_click(GButton source, GEvent event) { //_CODE_:buttonStop:304432:
@@ -226,7 +226,7 @@ public void buttonAboutOk_click(GButton source, GEvent event) { //_CODE_:buttonA
 } //_CODE_:buttonAboutOk:426945:
 
 public void buttonNext_click(GButton source, GEvent event) { //_CODE_:buttonNext:814019:
-  end(false);
+  next();
 } //_CODE_:buttonNext:814019:
 
 

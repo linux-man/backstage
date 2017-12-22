@@ -16,7 +16,7 @@ along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
 class Audio extends Node {
   String path;
-  float beginTransitionDuration, endTransitionDuration, volume, beginAt, endAt;
+  float volume, beginAt, endAt;
   AudioPlayer audio;
   
   Audio(String label, String notes, float duration, boolean beginPaused, boolean endPaused, int index, int x, int y, int[] next,
@@ -55,8 +55,8 @@ class Audio extends Node {
   void play() {
     if(!playing) return;
 
-    if(beginTransition && beginTransitionDuration > 0 && presentTime < beginTransitionDuration * 1000) audio.setGain(volumeToDecibel(volume * presentTime / beginTransitionDuration / 1000));
-    else if(endTransition && endTransitionDuration > 0 && presentTime > endTime - endTransitionDuration * 1000) audio.setGain(volumeToDecibel(volume * (endTime - presentTime) / endTransitionDuration / 1000));
+    if(isBeginTransition()) audio.setGain(volumeToDecibel(volume * presentTime / beginTransitionDuration / 1000));
+    else if(isEndTransition()) audio.setGain(volumeToDecibel(volume * (endTime - presentTime) / endTransitionDuration / 1000));
     else audio.setGain(volumeToDecibel(volume));
 
     finalizePlay();
@@ -145,8 +145,6 @@ class Audio extends Node {
   void save() {
     super.save();
     path = trim(textPath.getText());
-    if(isTime(textBeginTransition.getText())) beginTransitionDuration = stringToTime(textBeginTransition.getText());
-    if(isTime(textEndTransition.getText())) endTransitionDuration = stringToTime(textEndTransition.getText());
     volume = sliderVolume.getValueF();
     if(isTime(textBegin.getText())) beginAt = stringToTime(textBegin.getText());
     if(isTime(textEnd.getText())) endAt = stringToTime(textEnd.getText());

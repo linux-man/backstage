@@ -16,7 +16,7 @@ along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
 class Text extends Node {
   boolean centered;
-  float nX, nY, nW, nH, beginTransitionDuration, endTransitionDuration;
+  float nX, nY, nW, nH;
   int beginTransitionType, endTransitionType, textAlignHor, textAlignVer, textSize;
   String text, textFont;
   color bColor;
@@ -68,7 +68,7 @@ class Text extends Node {
     float x = pX; float y = pY; float w = pW; float h = pH;
     color c = bColor;
 
-    if(beginTransition && beginTransitionDuration > 0 && presentTime < beginTransitionDuration * 1000) {
+    if(isBeginTransition()) {
       switch(beginTransitionType) {
         case 0: c = color(red(bColor), green(bColor), blue(bColor), alpha(bColor) * presentTime / beginTransitionDuration / 1000); break;
         case 1: x = width +  (pX - width) * presentTime / beginTransitionDuration / 1000; break;
@@ -77,7 +77,7 @@ class Text extends Node {
         case 4: y = -pH + (pY + pH) * presentTime / beginTransitionDuration / 1000; break;
       }
     }
-    else if(endTransition && endTransitionDuration > 0 && presentTime > endTime - endTransitionDuration * 1000) {
+    else if(isEndTransition()) {
       switch(endTransitionType) {
         case 0: c = color(red(bColor), green(bColor), blue(bColor), alpha(bColor) * (endTime - presentTime) / endTransitionDuration / 1000); break;
         case 1: x = -pW +  (pX + pW) * (endTime - presentTime) / endTransitionDuration / 1000; break;
@@ -223,8 +223,6 @@ class Text extends Node {
     if(isDim(textH.getText())) nH = stringToDim(textH.getText());
     if(nW < 0) nW = 0;
     if(nH < 0) nH = 0;
-    if(isTime(textBeginTransition.getText())) beginTransitionDuration = stringToTime(textBeginTransition.getText());
-    if(isTime(textEndTransition.getText())) endTransitionDuration = stringToTime(textEndTransition.getText());
     beginTransitionType = dListBeginTransition.getSelectedIndex();
     endTransitionType = dListEndTransition.getSelectedIndex();
     textAlignHor = dListTextAlignHor.getSelectedIndex();

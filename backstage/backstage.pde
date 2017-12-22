@@ -97,6 +97,10 @@ void end(boolean fullStop) {
   for(Node no: stage) if(no != null) no.end(fullStop);
 }
 
+void next() {
+  for(Node no: stage) if(no != null) no.next();
+}
+
 void movieEvent(Movie m) {
   m.read();
 }

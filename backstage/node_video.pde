@@ -17,7 +17,7 @@ along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 class Video extends Node {
   String path;
   boolean centered, aspectRatio;
-  float nX, nY, nW, nH, beginTransitionDuration, endTransitionDuration, volume, beginAt, endAt;
+  float nX, nY, nW, nH, volume, beginAt, endAt;
   int beginTransitionType, endTransitionType;
   
   float pX, pY, pW, pH;
@@ -86,7 +86,7 @@ class Video extends Node {
     float x = pX; float y = pY; float w = pW; float h = pH;
     tint(255, 255);
 
-    if(beginTransition && beginTransitionDuration > 0 && presentTime < beginTransitionDuration * 1000) {
+    if(isBeginTransition()) {
       switch(beginTransitionType) {
         case 0: tint(255, 255 * presentTime / beginTransitionDuration / 1000); break;
         case 1:
@@ -102,7 +102,7 @@ class Video extends Node {
       }
       video.volume(volume * presentTime / beginTransitionDuration / 1000);
     }
-    else if(endTransition && endTransitionDuration > 0 && presentTime > endTime - endTransitionDuration * 1000) {
+    else if(isEndTransition()) {
       switch(endTransitionType) {
         case 0: tint(255, 255 * (endTime - presentTime) / endTransitionDuration / 1000); break;
         case 1:
@@ -238,8 +238,6 @@ class Video extends Node {
     if(isDim(textH.getText())) nH = stringToDim(textH.getText());
     if(nW <= 0) nW = 1;
     if(nH <= 0) nH = 1;
-    if(isTime(textBeginTransition.getText())) beginTransitionDuration = stringToTime(textBeginTransition.getText());
-    if(isTime(textEndTransition.getText())) endTransitionDuration = stringToTime(textEndTransition.getText());
     volume = sliderVolume.getValueF();
     if(isTime(textBegin.getText())) beginAt = stringToTime(textBegin.getText());
     if(isTime(textEnd.getText())) endAt = stringToTime(textEnd.getText());

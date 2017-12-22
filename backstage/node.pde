@@ -15,12 +15,13 @@ You should have received a copy of the GNU General Public License
 along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
 class Node {
-  String type; String label; String notes; float duration; boolean beginPaused; boolean endPaused;
-  int index; int x; int y; int w; int h; int[] next;
-  boolean loop; boolean beginTransition; boolean endTransition;
+  String type, label, notes;
+  int index, x, y, w, h; int[] next;
+  boolean beginPaused, endPaused, loop, beginTransition, endTransition;
+  float duration, beginTransitionDuration, endTransitionDuration;
   
   int track, endTime, presentTime, prevMillis;
-  boolean selected, connecting, dragged, mouseOver, playing, paused, onEndPause;
+  boolean selected, connecting, dragged, mouseOver, playing, paused, onEndPause, noLoop, onLoop;
   PImage icon;
 
   Node(String type, String label, String notes, float duration, boolean beginPaused, boolean endPaused, int index, int x, int y, int[] next, PImage icon) {
@@ -31,6 +32,7 @@ class Node {
     track = tracks - int(round(float(y) / trackHeight));
     
     loop = false; beginTransition = false; endTransition = false;
+    beginTransitionDuration = 1; endTransitionDuration = 1;
   }
 
   void switchConnectors(int a, int b) {
@@ -132,7 +134,7 @@ class Node {
         int x2 = nodes.get(next[n]).x;
         int y2 = nodes.get(next[n]).y + nodes.get(next[n]).h / 2;
         float dif =  min(200, max(20, x1 - x2 + abs(y1 - y2)));
-        if(selected) cp.strokeWeight(5);
+        if(selected) cp.strokeWeight(4);
         else cp.strokeWeight(3);
         cp.bezier(x1, y1, x1 + dif, y1, x2 - dif, y2, x2, y2);
       } catch (Exception e) {
@@ -202,6 +204,8 @@ class Node {
     presentTime = 0;
     paused = beginPaused;
     onEndPause = false;
+    noLoop = false;
+    onLoop = false;
     prevMillis = millis();
     playing = true;
   }
@@ -216,7 +220,10 @@ class Node {
     if(!paused) {
       presentTime += presentMillis - prevMillis;
       if(presentTime >= endTime) {
-        if(loop && !onEndPause) presentTime = 0;
+        if(loop && !noLoop && !onEndPause) {
+          onLoop = true;
+          presentTime = 0;
+        }
         else end(false);
       }
     }
@@ -224,7 +231,7 @@ class Node {
   }
 
   void end(boolean fullStop) {
-    if(!fullStop && endPaused && !onEndPause) gotoEndPause(); //<>//
+    if(!fullStop && endPaused && !onEndPause && (!loop || noLoop)) gotoEndPause(); //<>//
     else finalizeEnd(fullStop);
   }
   
@@ -238,6 +245,8 @@ class Node {
     playing = false;
     paused = false;
     onEndPause = false;
+    noLoop = false;
+    onLoop = false;
     stage[track] = null;
     if(!fullStop) {
       for(int n: next) {
@@ -246,6 +255,15 @@ class Node {
         no.turn();
       }
     }
+  }
+
+  void next() {
+    noLoop = true;
+    if(onEndPause) end(false);
+    else if(endTransition) {
+      if(presentTime + endTransitionDuration * 1000 < endTime) endTime = presentTime + int(endTransitionDuration * 1000);
+    }
+    else endTime = presentTime;
   }
 
   void load() {
@@ -299,10 +317,21 @@ class Node {
     loop = cboxLoop.isSelected();
     beginTransition = cboxBeginTransition.isSelected();
     endTransition = cboxEndTransition.isSelected();
+    if(isTime(textBeginTransition.getText())) beginTransitionDuration = stringToTime(textBeginTransition.getText());
+    if(isTime(textEndTransition.getText())) endTransitionDuration = stringToTime(textEndTransition.getText());
   }
   
   void clear() {
     g.removeCache(icon);
     icon = null;
   }
+
+  boolean isBeginTransition() {
+    return beginTransition && beginTransitionDuration > 0 && !onLoop && presentTime < beginTransitionDuration * 1000;
+  }
+
+  boolean isEndTransition() {
+    return endTransition && endTransitionDuration > 0 && (!loop || noLoop) && presentTime > endTime - endTransitionDuration * 1000;
+  }
+
 }

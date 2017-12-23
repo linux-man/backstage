@@ -237,7 +237,29 @@ synchronized public void cp_mouse(PApplet appc, GWinData data, MouseEvent mevent
         if(last.mouseOver(x, y)) {
           if(last.mouseOverConnector(x, y) >= 0) last.removeConnector(last.mouseOverConnector(x, y));
           else {
-            if(G4P.selectOption(cp, "Are you sure?", "Delete node " + last.label, G4P.QUERY, G4P.YES_NO) == G4P.OK){
+            if(ctrl) {
+              switch(last.type) {
+                case "Link":
+                  nodes.add(new Link((Link)last));
+                  break;
+                case "Rect":
+                  nodes.add(new Rect((Rect)last));
+                  break;
+                case "Text":
+                  nodes.add(new Text((Text)last));
+                  break;
+                case "Image":
+                  nodes.add(new Image((Image)last));
+                  break;
+                case "Audio":
+                  nodes.add(new Audio((Audio)last));
+                  break;
+                case "Video":
+                  nodes.add(new Video((Video)last));
+                  break;
+              }
+            }
+            else if(G4P.selectOption(cp, "Are you sure?", "Delete node " + last.label, G4P.QUERY, G4P.YES_NO) == G4P.OK){
               for(Node no: stage) if(no == last) no.end(true);
               for(Node no: nodes) no.removeConnector(nodes.size()-1);
               nodes.get(nodes.size()-1).clear();

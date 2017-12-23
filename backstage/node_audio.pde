@@ -18,7 +18,13 @@ class Audio extends Node {
   String path;
   float volume, beginAt, endAt;
   AudioPlayer audio;
-  
+
+  Audio(Audio no) {
+    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, nodes.size(), no.x + 1, no.y, new int[0],
+    no.path, no.loop, no.beginTransition, no.endTransition,
+    no.beginTransitionDuration, no.endTransitionDuration, no.volume, no.beginAt, no.endAt);
+  }
+
   Audio(String label, String notes, float duration, boolean beginPaused, boolean endPaused, int index, int x, int y, int[] next,
   String path,
   boolean loop, boolean beginTransition, boolean endTransition,

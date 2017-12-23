@@ -22,6 +22,13 @@ class Rect extends Node {
 
   float pX, pY, pW, pH;
 
+  Rect(Rect no) {
+    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, nodes.size(), no.x + 1, no.y, new int[0],
+    no.loop, no.beginTransition, no.endTransition, no.centered,
+    no.nX, no.nY, no.nW, no.nH, no.beginTransitionDuration, no.endTransitionDuration,
+    no.beginTransitionType, no.endTransitionType, no.bColor);
+  }
+
   Rect() {
     this("", "", defaultDuration, false, false, nodes.size(), -translation, trackHeight, new int[0], false, false, false, false, 0, 0, 1, 1, 1, 1, 0, 0, color(128));
   }

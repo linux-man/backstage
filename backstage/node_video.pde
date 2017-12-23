@@ -22,7 +22,14 @@ class Video extends Node {
   
   float pX, pY, pW, pH;
   Movie video;
-  
+
+  Video(Video no) {
+    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, nodes.size(), no.x + 1, no.y, new int[0],
+    no.path, no.loop, no.beginTransition, no.endTransition, no.centered, no.aspectRatio,
+    no.nX, no.nY, no.nW, no.nH, no.beginTransitionDuration, no.endTransitionDuration, no.volume, no.beginAt, no.endAt,
+    no.beginTransitionType, no.endTransitionType);
+  }
+
   Video(String label, String notes, float duration, boolean beginPaused, boolean endPaused, int index, int x, int y, int[] next,
   String path,
   boolean loop, boolean beginTransition, boolean endTransition, boolean centered, boolean aspectRatio,

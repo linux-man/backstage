@@ -16,6 +16,10 @@ along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
 class Link extends Node {
 
+  Link(Link no) {
+    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, nodes.size(), no.x + 1, no.y, new int[0]);
+  }
+
   Link() {
     this("", "", 0, false, false, nodes.size(), -translation, trackHeight, new int[0]);
   }

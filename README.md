@@ -20,7 +20,7 @@ There are 6 types:
 
 Link ![Arrow](backstage/data/link.png), Text ![T](backstage/data/text.png) and Rect ![Square](backstage/data/rect.png) are created using the menu.
 
-To add Image ![Image](backstage/data/image.png), Audio ![Audio](backstage/data/audio.png) and Video ![Video](backstage/data/video.png) you can also drag and drop the wanted files.
+To add Image ![Image](backstage/data/picture.png), Audio ![Audio](backstage/data/audio.png) and Video ![Video](backstage/data/media.png) you can also drag and drop the wanted files.
 
 Initially you have 4 tracks. It's important to understand that at each time only one node can be active (playing) on each track.
 

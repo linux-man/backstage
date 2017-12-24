@@ -17,15 +17,15 @@ along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 class Link extends Node {
 
   Link(Link no) {
-    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, nodes.size(), no.x + 1, no.y, new int[0]);
+    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, new int[0]);
   }
 
   Link() {
-    this("", "", 0, false, false, nodes.size(), -translation, trackHeight, new int[0]);
+    this("", "", 0, false, false, false, nodes.size(), -translation, trackHeight, new int[0]);
   }
 
-  Link(String label, String notes, float duration, boolean beginPaused, boolean endPaused, int index, int x, int y, int[] next) {
-    super("Link", label, notes, duration, beginPaused, endPaused, index, x, y, next, iconLink);
+  Link(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int[] next) {
+    super("Link", label, notes, duration, beginPaused, endPaused, independent, index, x, y, next, iconLink);
   }
   
   void load() {
@@ -33,15 +33,19 @@ class Link extends Node {
     labelPath.setVisible(false);
     textPath.setVisible(false);
     labelLabel.moveTo(8, 24);
-    textLabel.moveTo(72, 24);
+    textLabel.moveTo(48, 24);
     labelX.setVisible(false);
     textX.setVisible(false);
+    cboxX.setVisible(false);
     labelY.setVisible(false);
     textY.setVisible(false);
+    cboxY.setVisible(false);
     labelW.setVisible(false);
     textW.setVisible(false);
+    cboxW.setVisible(false);
     labelH.setVisible(false);
     textH.setVisible(false);
+    cboxH.setVisible(false);
     cboxCentered.setVisible(false);
     cboxAspectRatio.setVisible(false);
     buttonBegin.setVisible(false);

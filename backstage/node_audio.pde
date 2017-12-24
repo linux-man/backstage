@@ -20,16 +20,16 @@ class Audio extends Node {
   AudioPlayer audio;
 
   Audio(Audio no) {
-    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, nodes.size(), no.x + 1, no.y, new int[0],
+    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, new int[0],
     no.path, no.loop, no.beginTransition, no.endTransition,
     no.beginTransitionDuration, no.endTransitionDuration, no.volume, no.beginAt, no.endAt);
   }
 
-  Audio(String label, String notes, float duration, boolean beginPaused, boolean endPaused, int index, int x, int y, int[] next,
+  Audio(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int[] next,
   String path,
   boolean loop, boolean beginTransition, boolean endTransition,
   float beginTransitionDuration, float endTransitionDuration, float volume, float beginAt, float endAt) {
-    super("Audio", label, notes, duration, beginPaused, endPaused, index, x, y, next, iconAudio);
+    super("Audio", label, notes, duration, beginPaused, endPaused, independent, index, x, y, next, iconAudio);
     this.path = normalizePath(path);
     this.loop = loop; this.beginTransition = beginTransition; this.endTransition = endTransition;
     this.beginTransitionDuration = beginTransitionDuration; this.endTransitionDuration = endTransitionDuration; this.volume = volume; this.beginAt = beginAt; this.endAt = endAt;
@@ -88,15 +88,19 @@ class Audio extends Node {
     labelPath.setVisible(true);
     textPath.setVisible(true);
     labelLabel.moveTo(8, 48);
-    textLabel.moveTo(72, 48);
+    textLabel.moveTo(48, 48);
     labelX.setVisible(false);
     textX.setVisible(false);
+    cboxX.setVisible(false);
     labelY.setVisible(false);
     textY.setVisible(false);
+    cboxY.setVisible(false);
     labelW.setVisible(false);
     textW.setVisible(false);
+    cboxW.setVisible(false);
     labelH.setVisible(false);
     textH.setVisible(false);
+    cboxH.setVisible(false);
     cboxCentered.setVisible(false);
     cboxAspectRatio.setVisible(false);
     buttonBegin.setVisible(true);

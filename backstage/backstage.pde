@@ -89,16 +89,16 @@ void draw() {
 }
 
 void turn() {
-  if(!playing) {for(Node no: nodes) if(no.selected) no.turn();}
-  else {for(Node no: stage) if(no != null && !(paused  ^ no.paused)) no.turn();}
+  if(!playing) {for(Node no: nodes) if(no.selected && !no.independent) no.turn();}
+  else {for(Node no: stage) if(no != null && !no.independent && !(paused  ^ no.paused)) no.turn();}
 }
 
 void end(boolean fullStop) {
-  for(Node no: stage) if(no != null) no.end(fullStop);
+  for(Node no: stage) if(no != null && !no.independent) no.end(fullStop);
 }
 
 void next() {
-  for(Node no: stage) if(no != null) no.next();
+  for(Node no: stage) if(no != null && !no.independent) no.next();
 }
 
 void movieEvent(Movie m) {

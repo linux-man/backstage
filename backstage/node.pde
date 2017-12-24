@@ -17,15 +17,15 @@ along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 class Node {
   String type, label, notes;
   int index, x, y, w, h; int[] next;
-  boolean beginPaused, endPaused, loop, beginTransition, endTransition;
+  boolean beginPaused, endPaused, loop, beginTransition, endTransition, independent;
   float duration, beginTransitionDuration, endTransitionDuration;
   
   int track, endTime, presentTime, prevMillis;
   boolean selected, connecting, dragged, mouseOver, playing, paused, onEndPause, noLoop, onLoop;
   PImage icon;
 
-  Node(String type, String label, String notes, float duration, boolean beginPaused, boolean endPaused, int index, int x, int y, int[] next, PImage icon) {
-    this.type = type; this.label = label; this.notes = notes; this.duration = duration; this.beginPaused = beginPaused; this.endPaused = endPaused;   
+  Node(String type, String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int[] next, PImage icon) {
+    this.type = type; this.label = label; this.notes = notes; this.duration = duration; this.beginPaused = beginPaused; this.endPaused = endPaused; this.independent = independent;
     this.index = index; this.x = x; this.y = y; this.next = next; this.icon = icon;
     w = max(int(cp.textWidth(label)) + 8, 84);
     h = 40;
@@ -176,7 +176,9 @@ class Node {
     cp.textAlign(CENTER, CENTER);
     cp.fill(0);
     cp.text(label, x + w / 2, y + h / 4);
+    if(independent) cp.tint(192);
     cp.image(icon, x + 16, y + h / 2);
+    cp.noTint();
     if(!controlPanel.isVisible() && index == nodes.size() - 1 && mouseOver && notes.length() > 0) {
       cp.fill(color(red(overColor), green(overColor), blue(overColor), 232));
       cp.rect(cp.width - 240 - translation, 24, 240, 160);
@@ -276,6 +278,7 @@ class Node {
     cboxLoop.setSelected(loop);
     cboxBeginTransition.setSelected(beginTransition);
     cboxEndTransition.setSelected(endTransition);
+    cboxIndependent.setSelected(independent);
 
     textBegin.setLocalColor(7, color(255));
     textEnd.setLocalColor(7, color(255));
@@ -317,6 +320,7 @@ class Node {
     loop = cboxLoop.isSelected();
     beginTransition = cboxBeginTransition.isSelected();
     endTransition = cboxEndTransition.isSelected();
+    independent = cboxIndependent.isSelected();
     if(isTime(textBeginTransition.getText())) beginTransitionDuration = stringToTime(textBeginTransition.getText());
     if(isTime(textEndTransition.getText())) endTransitionDuration = stringToTime(textEndTransition.getText());
   }
@@ -333,5 +337,4 @@ class Node {
   boolean isEndTransition() {
     return endTransition && endTransitionDuration > 0 && (!loop || noLoop) && presentTime > endTime - endTransitionDuration * 1000;
   }
-
 }

@@ -15,7 +15,7 @@ You should have received a copy of the GNU General Public License
 along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
 class Text extends Node {
-  boolean centered;
+  boolean centered, perX, perY, perW, perH;
   float nX, nY, nW, nH;
   int beginTransitionType, endTransitionType, textAlignHor, textAlignVer, textSize;
   String text, textFont;
@@ -25,26 +25,27 @@ class Text extends Node {
   PFont font;
 
   Text(Text no) {
-    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, nodes.size(), no.x + 1, no.y, new int[0],
+    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, new int[0],
     no.loop, no.beginTransition, no.endTransition, no.centered,
-    no.nX, no.nY, no.nW, no.nH, no.beginTransitionDuration, no.endTransitionDuration,
+    no.nX, no.nY, no.nW, no.nH, no.perX, no.perY, no.perW, no.perH, no.beginTransitionDuration, no.endTransitionDuration,
     no.beginTransitionType, no.endTransitionType, no.textAlignHor, no.textAlignVer, no.textSize,
     no.text, no.textFont, no.bColor);
   }
 
   Text() {
-    this("", "", defaultDuration, false, false, nodes.size(), -translation, trackHeight, new int[0], false, false, false, true, 0, 0, 0, 0, 1, 1, 0, 0, 1, 2, 48, "", "", color(255));
+    this("", "", defaultDuration, false, false, false, nodes.size(), -translation, trackHeight, new int[0], false, false, false, true, 0, 0, 100, 100, false, false, true, true, 1, 1, 0, 0, 1, 2, 48, "", "", color(255));
   }
 
-  Text(String label, String notes, float duration, boolean beginPaused, boolean endPaused, int index, int x, int y, int[] next,
+  Text(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int[] next,
   boolean loop, boolean beginTransition, boolean endTransition, boolean centered,
-  float nX, float nY, float nW, float nH, float beginTransitionDuration, float endTransitionDuration,
+  float nX, float nY, float nW, float nH, boolean perX, boolean perY, boolean perW, boolean perH, float beginTransitionDuration, float endTransitionDuration,
   int beginTransitionType, int endTransitionType, int textAlignHor, int textAlignVer, int textSize,
   String text, String textFont,
   color bColor) {
-    super("Text", label, notes, duration, beginPaused, endPaused, index, x, y, next, iconText);
+    super("Text", label, notes, duration, beginPaused, endPaused, independent, index, x, y, next, iconText);
     this.loop = loop; this.beginTransition = beginTransition; this.endTransition = endTransition; this.centered = centered;
-    this.nX = nX; this.nY = nY; this.nW = nW; this.nH = nH; this.beginTransitionDuration = beginTransitionDuration; this.endTransitionDuration = endTransitionDuration;
+    this.nX = nX; this.nY = nY; this.nW = nW; this.nH = nH; this.perX = perX; this.perY = perY; this.perW = perW; this.perH = perH;
+    this.beginTransitionDuration = beginTransitionDuration; this.endTransitionDuration = endTransitionDuration;
     this.beginTransitionType = beginTransitionType; this.endTransitionType = endTransitionType; this.textAlignHor = textAlignHor; this.textAlignVer = textAlignVer; this.textSize = textSize;
     this.text = text; this.textFont = textFont;
     this.bColor = bColor;
@@ -53,10 +54,10 @@ class Text extends Node {
   void turn() {
     if(!playing) {
       initializeTurn();
-      if(nX > 0 && nX <= 1) pX = width * nX; else pX = nX;
-      if(nY > 0 && nY <= 1) pY = height * nY; else pY = nY;
-      if(nW <= 1) pW = width * nW; else pW = nW;
-      if(nH <= 1) pH = height * nH; else pH = nH;
+      if(perX) pX = width * nX / 100.0; else pX = nX;
+      if(perY) pY = height * nY / 100.0; else pY = nY;
+      if(perW) pW = width * nW / 100.0; else pW = nW;
+      if(perH) pH = height * nH / 100.0; else pH = nH;
       if(centered) {
         pX = (width - pW) / 2;
         pY = (height - pH) / 2;
@@ -124,6 +125,10 @@ class Text extends Node {
     textY.setText(dimToString(nY));
     textW.setText(dimToString(nW));
     textH.setText(dimToString(nH));
+    cboxX.setSelected(perX);
+    cboxY.setSelected(perY);
+    cboxW.setSelected(perW);
+    cboxH.setSelected(perH);
     textBeginTransition.setText(timeToString(beginTransitionDuration));
     textEndTransition.setText(timeToString(endTransitionDuration));
     String[] t = {"Dissolve", "Slide Left", "Slide Right", "Slide Up", "Slide Down"};
@@ -146,23 +151,31 @@ class Text extends Node {
     labelPath.setVisible(false);
     textPath.setVisible(false);
     labelLabel.moveTo(8, 24);
-    textLabel.moveTo(72, 24);
+    textLabel.moveTo(48, 24);
     labelX.setVisible(true);
     labelX.moveTo(8, 48);
     textX.setVisible(true);
-    textX.moveTo(72, 48);
+    textX.moveTo(48, 48);
+    cboxX.setVisible(true);
+    cboxX.moveTo(88, 48);
     labelY.setVisible(true);
     labelY.moveTo(8, 72);
     textY.setVisible(true);
-    textY.moveTo(72, 72);
+    textY.moveTo(48, 72);
+    cboxY.setVisible(true);
+    cboxY.moveTo(88, 72);
     labelW.setVisible(true);
     labelW.moveTo(128, 48);
     textW.setVisible(true);
-    textW.moveTo(192, 48);
+    textW.moveTo(168, 48);
+    cboxW.setVisible(true);
+    cboxW.moveTo(208, 48);
     labelH.setVisible(true);
     labelH.moveTo(128, 72);
     textH.setVisible(true);
-    textH.moveTo(192, 72);
+    textH.moveTo(168, 72);
+    cboxH.setVisible(true);
+    cboxH.moveTo(208, 72);
     cboxCentered.setVisible(true);
     cboxCentered.moveTo(8, 96);
     cboxAspectRatio.setVisible(false);
@@ -231,6 +244,10 @@ class Text extends Node {
     if(isDim(textH.getText())) nH = stringToDim(textH.getText());
     if(nW < 0) nW = 0;
     if(nH < 0) nH = 0;
+    perX = cboxX.isSelected();
+    perY = cboxY.isSelected();
+    perW = cboxW.isSelected();
+    perH = cboxH.isSelected();
     beginTransitionType = dListBeginTransition.getSelectedIndex();
     endTransitionType = dListEndTransition.getSelectedIndex();
     textAlignHor = dListTextAlignHor.getSelectedIndex();

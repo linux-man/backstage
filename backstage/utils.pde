@@ -89,26 +89,15 @@ void switchFullScreen() {
 //*/
 
 boolean isDim(String s) {
-  if(s.endsWith("%")) {
-    s = s.substring(0, s.length()-1);
-    if(Float.isNaN(float(s))) return false;
-    if(float(s) > 100) return false;
-  }
-  else if(Float.isNaN(float(s))) return false;
-  return true;
+  return !(Float.isNaN(float(s)));
 }
 
 String dimToString(float n) {
-  if(n > 0 && n <= 1) return str(int(n * 100)) + "%";
-  else return str(int(n));
+  return str(int(n));
 }
 
 float stringToDim(String s) {
-  if(s.endsWith("%")) {
-    s = s.substring(0, s.length()-1);
-    return float(s) / 100;
-  }
-  else return float(s);
+  return float(s);
 }
 
 boolean isTime(String s) {

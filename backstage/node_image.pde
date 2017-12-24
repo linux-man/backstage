@@ -16,7 +16,7 @@ along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
 class Image extends Node {
   String path;
-  boolean centered, aspectRatio;
+  boolean centered, aspectRatio, perX, perY, perW, perH;
   float nX, nY, nW, nH;
   int beginTransitionType, endTransitionType;
 
@@ -24,21 +24,22 @@ class Image extends Node {
   PImage image;
 
   Image(Image no) {
-    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, nodes.size(), no.x + 1, no.y, new int[0],
+    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, new int[0],
     no.path, no.loop, no.beginTransition, no.endTransition, no.centered, no.aspectRatio,
-    no.nX, no.nY, no.nW, no.nH, no.beginTransitionDuration, no.endTransitionDuration,
+    no.nX, no.nY, no.nW, no.nH, no.perX, no.perY, no.perW, no.perH, no.beginTransitionDuration, no.endTransitionDuration,
     no.beginTransitionType, no.endTransitionType);
   }
 
-  Image(String label, String notes, float duration, boolean beginPaused, boolean endPaused, int index, int x, int y, int[] next,
+  Image(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int[] next,
   String path,
   boolean loop, boolean beginTransition, boolean endTransition, boolean centered, boolean aspectRatio,
-  float nX, float nY, float nW, float nH, float beginTransitionDuration, float endTransitionDuration,
+  float nX, float nY, float nW, float nH, boolean perX, boolean perY, boolean perW, boolean perH, float beginTransitionDuration, float endTransitionDuration,
   int beginTransitionType, int endTransitionType) {
-    super("Image", label, notes, duration, beginPaused, endPaused, index, x, y, next, iconImage);
+    super("Image", label, notes, duration, beginPaused, endPaused, independent, index, x, y, next, iconImage);
     this.path = normalizePath(path);
     this.loop = loop; this.beginTransition = beginTransition; this.endTransition = endTransition; this.centered = centered; this.aspectRatio = aspectRatio;
-    this.nX = nX; this.nY = nY; this.nW = nW; this.nH = nH; this.beginTransitionDuration = beginTransitionDuration; this.endTransitionDuration = endTransitionDuration;
+    this.nX = nX; this.nY = nY; this.nW = nW; this.nH = nH; this.perX = perX; this.perY = perY; this.perW = perW; this.perH = perH;
+    this.beginTransitionDuration = beginTransitionDuration; this.endTransitionDuration = endTransitionDuration;
     this.beginTransitionType = beginTransitionType; this.endTransitionType = endTransitionType;
 
     image = loadImage(projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString());
@@ -48,10 +49,10 @@ class Image extends Node {
   void turn() {
     if(!playing) {
       initializeTurn();
-      if(nX > 0 && nX <= 1) pX = width * nX; else pX = nX;
-      if(nY > 0 && nY <= 1) pY = height * nY; else pY = nY;
-      if(nW <= 1) pW = width * nW; else pW = nW;
-      if(nH <= 1) pH = height * nH; else pH = nH;
+      if(perX) pX = width * nX / 100.0; else pX = nX;
+      if(perY) pY = height * nY / 100.0; else pY = nY;
+      if(perW) pW = width * nW / 100.0; else pW = nW;
+      if(perH) pH = height * nH / 100.0; else pH = nH;
       if(aspectRatio) {
         float ratio = float(image.width) / image.height;
         pW = min(pW, pH * ratio);
@@ -117,6 +118,10 @@ class Image extends Node {
     textY.setText(dimToString(nY));
     textW.setText(dimToString(nW));
     textH.setText(dimToString(nH));
+    cboxX.setSelected(perX);
+    cboxY.setSelected(perY);
+    cboxW.setSelected(perW);
+    cboxH.setSelected(perH);
     textBeginTransition.setText(timeToString(beginTransitionDuration));
     textEndTransition.setText(timeToString(endTransitionDuration));
     String[] t = {"Dissolve", "Zoom", "Slide Left", "Slide Right", "Slide Up", "Slide Down"};
@@ -128,23 +133,31 @@ class Image extends Node {
     labelPath.setVisible(true);
     textPath.setVisible(true);
     labelLabel.moveTo(8, 48);
-    textLabel.moveTo(72, 48);
+    textLabel.moveTo(48, 48);
     labelX.setVisible(true);
     labelX.moveTo(8, 72);
     textX.setVisible(true);
-    textX.moveTo(72, 72);
+    textX.moveTo(48, 72);
+    cboxX.setVisible(true);
+    cboxX.moveTo(88, 72);
     labelY.setVisible(true);
     labelY.moveTo(8, 96);
     textY.setVisible(true);
-    textY.moveTo(72, 96);
+    textY.moveTo(48, 96);
+    cboxY.setVisible(true);
+    cboxY.moveTo(88, 96);
     labelW.setVisible(true);
     labelW.moveTo(128, 72);
     textW.setVisible(true);
-    textW.moveTo(192, 72);
+    textW.moveTo(168, 72);
+    cboxW.setVisible(true);
+    cboxW.moveTo(208, 72);
     labelH.setVisible(true);
     labelH.moveTo(128, 96);
     textH.setVisible(true);
-    textH.moveTo(192, 96);
+    textH.moveTo(168, 96);
+    cboxH.setVisible(true);
+    cboxH.moveTo(208, 96);
     cboxCentered.setVisible(true);
     cboxCentered.moveTo(8, 120);
     cboxAspectRatio.setVisible(true);
@@ -203,8 +216,12 @@ class Image extends Node {
     if(isDim(textY.getText())) nY = stringToDim(textY.getText());
     if(isDim(textW.getText())) nW = stringToDim(textW.getText());
     if(isDim(textH.getText())) nH = stringToDim(textH.getText());
-    if(nW <= 0) nW = 1;
-    if(nH <= 0) nH = 1;
+    if(nW < 0) nW = 0;
+    if(nH < 0) nH = 0;
+    perX = cboxX.isSelected();
+    perY = cboxY.isSelected();
+    perW = cboxW.isSelected();
+    perH = cboxH.isSelected();
     beginTransitionType = dListBeginTransition.getSelectedIndex();
     endTransitionType = dListEndTransition.getSelectedIndex();
   }

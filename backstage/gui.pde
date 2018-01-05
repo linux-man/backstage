@@ -547,7 +547,7 @@ public void createGUI(){
   aboutPanel.setOpaque(true);
   labelTitle = new GLabel(cp, 8, 24, 184, 24);
   labelTitle.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
-  labelTitle.setText("Backstage v.1.4");
+  labelTitle.setText("Backstage v.1.5");
   labelTitle.setOpaque(false);
   buttonGithub = new GButton(cp, 8, 120, 72, 24);
   buttonGithub.setIcon("github.png", 1, GAlign.WEST, GAlign.CENTER, GAlign.MIDDLE);
@@ -555,7 +555,7 @@ public void createGUI(){
   buttonGithub.addEventHandler(this, "buttonGithub_click");
   labelCopyright = new GLabel(cp, 8, 48, 184, 24);
   labelCopyright.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
-  labelCopyright.setText("© 2017 Caldas Lopes");
+  labelCopyright.setText("© 2018 Caldas Lopes");
   labelCopyright.setOpaque(false);
   buttonAboutOk = new GButton(cp, 144, 120, 48, 24);
   buttonAboutOk.setIcon("ok.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);

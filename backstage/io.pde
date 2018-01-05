@@ -169,8 +169,10 @@ void saveZip(File file) {
       ZipOutputStream zipStream = new ZipOutputStream(new FileOutputStream(zip));
       ZipEntry ze;
       FileInputStream inputStream;
+      ArrayList<String> files = new ArrayList<String>();
       JSONObject json = loadJSONObject(projectPath.toString());
       JSONArray jsonNodes = json.getJSONArray("nodes");
+      files.clear();
       for(int n = 0; n < jsonNodes.size(); n++) {
         JSONObject node = jsonNodes.getJSONObject(n);
         switch(node.getString("type")) {
@@ -178,16 +180,19 @@ void saveZip(File file) {
             Path nodePath = Paths.get(node.getString("path"));
             Path newPath = Paths.get("media").resolve(nodePath.getFileName());
             node.setString("path", newPath.toString());
-            ze = new ZipEntry(newPath.toString());
-            zipStream.putNextEntry(ze);
-            inputStream = new FileInputStream(projectPath.getParent().resolve(nodePath).normalize().toString());
-            byte[] readBuffer = new byte[2048];
-            int amountRead;
-            while ((amountRead = inputStream.read(readBuffer)) > 0) {
-              zipStream.write(readBuffer, 0, amountRead);
+            if(!files.contains(newPath.toString())) {
+              files.add(newPath.toString());
+              ze = new ZipEntry(newPath.toString());
+              zipStream.putNextEntry(ze);
+              inputStream = new FileInputStream(projectPath.getParent().resolve(nodePath).normalize().toString());
+              byte[] readBuffer = new byte[2048];
+              int amountRead;
+              while ((amountRead = inputStream.read(readBuffer)) > 0) {
+                zipStream.write(readBuffer, 0, amountRead);
+              }
+              inputStream.close();
+              zipStream.closeEntry();
             }
-            inputStream.close();
-            zipStream.closeEntry();
             break;
         }
       }
@@ -206,7 +211,7 @@ void saveZip(File file) {
       zipStream.close();
     }
     catch (Exception e){
-      println("Exception caught within Zipper Class");
+      println(e.getMessage());
     }
   }
 }

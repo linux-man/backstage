@@ -4,6 +4,8 @@
 
 #### License [GPL-3+](LICENSE)
 
+Some [Videos](https://www.youtube.com/channel/UCQ6gAS_r49hooE0dBdEfLDw).
+
 if you find bugs, go to [github](https://github.com/linux-man/backstage/issues).
 
 if you have questions, try [forums.softlab.pt](http://forums.softlab.pt).

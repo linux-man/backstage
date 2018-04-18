@@ -233,7 +233,7 @@ class Node {
   }
 
   void end(boolean fullStop) {
-    if(!fullStop && endPaused && !onEndPause && (!loop || noLoop)) gotoEndPause(); //<>// //<>//
+    if(!fullStop && endPaused && !onEndPause && (!loop || noLoop)) gotoEndPause();
     else finalizeEnd(fullStop);
   }
   
@@ -261,7 +261,7 @@ class Node {
 
   void next() {
     noLoop = true;
-    if(onEndPause) end(false);
+    if(onEndPause) paused = false;
     else if(endTransition) {
       if(presentTime + endTransitionDuration * 1000 < endTime) endTime = presentTime + int(endTransitionDuration * 1000);
     }

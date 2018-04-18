@@ -60,9 +60,9 @@ Resize window: drag resize button at top-right
 
 Change tracks number: plus/minus buttons
 
-There are 2 sets of play/pause/step buttons. The upper is the global player. It starts all the SELECTED nodes. It pauses all the PLAYING nodes. Same goes for the "Step" button.
+There are 2 sets of play/pause/step buttons. The upper is the GLOBAL player. It starts all the SELECTED nodes. It pauses all the PLAYING nodes. Same goes for the "Step" button.
 
-The bottom buttons only affect the last selected node. This way you can start or stop playing something during the show. The "Step" button allow to end and jump to the next connected nodes.
+The bottom buttons (NODE buttons) only affect the last selected node. This way you can start or stop playing something during the show. The "Step" button allow to end and jump to the next connected nodes.
 
 "Step" respects End Paused and End Transition.
 
@@ -74,7 +74,7 @@ Accepted formats: jpg, png, gif, bmp, avi, mp4, mov, ogg, mkv, wav, mp3, au, aif
 
 Nodes with "Loop": it's expected to use "Step" to move forward.
 
-An "Independent" node is not controlled by the global buttons. You must start/stop selecting it and using the bottom buttons.
+An "Independent" node is not controlled by the global buttons (except the STOP button which stops everything). You must start/pause/step selecting it and using the NODE buttons.
 
 There are more to tell (I really should write a wiki), but for now, play with it. It's easy! Really!!
 
@@ -94,7 +94,7 @@ If you install Backstage you can open a project by double clicking the file. On 
 
 On Linux, Java has a tendency to crash when a monitor is connected/disconnected. Looks like a long time [bug](https://www.google.pt/search?q=sun.awt.image.BufImgSurfaceData+cannot+be+cast+to+sun.java2d.xr.XRSurfaceData).
 
-Certain mp4 files mute after 10-15 seconds of playing without any warning. It's a random glitch probably related to gstreamer-java. Better use avi or test the media several times.
+Certain mp4 files (mainly created by Handbrake) mute after 10-15 seconds of playing without any warning. It's a random glitch probably related to gstreamer-java. On Handbrake, choose mp3 audio, use avi and test the media several times.
 
 Ogg audio files are loaded by the Video library. You might have to play the "video" outside the window (choosing big or negative left/top values and small width/height).
 

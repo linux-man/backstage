@@ -74,7 +74,7 @@ synchronized public void cp_draw(PApplet appc, GWinData data) {
 
   playing = false;
   paused = true;
-  for(Node no: stage) if(no != null) {
+  for(Node no: stage) if(no != null && !no.independent) {
     playing = true;
     if(!no.paused) paused = false;
   }

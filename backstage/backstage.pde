@@ -94,7 +94,7 @@ void turn() {
 }
 
 void end(boolean fullStop) {
-  for(Node no: stage) if(no != null && !no.independent) no.end(fullStop);
+  for(Node no: stage) if(no != null) no.end(fullStop);
 }
 
 void next() {

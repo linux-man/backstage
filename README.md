@@ -100,6 +100,8 @@ Ogg audio files are loaded by the Video library. You might have to play the "vid
 
 Sometimes at start the theme is not correctly applied.
 
+If "loop" fails or behaves strangely, change "End At" value to a value less than duration, like duration minus 0.1.
+
 During the limited tests I did on Mac, I found that the original Opengl version crash, so I added an alternative JAVA2D version.
 There are 3 labeled code blocks on backstage.pde and utils.pde that must be commented/uncommented to change the renderer.
 The main difference between versions is that the presentation window start fullscreen minimized and can't be windowed.

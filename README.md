@@ -74,7 +74,7 @@ Accepted formats: jpg, png, gif, bmp, avi, mp4, mov, ogg, mkv, wav, mp3, au, aif
 
 Nodes with "Loop": it's expected to use "Step" to move forward.
 
-An "Independent" node is not controlled by the global buttons (except the STOP button which stops everything). You must start/pause/step selecting it and using the NODE buttons.
+An "Independent" node is not controlled by the global buttons (except the STOP button which stops everything). You must start/pause/step selecting it and using the NODE buttons. Also you can only play an Independent node if other non-independent nodes are already playing. You can't start a show with an Independent node.
 
 There are more to tell (I really should write a wiki), but for now, play with it. It's easy! Really!!
 

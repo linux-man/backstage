@@ -6,4 +6,4 @@ Terminal=false
 Type=Application
 Icon=backstage
 Categories=AudioVideo;
-MimeType=application/stage
+MimeType=application/stage;

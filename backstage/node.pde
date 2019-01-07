@@ -261,8 +261,8 @@ class Node {
 
   void next() {
     noLoop = true;
-    if(onEndPause) paused = false;
-    else if(endTransition) {
+    if(paused) turn();
+    if(endTransition) {
       if(presentTime + endTransitionDuration * 1000 < endTime) endTime = presentTime + int(endTransitionDuration * 1000);
     }
     else endTime = presentTime;

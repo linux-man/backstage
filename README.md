@@ -58,33 +58,33 @@ Open node properties window: Double click.
 
 Resize window: drag resize button at top-right
 
-Change tracks number: plus/minus buttons
+Add/remove tracks: plus/minus buttons
 
 There are 2 sets of play/pause/step buttons. The upper is the GLOBAL player. It starts all the SELECTED nodes. It pauses all the PLAYING nodes. Same goes for the "Step" button.
 
 The bottom buttons (NODE buttons) only affect the last selected node. This way you can start or stop playing something during the show. The "Step" button allow to end and jump to the next connected nodes.
 
-"Step" respects End Paused and End Transition.
-
 At the "Gear" submenu you can compress your project to export to other computer, change the default duration of new Text, Rect and Image nodes (default is 5 seconds) and change theme.
 
 The "Eye" turn fullscreen on/off. You can't do that while playing.
 
-Accepted formats: jpg, png, gif, bmp, avi, mp4, mov, ogg, mkv, wav, mp3, au, aiff.
-
 Nodes with "Loop": it's expected to use "Step" to move forward.
+
+"Step" always respects End Paused and End Transition.
 
 An "Independent" node is not controlled by the global buttons (except the STOP button which stops everything). You must start/pause/step selecting it and using the NODE buttons. Also you can only play an Independent node if other non-independent nodes are already playing. You can't start a show with an Independent node.
 
-There are more to tell (I really should write a wiki), but for now, play with it. It's easy! Really!!
+### Accepted formats
+
+Image: jpg, png, gif, bmp.
+Audio: wav, mp3, au, aiff, ogg, wma, asf, mka, tta, dts, mp2, a52, aac, flac, ra.
+Video: avi, mp4, mov, ogv, mkv, 3gp, wmv, flv, ts, mpeg, rm, dv, vid.
 
 ### Requirements
 
-Java Version 8 (preferably the latest update)
+Java JRE 8
 
-Gstreamer 1.0
-
-Codecs
+VLC Media Player
 
 ### Issues
 
@@ -94,13 +94,7 @@ If you install Backstage you can open a project by double clicking the file. On 
 
 On Linux, Java has a tendency to crash when a monitor is connected/disconnected. Looks like a long time [bug](https://www.google.pt/search?q=sun.awt.image.BufImgSurfaceData+cannot+be+cast+to+sun.java2d.xr.XRSurfaceData).
 
-Certain mp4 files (mainly created by Handbrake) mute after 10-15 seconds of playing without any warning. It's a random glitch probably related to gstreamer-java. On Handbrake, choose mp3 audio, use avi and test the media several times.
-
-Ogg audio files are loaded by the Video library. You might have to play the "video" outside the window (choosing big or negative left/top values and small width/height).
-
 Sometimes at start the theme is not correctly applied.
-
-If "loop" fails or behaves strangely, change "End At" value to a value less than duration, like duration minus 0.1.
 
 During the limited tests I did on Mac, I found that the original Opengl version crash, so I added an alternative JAVA2D version.
 There are 3 labeled code blocks on backstage.pde and utils.pde that must be commented/uncommented to change the renderer.
@@ -112,7 +106,9 @@ The main difference between versions is that the presentation window start fulls
 
 [G4P](http://www.lagers.org.uk/g4p/)
 
-[Minim](http://code.compartmental.net/tools/minim/)
+[VLCJVideo](https://github.com/linux-man/VLCJVideo)
+
+[vlcj](https://github.com/caprica/vlcj)
 
 [Drop](http://transfluxus.github.io/drop/)
 

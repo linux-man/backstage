@@ -21,7 +21,8 @@ class Video extends Node {
   int beginTransitionType, endTransitionType;
   
   float pX, pY, pW, pH;
-  Movie video;
+  boolean loading, turnStarted;
+  VLCJVideo video;
 
   Video(Video no) {
     this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, new int[0],
@@ -43,19 +44,29 @@ class Video extends Node {
     this.volume = volume; this.beginAt = beginAt; this.endAt = endAt;
     this.beginTransitionType = beginTransitionType; this.endTransitionType = endTransitionType;
 
-    video = new Movie(main, projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString());
+    video = new VLCJVideo(main);
+
+    video.bind(MediaPlayerEventType.PLAYING, new VRunnable(this) { public void run() {
+      if(parent.loading) {
+        parent.video.mute();
+        parent.loading = false;
+        parent.duration = int(video.duration() * 100) / 100.0;
+        if(parent.duration <= 0) throw new IllegalArgumentException("This is not a Video!");
+        if(parent.beginAt < 0 || parent.beginAt >= parent.duration) parent.beginAt = 0;
+        if(parent.endAt <= 0 || parent.endAt > parent.duration || parent.endAt <= parent.beginAt) parent.endAt = parent.duration;
+        parent.video.stop();
+      }
+    }});
+
+    loading = true;
+    video.openMedia(projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString());
     video.play();
-    video.volume(0);
-    this.duration = int(video.duration() * 100) / 100.0;
-    video.jump(video.duration() - 1);
-    if(this.duration <= 0) throw new IllegalArgumentException("This is not a Video!");
-    if(this.beginAt < 0 || this.beginAt >= this.duration) this.beginAt = 0;
-    if(this.endAt <= 0 || this.endAt > this.duration || this.endAt <= this.beginAt) this.endAt = this.duration;
   }
-  
+
   void turn() {
     if(!playing) {
       initializeTurn();
+      turnStarted = true;
       if(perX) pX = width * nX / 100.0; else pX = nX;
       if(perY) pY = height * nY / 100.0; else pY = nY;
       if(perW) pW = width * nW / 100.0; else pW = nW;
@@ -66,12 +77,9 @@ class Video extends Node {
       }
       endTime = int((endAt - beginAt) * 1000);
       video.play();
-      duration = int(video.duration() * 100) / 100.0;
-      if(beginAt < 0 || beginAt >= duration) beginAt = 0;
-      if(endAt <= 0 || endAt > duration || endAt <= beginAt) endAt = duration;
 
-      if(beginTransition) video.volume(0);
-      else video.volume(volume);
+      if(beginTransition) video.mute();
+      else video.setVolume(volume);
       video.jump(beginAt);
       if(aspectRatio) {
         float ratio = float(video.width) / video.height;
@@ -85,10 +93,11 @@ class Video extends Node {
       finalizeTurn();
     }
     else paused = !paused;
+
     if(paused) video.pause();
     else video.play();
   }
-  
+
   void play() {
     if(!playing) return;
     float x = pX; float y = pY; float w = pW; float h = pH;
@@ -108,7 +117,7 @@ class Video extends Node {
         case 4: y = height +  (pY - height) * presentTime / beginTransitionDuration / 1000; break;
         case 5: y = -pH + (pY + pH) * presentTime / beginTransitionDuration / 1000; break;
       }
-      video.volume(volume * presentTime / beginTransitionDuration / 1000);
+      video.setVolume(volume * presentTime / beginTransitionDuration / 1000);
     }
     else if(isEndTransition()) {
       switch(endTransitionType) {
@@ -124,18 +133,23 @@ class Video extends Node {
         case 4: y = -pH +  (pY + pH) * (endTime - presentTime) / endTransitionDuration / 1000; break;
         case 5: y = height +  (pY  - height) * (endTime - presentTime) / endTransitionDuration / 1000; break;
       }
-      video.volume(volume * (endTime - presentTime) / endTransitionDuration / 1000);
+      video.setVolume(volume * (endTime - presentTime) / endTransitionDuration / 1000);
     }
-    else video.volume(volume);
+    else video.setVolume(volume);
 
-    image(video, x, y, w, h);
+    if(!turnStarted || presentTime > 200) {
+      image(video, x, y, w, h);
+      turnStarted = false;
+    }
 
     finalizePlay();
-    if(loop && presentTime == 0 && !paused) video.jump(beginAt);
+    if(loop && presentTime == 0 && !paused) {
+      if(!video.isPlaying()) video.play();
+      video.jump(beginAt);
+    }
   }
 
   void finalizeEnd(boolean fullStop) {
-    video.jump(beginAt);
     video.stop();
     super.finalizeEnd(fullStop);
   }

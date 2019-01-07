@@ -75,14 +75,12 @@ public void buttonEnd_click(GButton source, GEvent event) { //_CODE_:buttonEnd:7
 } //_CODE_:buttonEnd:722486:
 
 public void buttonLoad_click(GButton source, GEvent event) { //_CODE_:buttonLoad:996884:
-  if(playing) return;
   buttonFiles_click(source, event);
   end(true);
   loadProject(openDialog("Load project"));
 } //_CODE_:buttonLoad:996884:
 
 public void buttonSave_click(GButton source, GEvent event) { //_CODE_:buttonSave:499788:
-  if(playing) return;
   buttonFiles_click(source, event);
   saveProject(saveDialog("project"));
 } //_CODE_:buttonSave:499788:
@@ -107,13 +105,14 @@ public void buttonFiles_click(GButton source, GEvent event) { //_CODE_:buttonFil
 } //_CODE_:buttonFiles:594317:
 
 public void buttonNew_click(GButton source, GEvent event) { //_CODE_:buttonNew:590597:
-  if(playing) return;
-  buttonFiles_click(source, event);
-  end(true);
-  clearNodes();
-  projectPath = Paths.get(System.getProperty("user.home")).resolve("presentation.stage");
-  prevProjectPath = projectPath;
-  cp.setTitle("Control Panel");
+  if(G4P.selectOption(cp, "Are you sure?", "New Backstage", G4P.QUERY, G4P.YES_NO) == G4P.OK) {
+    buttonFiles_click(source, event);
+    end(true);
+    clearNodes();
+    projectPath = Paths.get(System.getProperty("user.home")).resolve("presentation.stage");
+    prevProjectPath = projectPath;
+    cp.setTitle("Control Panel");
+  }
 } //_CODE_:buttonNew:590597:
 
 public void buttonConfig_click(GButton source, GEvent event) { //_CODE_:buttonConfig:357326:
@@ -365,7 +364,7 @@ public void createGUI(){
   sliderVolume = new GSlider(cp, 72, 192, 168, 16, 10.0);
   sliderVolume.setShowValue(true);
   sliderVolume.setLimits(1.0, 0.0, 1.0);
-  sliderVolume.setNbrTicks(11);
+  sliderVolume.setNbrTicks(21);
   sliderVolume.setStickToTicks(true);
   sliderVolume.setShowTicks(true);
   sliderVolume.setNumberFormat(G4P.DECIMAL, 2);
@@ -547,7 +546,7 @@ public void createGUI(){
   aboutPanel.setOpaque(true);
   labelTitle = new GLabel(cp, 8, 24, 184, 24);
   labelTitle.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
-  labelTitle.setText("Backstage v.1.6");
+  labelTitle.setText("Backstage v.2.0");
   labelTitle.setOpaque(false);
   buttonGithub = new GButton(cp, 8, 120, 72, 24);
   buttonGithub.setIcon("github.png", 1, GAlign.WEST, GAlign.CENTER, GAlign.MIDDLE);
@@ -555,7 +554,7 @@ public void createGUI(){
   buttonGithub.addEventHandler(this, "buttonGithub_click");
   labelCopyright = new GLabel(cp, 8, 48, 184, 24);
   labelCopyright.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
-  labelCopyright.setText("© 2018 Caldas Lopes");
+  labelCopyright.setText("© 2019 Caldas Lopes");
   labelCopyright.setOpaque(false);
   buttonAboutOk = new GButton(cp, 144, 120, 48, 24);
   buttonAboutOk.setIcon("ok.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);

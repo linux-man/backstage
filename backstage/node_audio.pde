@@ -14,11 +14,17 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
+import uk.co.caprica.vlcj.component.AudioMediaPlayerComponent;
+import uk.co.caprica.vlcj.player.MediaMeta;
+import uk.co.caprica.vlcj.player.MediaPlayer;
+
 class Audio extends Node {
   String path;
   float volume, beginAt, endAt;
-  AudioPlayer audio;
 
+  AudioMediaPlayerComponent amp;
+  MediaPlayer audio;
+  
   Audio(Audio no) {
     this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, new int[0],
     no.path, no.loop, no.beginTransition, no.endTransition,
@@ -34,22 +40,25 @@ class Audio extends Node {
     this.loop = loop; this.beginTransition = beginTransition; this.endTransition = endTransition;
     this.beginTransitionDuration = beginTransitionDuration; this.endTransitionDuration = endTransitionDuration; this.volume = volume; this.beginAt = beginAt; this.endAt = endAt;
 
-    audio = minim.loadFile(projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString(), 1024);
-    this.duration = audio.length() / 10 / 100.0;
+    amp = new AudioMediaPlayerComponent();
+    audio = amp.getMediaPlayer();
+    audio.prepareMedia(projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString());
+    audio.parseMedia();
+    MediaMeta mm;
+    mm = audio.getMediaMeta();
+    this.duration = mm.getLength() / 10 / 100.0;
     if(this.beginAt < 0 || this.beginAt >= this.duration) this.beginAt = 0;
     if(this.endAt <= 0 || this.endAt > this.duration || this.endAt <= this.beginAt) this.endAt = this.duration;
+    mm.release();
   }
   
   void turn() {
     if(!playing) {
       initializeTurn();
       endTime = int((endAt - beginAt) * 1000);
-      duration = audio.length() / 10 / 100.0;
-      if(beginAt < 0 || beginAt >= duration) beginAt = 0;
-      if(endAt <= 0 || endAt > duration || endAt <= beginAt) endAt = duration;
-      if(beginTransition) audio.setGain(-144);
-      else audio.setGain(volumeToDecibel(volume));
-      audio.cue(int(beginAt * 1000));
+      if(beginTransition) audio.mute();
+      else audio.setVolume(int(volume * 200));
+      audio.setTime(int(beginAt * 1000));
       finalizeTurn();
     }
     else paused = !paused;
@@ -61,18 +70,19 @@ class Audio extends Node {
   void play() {
     if(!playing) return;
 
-    if(isBeginTransition()) audio.setGain(volumeToDecibel(volume * presentTime / beginTransitionDuration / 1000));
-    else if(isEndTransition()) audio.setGain(volumeToDecibel(volume * (endTime - presentTime) / endTransitionDuration / 1000));
-    else audio.setGain(volumeToDecibel(volume));
+    if(isBeginTransition()) audio.setVolume(int(200 * volume * presentTime / beginTransitionDuration / 1000));
+    else if(isEndTransition()) audio.setVolume(int(200 * volume * (endTime - presentTime) / endTransitionDuration / 1000));
+    else audio.setVolume(int(200 * volume));
 
     finalizePlay();
-    if(loop && presentTime == 0 && !paused) audio.play(int(beginAt * 1000));
+    if(loop && presentTime == 0 && !paused) {
+      if(!audio.isPlaying()) audio.play();
+      audio.setTime(int(beginAt * 1000));
+    }
   }
 
   void finalizeEnd(boolean fullStop) {
-    audio.setGain(-144);//Sometimes audio just keep playing! (when you drag slider/click at the end)
-    audio.cue(int(beginAt * 1000));
-    audio.pause();
+    audio.stop();
     super.finalizeEnd(fullStop);
   }
 
@@ -164,7 +174,10 @@ class Audio extends Node {
 
   void clear() {
     super.clear();
-    audio.close();
+    audio.stop();
+    audio.release();
     audio = null;
+    amp.release();
+    amp = null;
   }
 }

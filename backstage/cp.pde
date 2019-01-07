@@ -14,6 +14,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
+import java.awt.Font;
+
 void initializeCp() {
   cp.getSurface().setIcon(loadImage("control-panel.png"));
   cp.setLocation(0, 0);
@@ -65,6 +67,96 @@ void initializeCp() {
   cp.addDrawHandler(this, "cp_draw");
   cp.textFont(loadFont("Ubuntu-12.vlw"), 12);
   changeScheme(prefs.getInt("Scheme", 8));
+  Font cpFont = new Font("Sans", Font.PLAIN, 10);
+  buttonAddMedia.setFont(cpFont);
+  buttonShow.setFont(cpFont);
+  controlPanel.setFont(cpFont);
+  buttonOK.setFont(cpFont);
+  textLabel.setFont(cpFont);
+  labelLabel.setFont(cpFont);
+  labelPath.setFont(cpFont);
+  textPath.setFont(cpFont);
+  textBegin.setFont(cpFont);
+  textEnd.setFont(cpFont);
+  buttonCancel.setFont(cpFont);
+  labelX.setFont(cpFont);
+  labelY.setFont(cpFont);
+  labelW.setFont(cpFont);
+  labelH.setFont(cpFont);
+  textX.setFont(cpFont);
+  textY.setFont(cpFont);
+  textW.setFont(cpFont);
+  textH.setFont(cpFont);
+  textDuration.setFont(cpFont);
+  labelDuration.setFont(cpFont);
+  labelText.setFont(cpFont);
+  textArea.setFont(cpFont);
+  labelNotes.setFont(cpFont);
+  notesArea.setFont(cpFont);
+  //sketchColor.setFont(cpFont);
+  buttonColor.setFont(cpFont);
+  buttonBegin.setFont(cpFont);
+  buttonEnd.setFont(cpFont);
+  cboxCentered.setFont(cpFont);
+  cboxAspectRatio.setFont(cpFont);
+  cboxBeginPaused.setFont(cpFont);
+  cboxEndPaused.setFont(cpFont);
+  cboxBeginTransition.setFont(cpFont);
+  cboxEndTransition.setFont(cpFont);
+  labelBeginTransition.setFont(cpFont);
+  labelEndTransition.setFont(cpFont);
+  textBeginTransition.setFont(cpFont);
+  textEndTransition.setFont(cpFont);
+  dListBeginTransition.setFont(cpFont);
+  dListEndTransition.setFont(cpFont);
+  labelVolume.setFont(cpFont);
+  //sliderVolume.setFont(cpFont);
+  cboxLoop.setFont(cpFont);
+  labelTextSize.setFont(cpFont);
+  textTextSize.setFont(cpFont);
+  dListTextAlignHor.setFont(cpFont);
+  dListTextAlignVer.setFont(cpFont);
+  dListTextFont.setFont(cpFont);
+  labelTextFont.setFont(cpFont);
+  labelTextAlign.setFont(cpFont);
+  cboxX.setFont(cpFont);
+  cboxH.setFont(cpFont);
+  cboxY.setFont(cpFont);
+  cboxW.setFont(cpFont);
+  cboxIndependent.setFont(cpFont);
+  buttonResize.setFont(cpFont);
+  buttonLoad.setFont(cpFont);
+  buttonSave.setFont(cpFont);
+  buttonZip.setFont(cpFont);
+  buttonFiles.setFont(cpFont);
+  buttonNew.setFont(cpFont);
+  buttonConfig.setFont(cpFont);
+  buttonScheme.setFont(cpFont);
+  buttonNodeNext.setFont(cpFont);
+  buttonStop.setFont(cpFont);
+  buttonPlay.setFont(cpFont);
+  buttonNodePlay.setFont(cpFont);
+  buttonNodeStop.setFont(cpFont);
+  buttonNodeSlider.setFont(cpFont);
+  buttonTracksPlus.setFont(cpFont);
+  buttonTracksMinus.setFont(cpFont);
+  buttonAdd.setFont(cpFont);
+  buttonAddLink.setFont(cpFont);
+  buttonAddText.setFont(cpFont);
+  buttonAddRect.setFont(cpFont);
+  durationPanel.setFont(cpFont);
+  textDp.setFont(cpFont);
+  buttonDpCancel.setFont(cpFont);
+  buttonDpOk.setFont(cpFont);
+  buttonDefaultDuration.setFont(cpFont);
+  buttonAbout.setFont(cpFont);
+  aboutPanel.setFont(cpFont);
+  labelTitle.setFont(cpFont);
+  buttonGithub.setFont(cpFont);
+  labelCopyright.setFont(cpFont);
+  buttonAboutOk.setFont(cpFont);
+  labelGPL.setFont(cpFont);
+  buttonNext.setFont(cpFont);
 }
 
 synchronized public void cp_draw(PApplet appc, GWinData data) {
@@ -188,7 +280,7 @@ synchronized public void cp_mouse(PApplet appc, GWinData data, MouseEvent mevent
         updateTime(last);
         switch(last.type) {
           case "Video": ((Video)last).video.jump(((Video)last).beginAt + last.presentTime/ 1000.0); break;
-          case "Audio": ((Audio)last).audio.cue(int(((Audio)last).beginAt * 1000 + last.presentTime)); break;
+          case "Audio": ((Audio)last).audio.setTime(int(((Audio)last).beginAt * 1000 + last.presentTime)); break;
         } 
       }
       if(dragging) {
@@ -227,7 +319,7 @@ synchronized public void cp_mouse(PApplet appc, GWinData data, MouseEvent mevent
         updateTime(last);
         switch(last.type) {
           case "Video": ((Video)last).video.jump(((Video)last).beginAt + last.presentTime/ 1000.0); break;
-          case "Audio": ((Audio)last).audio.cue(int(((Audio)last).beginAt * 1000 + last.presentTime)); break;
+          case "Audio": ((Audio)last).audio.setTime(int(((Audio)last).beginAt * 1000 + last.presentTime)); break;
         }
       }
       if(y < buttonFiles.getHeight() || y > cp.height - buttonFiles.getHeight() || controlPanel.isVisible() || durationPanel.isVisible()) return;

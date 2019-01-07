@@ -114,11 +114,6 @@ float stringToTime(String s) {
   return float(s);
 }
 
-float volumeToDecibel(float volume) {
-   if (volume != 0) return 20.0 * (float)Math.log10(volume);
-   else return -144;
-}
-
 void changeScheme(int c) {
   if(c > 12) c = 8;
   if(c < 8) c = 12;
@@ -193,4 +188,15 @@ String normalizePath(String path) {
   }
   path = projectPath.getParent().relativize(Paths.get(path)).normalize().toString();
   return path;
+}
+
+public class VRunnable implements Runnable {
+  public Video parent;
+  public VRunnable(Video parent) {
+    this.parent = parent;
+  }
+
+  @Override
+  public void run() {    
+  }
 }

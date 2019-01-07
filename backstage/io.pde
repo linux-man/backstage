@@ -230,8 +230,8 @@ void insertMedia(int x, int y, File file) {
   if(qname.length == 1) type = "Unknown";
   else switch(qname[qname.length - 1].toLowerCase()) {
     case "jpg": case "jpeg": case "png": case "gif": case "bmp": type = "Image"; break;
-    case "avi": case "mp4": case "m4v": case "mov": case "ogg": case "ogv": case "mkv": type = "Video"; break;
-    case "wav": case "mp3": case "au": case "aiff": type = "Audio"; break;
+    case "avi": case "mp4": case "m4v": case "mov": case "ogv": case "mkv": case "3gp": case "wmv": case "flv": case "ts": case "mpg": case "mpeg": case "rm": case "rmbv": case "dv": case "vid": type = "Video"; break;
+    case "wav": case "mp3": case "au": case "aiff": case "ogg": case "wma": case "asf": case "mka": case "tta": case "dts": case "mp2": case "a52": case "aac": case "flac":  case "ra": type = "Audio"; break;
     default: type = "Unknown";
   }
   int index = nodes.size();
@@ -241,7 +241,7 @@ void insertMedia(int x, int y, File file) {
   int beginTransitionType = 0; int endTransitionType = 0; float nX = 0; float nY = 0; float nW = 100; float nH = 100;
   boolean perX = false; boolean perY = false; boolean perW = true; boolean perH = true;
   boolean aspectRatio = true; boolean centered = true;
-  float volume = 1; float beginAt = 0; float endAt = 0;
+  float volume = 0.5; float beginAt = 0; float endAt = 0;
 
   switch(type) {
     case "Image":

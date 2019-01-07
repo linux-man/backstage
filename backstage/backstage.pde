@@ -14,15 +14,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
-import processing.video.*;
-import ddf.minim.*;
+import VLCJVideo.*;
+import uk.co.caprica.vlcj.player.events.MediaPlayerEventType;
+import uk.co.caprica.vlcj.discovery.NativeDiscovery;
 import g4p_controls.*;
 import drop.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.prefs.Preferences;
 
-Minim minim;
 boolean dragging, draggingWindow, draggingSlider, playing, paused;
 int screenWidth, screenHeight, colorScheme, trackHeight, translation, tracks, version;
 color backgroundColor, normalColor, overColor, selectedColor, borderColor;
@@ -66,13 +66,13 @@ void setup() {
   iconLink = loadImage("link_w.png");
   iconText = loadImage("text_w.png");
   iconRect = loadImage("rect_w.png");
-  minim = new Minim(this);
   nodes = new ArrayList<Node>();
   stage = new Node[tracks];
   createGUI();
   initializeCp();
   initializeDrop();
   if(args != null) loadProject(new File(args[0]));
+  new NativeDiscovery().discover();
 //OPENGL
 //*
   surface.setLocation(screenWidth - 640, screenHeight - 480);
@@ -99,10 +99,6 @@ void end(boolean fullStop) {
 
 void next() {
   for(Node no: stage) if(no != null && !no.independent) no.next();
-}
-
-void movieEvent(Movie m) {
-  m.read();
 }
 
 void keyPressed(){

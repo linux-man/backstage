@@ -77,7 +77,9 @@ An "Independent" node is not controlled by the global buttons (except the STOP b
 ### Accepted formats
 
 Image: jpg, png, gif, bmp.
+
 Audio: wav, mp3, au, aiff, ogg, wma, asf, mka, tta, dts, mp2, a52, aac, flac, ra.
+
 Video: avi, mp4, mov, ogv, mkv, 3gp, wmv, flv, ts, mpeg, rm, dv, vid.
 
 ### Requirements

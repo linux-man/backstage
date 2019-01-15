@@ -137,6 +137,8 @@ class Video extends Node {
     }
     else video.setVolume(volume);
 
+    if(paused && video.isPlaying()) video.pause();
+    
     if(!turnStarted || presentTime > 200) {
       image(video, x, y, w, h);
       turnStarted = false;

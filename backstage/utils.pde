@@ -200,3 +200,14 @@ public class VRunnable implements Runnable {
   public void run() {    
   }
 }
+
+public class ARunnable implements Runnable {
+  public Audio parent;
+  public ARunnable(Audio parent) {
+    this.parent = parent;
+  }
+
+  @Override
+  public void run() {    
+  }
+}

@@ -14,17 +14,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
-import uk.co.caprica.vlcj.component.AudioMediaPlayerComponent;
-import uk.co.caprica.vlcj.player.MediaMeta;
-import uk.co.caprica.vlcj.player.MediaPlayer;
-
 class Audio extends Node {
   String path;
   float volume, beginAt, endAt;
-
-  AudioMediaPlayerComponent amp;
-  MediaPlayer audio;
   
+  boolean loading;
+  VLCJVideo audio;
+
   Audio(Audio no) {
     this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, new int[0],
     no.path, no.loop, no.beginTransition, no.endTransition,
@@ -40,25 +36,34 @@ class Audio extends Node {
     this.loop = loop; this.beginTransition = beginTransition; this.endTransition = endTransition;
     this.beginTransitionDuration = beginTransitionDuration; this.endTransitionDuration = endTransitionDuration; this.volume = volume; this.beginAt = beginAt; this.endAt = endAt;
 
-    amp = new AudioMediaPlayerComponent();
-    audio = amp.getMediaPlayer();
-    audio.prepareMedia(projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString());
-    audio.parseMedia();
-    MediaMeta mm;
-    mm = audio.getMediaMeta();
-    this.duration = mm.getLength() / 10 / 100.0;
-    if(this.beginAt < 0 || this.beginAt >= this.duration) this.beginAt = 0;
-    if(this.endAt <= 0 || this.endAt > this.duration || this.endAt <= this.beginAt) this.endAt = this.duration;
-    mm.release();
+    audio = new VLCJVideo(main);
+
+    audio.bind(MediaPlayerEventType.PLAYING, new ARunnable(this) { public void run() {
+      if(parent.loading) {
+        parent.audio.mute();
+        parent.loading = false;
+        parent.duration = int(audio.duration() * 100) / 100.0;
+        if(parent.duration <= 0) throw new IllegalArgumentException("This is not an Audio!");
+        if(parent.beginAt < 0 || parent.beginAt >= parent.duration) parent.beginAt = 0;
+        if(parent.endAt <= 0 || parent.endAt > parent.duration || parent.endAt <= parent.beginAt) parent.endAt = parent.duration;
+        parent.audio.stop();
+      }
+    }});
+
+    loading = true;
+    audio.openMedia(projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString());
+    audio.play();
   }
-  
+
   void turn() {
     if(!playing) {
       initializeTurn();
       endTime = int((endAt - beginAt) * 1000);
+      audio.play();
+
       if(beginTransition) audio.mute();
-      else audio.setVolume(int(volume * 200));
-      audio.setTime(int(beginAt * 1000));
+      else audio.setVolume(volume);
+      audio.jump(beginAt);
       finalizeTurn();
     }
     else paused = !paused;
@@ -66,18 +71,20 @@ class Audio extends Node {
     if(paused) audio.pause();
     else audio.play();
   }
-  
+
   void play() {
     if(!playing) return;
 
-    if(isBeginTransition()) audio.setVolume(int(200 * volume * presentTime / beginTransitionDuration / 1000));
-    else if(isEndTransition()) audio.setVolume(int(200 * volume * (endTime - presentTime) / endTransitionDuration / 1000));
-    else audio.setVolume(int(200 * volume));
+    if(isBeginTransition()) audio.setVolume(volume * presentTime / beginTransitionDuration / 1000);
+    else if(isEndTransition()) audio.setVolume(volume * (endTime - presentTime) / endTransitionDuration / 1000);
+    else audio.setVolume(volume);
 
+    if(paused && audio.isPlaying()) audio.pause();
+    
     finalizePlay();
     if(loop && presentTime == 0 && !paused) {
       if(!audio.isPlaying()) audio.play();
-      audio.setTime(int(beginAt * 1000));
+      audio.jump(beginAt);
     }
   }
 
@@ -175,9 +182,7 @@ class Audio extends Node {
   void clear() {
     super.clear();
     audio.stop();
-    audio.release();
+    audio.dispose();
     audio = null;
-    amp.release();
-    amp = null;
   }
 }

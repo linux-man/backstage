@@ -280,7 +280,7 @@ synchronized public void cp_mouse(PApplet appc, GWinData data, MouseEvent mevent
         updateTime(last);
         switch(last.type) {
           case "Video": ((Video)last).video.jump(((Video)last).beginAt + last.presentTime/ 1000.0); break;
-          case "Audio": ((Audio)last).audio.setTime(int(((Audio)last).beginAt * 1000 + last.presentTime)); break;
+          case "Audio": ((Audio)last).audio.jump(((Audio)last).beginAt + last.presentTime/ 1000.0); break;
         } 
       }
       if(dragging) {
@@ -319,7 +319,7 @@ synchronized public void cp_mouse(PApplet appc, GWinData data, MouseEvent mevent
         updateTime(last);
         switch(last.type) {
           case "Video": ((Video)last).video.jump(((Video)last).beginAt + last.presentTime/ 1000.0); break;
-          case "Audio": ((Audio)last).audio.setTime(int(((Audio)last).beginAt * 1000 + last.presentTime)); break;
+          case "Audio": ((Audio)last).audio.jump(((Audio)last).beginAt + last.presentTime/ 1000.0); break;
         }
       }
       if(y < buttonFiles.getHeight() || y > cp.height - buttonFiles.getHeight() || controlPanel.isVisible() || durationPanel.isVisible()) return;

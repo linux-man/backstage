@@ -144,9 +144,10 @@ class Text extends Node {
     fonts = concat(fonts, PFont.list());
     dListTextFont.setItems(fonts, 0);
     for(int n = 0; n < fonts.length; n++) if(fonts[n] == textFont) dListTextFont.setSelected(n);
-    sketchPg.beginDraw();
-    sketchPg.background(bColor);
-    sketchPg.endDraw();
+    PGraphics v = viewColor.getGraphics();
+    v.beginDraw();
+    v.background(bColor);
+    v.endDraw();
 
     labelPath.setVisible(false);
     textPath.setVisible(false);
@@ -192,8 +193,8 @@ class Text extends Node {
     sliderVolume.setVisible(false);
     buttonColor.setVisible(true);
     buttonColor.moveTo(8, 216);
-    sketchColor.setVisible(true);
-    sketchColor.moveTo(72, 216);
+    viewColor.setVisible(true);
+    viewColor.moveTo(72, 216);
     cboxBeginPaused.moveTo(248, 24);
     cboxEndPaused.moveTo(368, 24);
     cboxBeginTransition.setVisible(true);
@@ -255,6 +256,6 @@ class Text extends Node {
     if(isTime(textTextSize.getText())) textSize = int(stringToTime(textTextSize.getText()));
     text = textArea.getText();
     textFont = dListTextFont.getSelectedText();
-    bColor = sketchPg.backgroundColor;
+    bColor = viewColor.getGraphics().backgroundColor;
   }
 }

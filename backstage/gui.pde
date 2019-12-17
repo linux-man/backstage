@@ -14,84 +14,86 @@
  * =========================================================
  */
 
-synchronized public void cp_key(PApplet appc, GWinData data, KeyEvent kevent) { //_CODE_:cp:599046:
+synchronized public void cp_key(PApplet appc, GWinData data, KeyEvent kevent) { //_CODE_:cp:553332:
   cp.key = cp.keyCode == ESC ? 0 : cp.key;
-} //_CODE_:cp:769550:
+} //_CODE_:cp:718042:
 
-public void cp_close(GWindow window) { //_CODE_:cp:952494:
+public void cp_close(GWindow window) { //_CODE_:cp:723213:
   prefs.putInt("Width", cp.width);
   prefs.putInt("Scheme", colorScheme);
   end(true);
   exit();
-} //_CODE_:cp:952494:
+} //_CODE_:cp:723213:
 
-public void buttonAddMedia_click(GButton source, GEvent event) { //_CODE_:buttonAddMedia:420223:
+public void buttonAddMedia_click(GButton source, GEvent event) { //_CODE_:buttonAddMedia:865208:
   buttonAdd_click(source, event);
   insertMedia(openDialog("Insert media"));
-} //_CODE_:buttonAddMedia:420223:
+} //_CODE_:buttonAddMedia:865208:
 
-public void buttonShow_click(GButton source, GEvent event) { //_CODE_:buttonShow:633469:
+public void buttonShow_click(GButton source, GEvent event) { //_CODE_:buttonShow:602257:
   if(playing) return;
   switchFullScreen();
-} //_CODE_:buttonShow:633469:
+} //_CODE_:buttonShow:602257:
 
-public void controlPanel_Event(GPanel source, GEvent event) { //_CODE_:controlPanel:399633:
+public void controlPanel_Event(GPanel source, GEvent event) { //_CODE_:controlPanel:650884:
   if(event == GEvent.DRAGGED) controlPanel.setDragArea();
-} //_CODE_:controlPanel:399633:
+} //_CODE_:controlPanel:650884:
 
-public void buttonOK_click(GButton source, GEvent event) { //_CODE_:buttonOK:317617:
+public void buttonOK_click(GButton source, GEvent event) { //_CODE_:buttonOK:412325:
   Node last = nodes.get(nodes.size() - 1);
   last.save();
   controlPanel.setVisible(false);
   buttonsEnabled(true);
-} //_CODE_:buttonOK:317617:
+} //_CODE_:buttonOK:412325:
 
-public void buttonCancel_click(GButton source, GEvent event) { //_CODE_:buttonCancel:230843:
+public void buttonCancel_click(GButton source, GEvent event) { //_CODE_:buttonCancel:309314:
   controlPanel.setVisible(false);
   buttonsEnabled(true);
-} //_CODE_:buttonCancel:230843:
+} //_CODE_:buttonCancel:309314:
 
-public void buttonColor_click(GButton source, GEvent event) { //_CODE_:buttonColor:695939:
-  color c = colorChooser(sketchPg.backgroundColor);
-  sketchPg.beginDraw();
-  sketchPg.background(c);
-  sketchPg.endDraw();
-} //_CODE_:buttonColor:695939:
+public void buttonColor_click(GButton source, GEvent event) { //_CODE_:buttonColor:764260:
+  //color c = colorChooser(sketchPg.backgroundColor);
+  PGraphics v = viewColor.getGraphics();
+  color c = colorChooser(v.backgroundColor);
+  v.beginDraw();
+  v.background(c);
+  v.endDraw();
+} //_CODE_:buttonColor:764260:
 
-public void buttonBegin_click(GButton source, GEvent event) { //_CODE_:buttonBegin:760643:
+public void buttonBegin_click(GButton source, GEvent event) { //_CODE_:buttonBegin:740950:
   Node last = nodes.get(nodes.size() - 1);
   if(last.playing) {
     if(last.type == "Video") textBegin.setText(timeToString(((Video)last).beginAt + ((Video)last).presentTime  / 1000.0));
     else textBegin.setText(timeToString(((Audio)last).beginAt + ((Audio)last).presentTime  / 1000.0));
   }
-} //_CODE_:buttonBegin:760643:
+} //_CODE_:buttonBegin:740950:
 
-public void buttonEnd_click(GButton source, GEvent event) { //_CODE_:buttonEnd:722486:
+public void buttonEnd_click(GButton source, GEvent event) { //_CODE_:buttonEnd:376759:
   Node last = nodes.get(nodes.size() - 1);
   if(last.playing) {
     if(last.type == "Video") textEnd.setText(timeToString(((Video)last).beginAt + ((Video)last).presentTime  / 1000.0));
     else textEnd.setText(timeToString(((Audio)last).beginAt + ((Audio)last).presentTime  / 1000.0));
   }
-} //_CODE_:buttonEnd:722486:
+} //_CODE_:buttonEnd:376759:
 
-public void buttonLoad_click(GButton source, GEvent event) { //_CODE_:buttonLoad:996884:
+public void buttonLoad_click(GButton source, GEvent event) { //_CODE_:buttonLoad:520173:
   buttonFiles_click(source, event);
   end(true);
   loadProject(openDialog("Load project"));
-} //_CODE_:buttonLoad:996884:
+} //_CODE_:buttonLoad:520173:
 
-public void buttonSave_click(GButton source, GEvent event) { //_CODE_:buttonSave:499788:
+public void buttonSave_click(GButton source, GEvent event) { //_CODE_:buttonSave:396549:
   buttonFiles_click(source, event);
   saveProject(saveDialog("project"));
-} //_CODE_:buttonSave:499788:
+} //_CODE_:buttonSave:396549:
 
-public void buttonZip_click(GButton source, GEvent event) { //_CODE_:buttonZip:452236:
+public void buttonZip_click(GButton source, GEvent event) { //_CODE_:buttonZip:430393:
   buttonConfig_click(source, event);
   if(!(new File(projectPath.toString()).isFile())) return;
   saveZip(saveDialog("zip"));
-} //_CODE_:buttonZip:452236:
+} //_CODE_:buttonZip:430393:
 
-public void buttonFiles_click(GButton source, GEvent event) { //_CODE_:buttonFiles:594317:
+public void buttonFiles_click(GButton source, GEvent event) { //_CODE_:buttonFiles:591107:
   buttonConfig.setVisible(!buttonConfig.isVisible());
   buttonAdd.setVisible(!buttonAdd.isVisible());
   buttonShow.setVisible(!buttonShow.isVisible());
@@ -102,9 +104,9 @@ public void buttonFiles_click(GButton source, GEvent event) { //_CODE_:buttonFil
   buttonNew.setVisible(!buttonNew.isVisible());
   buttonLoad.setVisible(!buttonLoad.isVisible());
   buttonSave.setVisible(!buttonSave.isVisible());
-} //_CODE_:buttonFiles:594317:
+} //_CODE_:buttonFiles:591107:
 
-public void buttonNew_click(GButton source, GEvent event) { //_CODE_:buttonNew:590597:
+public void buttonNew_click(GButton source, GEvent event) { //_CODE_:buttonNew:668979:
   if(G4P.selectOption(cp, "Are you sure?", "New Backstage", G4P.QUERY, G4P.YES_NO) == G4P.OK) {
     buttonFiles_click(source, event);
     end(true);
@@ -113,9 +115,9 @@ public void buttonNew_click(GButton source, GEvent event) { //_CODE_:buttonNew:5
     prevProjectPath = projectPath;
     cp.setTitle("Control Panel");
   }
-} //_CODE_:buttonNew:590597:
+} //_CODE_:buttonNew:668979:
 
-public void buttonConfig_click(GButton source, GEvent event) { //_CODE_:buttonConfig:357326:
+public void buttonConfig_click(GButton source, GEvent event) { //_CODE_:buttonConfig:230647:
   buttonFiles.setVisible(!buttonFiles.isVisible());
   buttonAdd.setVisible(!buttonAdd.isVisible());
   buttonShow.setVisible(!buttonShow.isVisible());
@@ -126,45 +128,45 @@ public void buttonConfig_click(GButton source, GEvent event) { //_CODE_:buttonCo
   buttonZip.setVisible(!buttonZip.isVisible());
   buttonDefaultDuration.setVisible(!buttonDefaultDuration.isVisible());
   buttonScheme.setVisible(!buttonScheme.isVisible());
-} //_CODE_:buttonConfig:357326:
+} //_CODE_:buttonConfig:230647:
 
-public void buttonScheme_click(GButton source, GEvent event) { //_CODE_:buttonScheme:740675:
+public void buttonScheme_click(GButton source, GEvent event) { //_CODE_:buttonScheme:472181:
   buttonConfig_click(source, event);
   changeScheme(colorScheme + 1);
-} //_CODE_:buttonScheme:740675:
+} //_CODE_:buttonScheme:472181:
 
-public void buttonNodeNext_click(GButton source, GEvent event) { //_CODE_:buttonNodeNext:885533:
+public void buttonNodeNext_click(GButton source, GEvent event) { //_CODE_:buttonNodeNext:334280:
   Node last = nodes.get(nodes.size() - 1);
   if(last.selected && last.playing) last.next();
-} //_CODE_:buttonNodeNext:885533:
+} //_CODE_:buttonNodeNext:334280:
 
-public void buttonStop_click(GButton source, GEvent event) { //_CODE_:buttonStop:304432:
+public void buttonStop_click(GButton source, GEvent event) { //_CODE_:buttonStop:401078:
   end(true);
-} //_CODE_:buttonStop:304432:
+} //_CODE_:buttonStop:401078:
 
-public void buttonPlay_click(GButton source, GEvent event) { //_CODE_:buttonPlay:935524:
+public void buttonPlay_click(GButton source, GEvent event) { //_CODE_:buttonPlay:467305:
   turn();
-} //_CODE_:buttonPlay:935524:
+} //_CODE_:buttonPlay:467305:
 
-public void buttonNodePlay_click(GButton source, GEvent event) { //_CODE_:buttonNodePlay:596092:
+public void buttonNodePlay_click(GButton source, GEvent event) { //_CODE_:buttonNodePlay:285767:
   Node last = nodes.get(nodes.size() - 1);
   last.turn();
-} //_CODE_:buttonNodePlay:596092:
+} //_CODE_:buttonNodePlay:285767:
 
-public void buttonNodeStop_click(GButton source, GEvent event) { //_CODE_:buttonNodeStop:358353:
+public void buttonNodeStop_click(GButton source, GEvent event) { //_CODE_:buttonNodeStop:980932:
   Node last = nodes.get(nodes.size() - 1);
   if(last.selected && last.playing) last.end(true);
-} //_CODE_:buttonNodeStop:358353:
+} //_CODE_:buttonNodeStop:980932:
 
-public void buttonTracksPlus_click(GButton source, GEvent event) { //_CODE_:buttonTracksPlus:678586:
+public void buttonTracksPlus_click(GButton source, GEvent event) { //_CODE_:buttonTracksPlus:971221:
   tracksChange(tracks + 1);
-} //_CODE_:buttonTracksPlus:678586:
+} //_CODE_:buttonTracksPlus:971221:
 
-public void buttonTracksMinus_click(GButton source, GEvent event) { //_CODE_:buttonTracksMinus:446073:
+public void buttonTracksMinus_click(GButton source, GEvent event) { //_CODE_:buttonTracksMinus:595166:
   tracksChange(tracks - 1);
-} //_CODE_:buttonTracksMinus:446073:
+} //_CODE_:buttonTracksMinus:595166:
 
-public void buttonAdd_click(GButton source, GEvent event) { //_CODE_:buttonAdd:491400:
+public void buttonAdd_click(GButton source, GEvent event) { //_CODE_:buttonAdd:584446:
   buttonFiles.setVisible(!buttonFiles.isVisible());
   buttonConfig.setVisible(!buttonConfig.isVisible());
   buttonShow.setVisible(!buttonShow.isVisible());
@@ -176,57 +178,57 @@ public void buttonAdd_click(GButton source, GEvent event) { //_CODE_:buttonAdd:4
   buttonAddText.setVisible(!buttonAddText.isVisible());
   buttonAddRect.setVisible(!buttonAddRect.isVisible());
   buttonAddMedia.setVisible(!buttonAddMedia.isVisible());
-} //_CODE_:buttonAdd:491400:
+} //_CODE_:buttonAdd:584446:
 
-public void buttonAddLink_click(GButton source, GEvent event) { //_CODE_:buttonAddLink:911686:
+public void buttonAddLink_click(GButton source, GEvent event) { //_CODE_:buttonAddLink:396763:
   buttonAdd_click(source, event);
   nodes.add(new Link());  
-} //_CODE_:buttonAddLink:911686:
+} //_CODE_:buttonAddLink:396763:
 
-public void buttonAddText_click(GButton source, GEvent event) { //_CODE_:buttonAddText:550880:
+public void buttonAddText_click(GButton source, GEvent event) { //_CODE_:buttonAddText:871890:
   buttonAdd_click(source, event);
   nodes.add(new Text());  
-} //_CODE_:buttonAddText:550880:
+} //_CODE_:buttonAddText:871890:
 
-public void buttonAddRect_click(GButton source, GEvent event) { //_CODE_:buttonAddRect:410544:
+public void buttonAddRect_click(GButton source, GEvent event) { //_CODE_:buttonAddRect:475144:
   buttonAdd_click(source, event);
   nodes.add(new Rect());  
-} //_CODE_:buttonAddRect:410544:
+} //_CODE_:buttonAddRect:475144:
 
-public void buttonDpCancel_click(GButton source, GEvent event) { //_CODE_:buttonDpCancel:572506:
+public void buttonDpCancel_click(GButton source, GEvent event) { //_CODE_:buttonDpCancel:273107:
   durationPanel.setVisible(false);
   buttonsEnabled(true);
-} //_CODE_:buttonDpCancel:572506:
+} //_CODE_:buttonDpCancel:273107:
 
-public void buttonDpOk_click(GButton source, GEvent event) { //_CODE_:buttonDpOk:372725:
+public void buttonDpOk_click(GButton source, GEvent event) { //_CODE_:buttonDpOk:965799:
   if(isTime(textDp.getText())) defaultDuration = stringToTime(textDp.getText());
   durationPanel.setVisible(false);
   buttonsEnabled(true);
-} //_CODE_:buttonDpOk:372725:
+} //_CODE_:buttonDpOk:965799:
 
-public void buttonDefaultDuration_click(GButton source, GEvent event) { //_CODE_:buttonDefaultDuration:263921:
+public void buttonDefaultDuration_click(GButton source, GEvent event) { //_CODE_:buttonDefaultDuration:585100:
   buttonConfig_click(source, event);
   textDp.setText(timeToString(defaultDuration));
   buttonsEnabled(false);
   durationPanel.setVisible(true);
-} //_CODE_:buttonDefaultDuration:263921:
+} //_CODE_:buttonDefaultDuration:585100:
 
-public void buttonAbout_click(GButton source, GEvent event) { //_CODE_:buttonAbout:881011:
+public void buttonAbout_click(GButton source, GEvent event) { //_CODE_:buttonAbout:332361:
   aboutPanel.setVisible(true);
-} //_CODE_:buttonAbout:881011:
+} //_CODE_:buttonAbout:332361:
 
-public void buttonGithub_click(GButton source, GEvent event) { //_CODE_:buttonGithub:708326:
+public void buttonGithub_click(GButton source, GEvent event) { //_CODE_:buttonGithub:681756:
   aboutPanel.setVisible(false);
   link("https://github.com/linux-man/backstage");
-} //_CODE_:buttonGithub:708326:
+} //_CODE_:buttonGithub:681756:
 
-public void buttonAboutOk_click(GButton source, GEvent event) { //_CODE_:buttonAboutOk:426945:
+public void buttonAboutOk_click(GButton source, GEvent event) { //_CODE_:buttonAboutOk:306674:
   aboutPanel.setVisible(false);
-} //_CODE_:buttonAboutOk:426945:
+} //_CODE_:buttonAboutOk:306674:
 
-public void buttonNext_click(GButton source, GEvent event) { //_CODE_:buttonNext:814019:
+public void buttonNext_click(GButton source, GEvent event) { //_CODE_:buttonNext:977240:
   next();
-} //_CODE_:buttonNext:814019:
+} //_CODE_:buttonNext:977240:
 
 
 
@@ -309,7 +311,7 @@ public void createGUI(){
   labelNotes.setOpaque(false);
   notesArea = new GTextArea(cp, 488, 64, 112, 72, G4P.SCROLLBARS_NONE);
   notesArea.setOpaque(true);
-  sketchColor = new GSketchPad(cp, 72, 216, 48, 15);
+  viewColor = new GView(cp, 72, 216, 48, 16, JAVA2D);
   buttonColor = new GButton(cp, 8, 216, 64, 16);
   buttonColor.setText("Color");
   buttonColor.addEventHandler(this, "buttonColor_click");
@@ -320,27 +322,21 @@ public void createGUI(){
   buttonEnd.setText("End at");
   buttonEnd.addEventHandler(this, "buttonEnd_click");
   cboxCentered = new GCheckbox(cp, 8, 120, 112, 16);
-  cboxCentered.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
   cboxCentered.setText("Centered");
   cboxCentered.setOpaque(false);
   cboxAspectRatio = new GCheckbox(cp, 128, 120, 112, 16);
-  cboxAspectRatio.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
   cboxAspectRatio.setText("Aspect Ratio");
   cboxAspectRatio.setOpaque(false);
   cboxBeginPaused = new GCheckbox(cp, 248, 48, 120, 16);
-  cboxBeginPaused.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
   cboxBeginPaused.setText("Begin Paused");
   cboxBeginPaused.setOpaque(false);
   cboxEndPaused = new GCheckbox(cp, 368, 48, 112, 16);
-  cboxEndPaused.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
   cboxEndPaused.setText("End Paused");
   cboxEndPaused.setOpaque(false);
   cboxBeginTransition = new GCheckbox(cp, 248, 72, 120, 16);
-  cboxBeginTransition.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
   cboxBeginTransition.setText("Begin Transition");
   cboxBeginTransition.setOpaque(false);
   cboxEndTransition = new GCheckbox(cp, 368, 72, 112, 16);
-  cboxEndTransition.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
   cboxEndTransition.setText("End Transition");
   cboxEndTransition.setOpaque(false);
   labelBeginTransition = new GLabel(cp, 248, 96, 64, 16);
@@ -353,24 +349,22 @@ public void createGUI(){
   textBeginTransition.setOpaque(true);
   textEndTransition = new GTextField(cp, 432, 96, 48, 16, G4P.SCROLLBARS_NONE);
   textEndTransition.setOpaque(true);
-  dListBeginTransition = new GDropList(cp, 248, 120, 112, 112, 6);
-  dListBeginTransition.setItems(loadStrings("list_875679"), 0);
-  dListEndTransition = new GDropList(cp, 368, 120, 112, 112, 6);
-  dListEndTransition.setItems(loadStrings("list_583775"), 0);
+  dListBeginTransition = new GDropList(cp, 248, 120, 112, 112, 6, 10);
+  dListBeginTransition.setItems(loadStrings("list_399051"), 0);
+  dListEndTransition = new GDropList(cp, 368, 120, 112, 112, 6, 10);
+  dListEndTransition.setItems(loadStrings("list_281916"), 0);
   labelVolume = new GLabel(cp, 8, 192, 64, 16);
-  labelVolume.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
   labelVolume.setText("Volume");
   labelVolume.setOpaque(false);
   sliderVolume = new GSlider(cp, 72, 192, 168, 16, 10.0);
   sliderVolume.setShowValue(true);
-  sliderVolume.setLimits(1.0, 0.0, 1.0);
+  sliderVolume.setLimits(0.5, 0.0, 1.0);
   sliderVolume.setNbrTicks(21);
   sliderVolume.setStickToTicks(true);
   sliderVolume.setShowTicks(true);
   sliderVolume.setNumberFormat(G4P.DECIMAL, 2);
   sliderVolume.setOpaque(false);
-  cboxLoop = new GCheckbox(cp, 128, 168, 112, 16);
-  cboxLoop.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
+  cboxLoop = new GCheckbox(cp, 128, 168, 64, 16);
   cboxLoop.setText("Loop");
   cboxLoop.setOpaque(false);
   labelTextSize = new GLabel(cp, 488, 184, 64, 16);
@@ -378,12 +372,12 @@ public void createGUI(){
   labelTextSize.setOpaque(false);
   textTextSize = new GTextField(cp, 488, 200, 48, 16, G4P.SCROLLBARS_NONE);
   textTextSize.setOpaque(true);
-  dListTextAlignHor = new GDropList(cp, 368, 168, 112, 64, 3);
-  dListTextAlignHor.setItems(loadStrings("list_265884"), 0);
-  dListTextAlignVer = new GDropList(cp, 368, 192, 112, 80, 4);
-  dListTextAlignVer.setItems(loadStrings("list_736386"), 0);
-  dListTextFont = new GDropList(cp, 488, 160, 192, 144, 8);
-  dListTextFont.setItems(loadStrings("list_472202"), 0);
+  dListTextAlignHor = new GDropList(cp, 368, 168, 112, 64, 3, 10);
+  dListTextAlignHor.setItems(loadStrings("list_355854"), 0);
+  dListTextAlignVer = new GDropList(cp, 368, 192, 112, 80, 4, 10);
+  dListTextAlignVer.setItems(loadStrings("list_625198"), 0);
+  dListTextFont = new GDropList(cp, 488, 160, 192, 144, 8, 10);
+  dListTextFont.setItems(loadStrings("list_672062"), 0);
   labelTextFont = new GLabel(cp, 488, 144, 64, 16);
   labelTextFont.setText("Font");
   labelTextFont.setOpaque(false);
@@ -391,23 +385,18 @@ public void createGUI(){
   labelTextAlign.setText("Text Align");
   labelTextAlign.setOpaque(false);
   cboxX = new GCheckbox(cp, 88, 72, 32, 16);
-  cboxX.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
   cboxX.setText("%");
   cboxX.setOpaque(false);
   cboxH = new GCheckbox(cp, 208, 96, 32, 16);
-  cboxH.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
   cboxH.setText("%");
   cboxH.setOpaque(false);
   cboxY = new GCheckbox(cp, 88, 96, 32, 16);
-  cboxY.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
   cboxY.setText("%");
   cboxY.setOpaque(false);
   cboxW = new GCheckbox(cp, 208, 72, 32, 16);
-  cboxW.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
   cboxW.setText("%");
   cboxW.setOpaque(false);
-  cboxIndependent = new GCheckbox(cp, 368, 176, 112, 20);
-  cboxIndependent.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
+  cboxIndependent = new GCheckbox(cp, 368, 176, 112, 16);
   cboxIndependent.setText("Independent");
   cboxIndependent.setOpaque(false);
   controlPanel.addControl(buttonOK);
@@ -432,7 +421,7 @@ public void createGUI(){
   controlPanel.addControl(textArea);
   controlPanel.addControl(labelNotes);
   controlPanel.addControl(notesArea);
-  controlPanel.addControl(sketchColor);
+  controlPanel.addControl(viewColor);
   controlPanel.addControl(buttonColor);
   controlPanel.addControl(buttonBegin);
   controlPanel.addControl(buttonEnd);
@@ -522,6 +511,7 @@ public void createGUI(){
   buttonAddRect.setIcon("rect.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
   buttonAddRect.addEventHandler(this, "buttonAddRect_click");
   durationPanel = new GPanel(cp, 352, 0, 104, 80, "Default Duration");
+  durationPanel.setCollapsible(false);
   durationPanel.setText("Default Duration");
   durationPanel.setOpaque(true);
   textDp = new GTextField(cp, 8, 24, 88, 16, G4P.SCROLLBARS_NONE);
@@ -542,15 +532,16 @@ public void createGUI(){
   buttonAbout.setIcon("help.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
   buttonAbout.addEventHandler(this, "buttonAbout_click");
   aboutPanel = new GPanel(cp, 24, 64, 200, 152, "About");
+  aboutPanel.setCollapsible(false);
   aboutPanel.setText("About");
   aboutPanel.setOpaque(true);
   labelTitle = new GLabel(cp, 8, 24, 184, 24);
   labelTitle.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
-  labelTitle.setText("Backstage v.2.0");
+  labelTitle.setText("Backstage v.2.0.1");
+  labelTitle.setTextBold();
   labelTitle.setOpaque(false);
   buttonGithub = new GButton(cp, 8, 120, 72, 24);
-  buttonGithub.setIcon("github.png", 1, GAlign.WEST, GAlign.CENTER, GAlign.MIDDLE);
-  buttonGithub.setText("Github");
+  buttonGithub.setIcon("github.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
   buttonGithub.addEventHandler(this, "buttonGithub_click");
   labelCopyright = new GLabel(cp, 8, 48, 184, 24);
   labelCopyright.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
@@ -602,7 +593,7 @@ GLabel labelText;
 GTextArea textArea; 
 GLabel labelNotes; 
 GTextArea notesArea; 
-GSketchPad sketchColor; 
+GView viewColor; 
 GButton buttonColor; 
 GButton buttonBegin; 
 GButton buttonEnd; 

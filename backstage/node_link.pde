@@ -59,7 +59,7 @@ class Link extends Node {
     labelVolume.setVisible(false);
     sliderVolume.setVisible(false);
     buttonColor.setVisible(false);
-    sketchColor.setVisible(false);
+    viewColor.setVisible(false);
     cboxBeginPaused.moveTo(248, 24);
     cboxEndPaused.moveTo(368, 24);
     cboxBeginTransition.setVisible(false);

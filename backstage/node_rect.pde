@@ -124,9 +124,10 @@ class Rect extends Node {
     dListEndTransition.setItems(t, 0);
     dListBeginTransition.setSelected(beginTransitionType);
     dListEndTransition.setSelected(endTransitionType);
-    sketchPg.beginDraw();
-    sketchPg.background(bColor);
-    sketchPg.endDraw();
+    PGraphics v = viewColor.getGraphics();
+    v.beginDraw();
+    v.background(bColor);
+    v.endDraw();
 
     labelPath.setVisible(false);
     textPath.setVisible(false);
@@ -172,8 +173,8 @@ class Rect extends Node {
     sliderVolume.setVisible(false);
     buttonColor.setVisible(true);
     buttonColor.moveTo(8, 120);
-    sketchColor.setVisible(true);
-    sketchColor.moveTo(72, 120);
+    viewColor.setVisible(true);
+    viewColor.moveTo(72, 120);
     cboxBeginPaused.moveTo(248, 24);
     cboxEndPaused.moveTo(368, 24);
     cboxBeginTransition.setVisible(true);
@@ -221,6 +222,6 @@ class Rect extends Node {
     perH = cboxH.isSelected();
     beginTransitionType = dListBeginTransition.getSelectedIndex();
     endTransitionType = dListEndTransition.getSelectedIndex();
-    bColor = sketchPg.backgroundColor;
+    bColor = viewColor.getGraphics().backgroundColor;
   }
 }

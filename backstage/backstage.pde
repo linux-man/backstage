@@ -29,7 +29,6 @@ color backgroundColor, normalColor, overColor, selectedColor, borderColor;
 float defaultDuration;
 ArrayList<Node> nodes;
 Node[] stage;
-PGraphics sketchPg;
 PImage iconImage, iconVideo, iconAudio, iconText, iconRect, iconLink;
 Path projectPath, prevProjectPath;
 Preferences prefs;

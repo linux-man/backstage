@@ -56,11 +56,10 @@ void initializeCp() {
   textW.addEventHandler(this, "textDim_change");
   textH.addEventHandler(this, "textDim_change");
   textDp.addEventHandler(this,"textTime_change");
-  sketchPg = createGraphics(56, 15);
-  sketchPg.beginDraw();
-  sketchPg.background(255, 0, 0);
-  sketchPg.endDraw();
-  sketchColor.setGraphic(sketchPg);
+  PGraphics v = viewColor.getGraphics();
+  v.beginDraw();
+  v.background(255, 0, 0);
+  v.endDraw();
   cp.frame.setSize(max(min(prefs.getInt("Width", 600), screenWidth), 600), cp.height);
   resizeCp();
   cp.addMouseHandler(this, "cp_mouse");  
@@ -93,7 +92,6 @@ void initializeCp() {
   textArea.setFont(cpFont);
   labelNotes.setFont(cpFont);
   notesArea.setFont(cpFont);
-  //sketchColor.setFont(cpFont);
   buttonColor.setFont(cpFont);
   buttonBegin.setFont(cpFont);
   buttonEnd.setFont(cpFont);
@@ -110,7 +108,6 @@ void initializeCp() {
   dListBeginTransition.setFont(cpFont);
   dListEndTransition.setFont(cpFont);
   labelVolume.setFont(cpFont);
-  //sliderVolume.setFont(cpFont);
   cboxLoop.setFont(cpFont);
   labelTextSize.setFont(cpFont);
   textTextSize.setFont(cpFont);
@@ -243,8 +240,8 @@ synchronized public void cp_mouse(PApplet appc, GWinData data, MouseEvent mevent
   boolean ctrl = (mevent.getModifiers() & mevent.CTRL) != 0;
   switch(action) {
     case 1://mevent.PRESS
-      if(buttonResize.isOver(x, y)) draggingWindow = true;
-      if(buttonNodeSlider.isVisible() && buttonNodeSlider.isOver(x, y)) draggingSlider = true;
+      if(overButton(buttonResize, x, y)) draggingWindow = true;
+      if(buttonNodeSlider.isVisible() && overButton(buttonNodeSlider, x, y)) draggingSlider = true;
       if(y < buttonFiles.getHeight() || y > cp.height - buttonNodePlay.getHeight() || controlPanel.isVisible() || durationPanel.isVisible()) return;
       dragging = false;
       for(Node no: nodes) {

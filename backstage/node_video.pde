@@ -230,7 +230,7 @@ class Video extends Node {
     sliderVolume.setVisible(true);
     sliderVolume.moveTo(72, 192);
     buttonColor.setVisible(false);
-    sketchColor.setVisible(false);
+    viewColor.setVisible(false);
     cboxBeginPaused.moveTo(248, 48);
     cboxEndPaused.moveTo(368, 48);
     cboxBeginTransition.setVisible(true);

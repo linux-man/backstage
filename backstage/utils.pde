@@ -114,6 +114,10 @@ float stringToTime(String s) {
   return float(s);
 }
 
+boolean overButton(GButton b, int x, int y) {
+  return x > b.getX() && x < b.getX() + b.getWidth() && y > b.getY() && y < b.getY() + b.getHeight();
+}
+
 void changeScheme(int c) {
   if(c > 12) c = 8;
   if(c < 8) c = 12;

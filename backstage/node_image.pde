@@ -174,7 +174,7 @@ class Image extends Node {
     labelVolume.setVisible(false);
     sliderVolume.setVisible(false);
     buttonColor.setVisible(false);
-    sketchColor.setVisible(false);
+    viewColor.setVisible(false);
     cboxBeginPaused.moveTo(248, 48);
     cboxEndPaused.moveTo(368, 48);
     cboxBeginTransition.setVisible(true);

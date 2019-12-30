@@ -86,7 +86,7 @@ Video: avi, mp4, mov, ogv, mkv, 3gp, wmv, flv, ts, mpeg, rm, dv, vid.
 
 Java JRE 8
 
-VLC Media Player
+VLC Media Player 3.x or later
 
 ### Issues
 
@@ -102,7 +102,7 @@ During the limited tests I did on Mac, I found that the original Opengl version 
 There are 3 labeled code blocks on backstage.pde and utils.pde that must be commented/uncommented to change the renderer.
 The main difference between versions is that the presentation window start fullscreen minimized and can't be windowed.
 
-### Acknowledgements:
+### Acknowledgements
 
 [Processing](https://processing.org/)
 

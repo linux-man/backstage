@@ -15,8 +15,6 @@ You should have received a copy of the GNU General Public License
 along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
 import VLCJVideo.*;
-import uk.co.caprica.vlcj.player.events.MediaPlayerEventType;
-import uk.co.caprica.vlcj.discovery.NativeDiscovery;
 import g4p_controls.*;
 import drop.*;
 import java.nio.file.Path;
@@ -71,7 +69,6 @@ void setup() {
   initializeCp();
   initializeDrop();
   if(args != null) loadProject(new File(args[0]));
-  new NativeDiscovery().discover();
 //OPENGL
 //*
   surface.setLocation(screenWidth - 640, screenHeight - 480);

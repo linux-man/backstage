@@ -46,11 +46,11 @@ class Video extends Node {
 
     video = new VLCJVideo(main);
 
-    video.bind(MediaPlayerEventType.PLAYING, new VRunnable(this) { public void run() {
+    video.bind(VLCJVideo.MediaPlayerEventType.PLAYING, new VRunnable(this) { public void run() {
       if(parent.loading) {
-        parent.video.mute();
+        parent.video.setVolume(0);
         parent.loading = false;
-        parent.duration = int(video.duration() * 100) / 100.0;
+        parent.duration = video.duration() / 1000.0;
         if(parent.duration <= 0) throw new IllegalArgumentException("This is not a Video!");
         if(parent.beginAt < 0 || parent.beginAt >= parent.duration) parent.beginAt = 0;
         if(parent.endAt <= 0 || parent.endAt > parent.duration || parent.endAt <= parent.beginAt) parent.endAt = parent.duration;
@@ -59,8 +59,7 @@ class Video extends Node {
     }});
 
     loading = true;
-    video.openMedia(projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString());
-    video.play();
+    video.openAndPlay(projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString());
   }
 
   void turn() {
@@ -78,9 +77,9 @@ class Video extends Node {
       endTime = int((endAt - beginAt) * 1000);
       video.play();
 
-      if(beginTransition) video.mute();
-      else video.setVolume(volume);
-      video.jump(beginAt);
+      if(beginTransition) video.setVolume(0);
+      else video.setVolume(int(volume * 100));
+      video.setTime(int(beginAt * 1000));
       if(aspectRatio) {
         float ratio = float(video.width) / video.height;
         pW = min(pW, pH * ratio);
@@ -117,7 +116,7 @@ class Video extends Node {
         case 4: y = height +  (pY - height) * presentTime / beginTransitionDuration / 1000; break;
         case 5: y = -pH + (pY + pH) * presentTime / beginTransitionDuration / 1000; break;
       }
-      video.setVolume(volume * presentTime / beginTransitionDuration / 1000);
+      video.setVolume(int(volume * presentTime / beginTransitionDuration / 10));
     }
     else if(isEndTransition()) {
       switch(endTransitionType) {
@@ -133,9 +132,9 @@ class Video extends Node {
         case 4: y = -pH +  (pY + pH) * (endTime - presentTime) / endTransitionDuration / 1000; break;
         case 5: y = height +  (pY  - height) * (endTime - presentTime) / endTransitionDuration / 1000; break;
       }
-      video.setVolume(volume * (endTime - presentTime) / endTransitionDuration / 1000);
+      video.setVolume(int(volume * (endTime - presentTime) / endTransitionDuration / 10));
     }
-    else video.setVolume(volume);
+    else video.setVolume(int(volume * 100));
 
     if(paused && video.isPlaying()) video.pause();
     
@@ -147,7 +146,7 @@ class Video extends Node {
     finalizePlay();
     if(loop && presentTime == 0 && !paused) {
       if(!video.isPlaying()) video.play();
-      video.jump(beginAt);
+      video.setTime(int(beginAt * 1000));
     }
   }
 

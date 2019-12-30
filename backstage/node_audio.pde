@@ -38,11 +38,11 @@ class Audio extends Node {
 
     audio = new VLCJVideo(main);
 
-    audio.bind(MediaPlayerEventType.PLAYING, new ARunnable(this) { public void run() {
+    audio.bind(VLCJVideo.MediaPlayerEventType.PLAYING, new ARunnable(this) { public void run() {
       if(parent.loading) {
-        parent.audio.mute();
+        parent.audio.setVolume(0);
         parent.loading = false;
-        parent.duration = int(audio.duration() * 100) / 100.0;
+        parent.duration = audio.duration() / 1000.0;
         if(parent.duration <= 0) throw new IllegalArgumentException("This is not an Audio!");
         if(parent.beginAt < 0 || parent.beginAt >= parent.duration) parent.beginAt = 0;
         if(parent.endAt <= 0 || parent.endAt > parent.duration || parent.endAt <= parent.beginAt) parent.endAt = parent.duration;
@@ -51,8 +51,7 @@ class Audio extends Node {
     }});
 
     loading = true;
-    audio.openMedia(projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString());
-    audio.play();
+    audio.openAndPlay(projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString());
   }
 
   void turn() {
@@ -61,9 +60,9 @@ class Audio extends Node {
       endTime = int((endAt - beginAt) * 1000);
       audio.play();
 
-      if(beginTransition) audio.mute();
-      else audio.setVolume(volume);
-      audio.jump(beginAt);
+      if(beginTransition) audio.setVolume(0);
+      else audio.setVolume(int(volume * 100));
+      audio.setTime(int(beginAt * 1000));
       finalizeTurn();
     }
     else paused = !paused;
@@ -75,16 +74,16 @@ class Audio extends Node {
   void play() {
     if(!playing) return;
 
-    if(isBeginTransition()) audio.setVolume(volume * presentTime / beginTransitionDuration / 1000);
-    else if(isEndTransition()) audio.setVolume(volume * (endTime - presentTime) / endTransitionDuration / 1000);
-    else audio.setVolume(volume);
+    if(isBeginTransition()) audio.setVolume(int(volume * presentTime / beginTransitionDuration / 10));
+    else if(isEndTransition()) audio.setVolume(int(volume * (endTime - presentTime) / endTransitionDuration / 10));
+    else audio.setVolume(int(volume * 100));
 
     if(paused && audio.isPlaying()) audio.pause();
     
     finalizePlay();
     if(loop && presentTime == 0 && !paused) {
       if(!audio.isPlaying()) audio.play();
-      audio.jump(beginAt);
+      audio.setTime(int(beginAt * 1000));
     }
   }
 

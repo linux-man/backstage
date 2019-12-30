@@ -358,7 +358,7 @@ public void createGUI(){
   labelVolume.setOpaque(false);
   sliderVolume = new GSlider(cp, 72, 192, 168, 16, 10.0);
   sliderVolume.setShowValue(true);
-  sliderVolume.setLimits(0.5, 0.0, 1.0);
+  sliderVolume.setLimits(1.0, 0.0, 2.0);
   sliderVolume.setNbrTicks(21);
   sliderVolume.setStickToTicks(true);
   sliderVolume.setShowTicks(true);

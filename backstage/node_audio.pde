@@ -38,7 +38,7 @@ class Audio extends Node {
 
     audio = new VLCJVideo(main);
 
-    audio.bind(VLCJVideo.MediaPlayerEventType.PLAYING, new ARunnable(this) { public void run() {
+    audio.bind(VLCJVideo.MediaPlayerEventType.LENGTH_CHANGED, new ARunnable(this) { public void run() {
       if(parent.loading) {
         parent.audio.setVolume(0);
         parent.loading = false;

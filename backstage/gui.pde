@@ -14,17 +14,6 @@
  * =========================================================
  */
 
-synchronized public void cp_key(PApplet appc, GWinData data, KeyEvent kevent) { //_CODE_:cp:553332:
-  cp.key = cp.keyCode == ESC ? 0 : cp.key;
-} //_CODE_:cp:718042:
-
-public void cp_close(GWindow window) { //_CODE_:cp:723213:
-  prefs.putInt("Width", cp.width);
-  prefs.putInt("Scheme", colorScheme);
-  end(true);
-  exit();
-} //_CODE_:cp:723213:
-
 public void buttonAddMedia_click(GButton source, GEvent event) { //_CODE_:buttonAddMedia:865208:
   buttonAdd_click(source, event);
   insertMedia(openDialog("Insert media"));
@@ -243,8 +232,6 @@ public void createGUI(){
   cp = GWindow.getWindow(this, "Control Panel", 0, 0, 600, 296, JAVA2D);
   cp.noLoop();
   cp.setActionOnClose(G4P.CLOSE_WINDOW);
-  cp.addKeyHandler(this, "cp_key");
-  cp.addOnCloseHandler(this, "cp_close");
   buttonAddMedia = new GButton(cp, 96, 96, 48, 24);
   buttonAddMedia.setIcon("media.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
   buttonAddMedia.addEventHandler(this, "buttonAddMedia_click");

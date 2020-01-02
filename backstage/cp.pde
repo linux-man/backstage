@@ -64,6 +64,8 @@ void initializeCp() {
   resizeCp();
   cp.addMouseHandler(this, "cp_mouse");  
   cp.addDrawHandler(this, "cp_draw");
+  cp.addKeyHandler(this, "cp_key");
+  cp.addOnCloseHandler(this, "cp_close");
   cp.textFont(loadFont("Ubuntu-12.vlw"), 12);
   changeScheme(prefs.getInt("Scheme", 8));
   Font cpFont = new Font("Sans", Font.PLAIN, 10);
@@ -382,6 +384,35 @@ synchronized public void cp_mouse(PApplet appc, GWinData data, MouseEvent mevent
       }
       break;
   }
+}
+
+synchronized public void cp_key(PApplet appc, GWinData data, KeyEvent kevent) {
+  cp.key = cp.keyCode == ESC ? 0 : cp.key;
+  if(kevent.getAction() == KeyEvent.PRESS && !(controlPanel.isVisible() || durationPanel.isVisible() || aboutPanel.isVisible())) {
+    if(kevent.isControlDown()) {
+      if(kevent.getKeyCode() == 'A') for(Node no: nodes) no.selected = true;
+      else if(kevent.getKeyCode() == LEFT) for(Node no: nodes) no.selected = no.x < cp.mouseX - translation;
+      else if(kevent.getKeyCode() == RIGHT) for(Node no: nodes) no.selected = no.x > cp.mouseX - translation;      
+    }
+    else if(kevent.isShiftDown()) {
+      if(kevent.getKeyCode() == ' ') buttonNodePlay_click(null, null);
+      else if(kevent.getKeyCode() == RIGHT) buttonNodeNext_click(null, null);
+      else if(kevent.getKeyCode() == ENTER) buttonNodeStop_click(null, null);
+    }
+    else if(kevent.getKeyCode() == ' ') buttonPlay_click(null, null);
+    else if(kevent.getKeyCode() == RIGHT) buttonNext_click(null, null);
+    else if(kevent.getKeyCode() == ENTER) buttonStop_click(null, null);
+    else if(kevent.getKeyCode() == 'P') {
+      for(Node no: stage) if(no != null && no.playing) translation = -no.x + 80;
+    };
+  }
+}
+
+public void cp_close(GWindow window) {
+  prefs.putInt("Width", cp.width);
+  prefs.putInt("Scheme", colorScheme);
+  end(true);
+  exit();
 }
 
 public void textTime_change(GTextField source, GEvent event) {

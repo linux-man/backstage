@@ -60,19 +60,41 @@ Resize window: drag resize button at top-right
 
 Add/remove tracks: plus/minus buttons
 
-There are 2 sets of play/pause/step buttons. The upper is the GLOBAL player. It starts all the SELECTED nodes. It pauses all the PLAYING nodes. Same goes for the "Step" button.
+There are 2 sets of PLAY/PAUSE, STEP and STOP buttons. The upper is the GLOBAL player. It starts all the SELECTED nodes. It pauses all the PLAYING nodes. Same goes for the STEP and STOP buttons.
 
-The bottom buttons (NODE buttons) only affect the last selected node. This way you can start or stop playing something during the show. The "Step" button allow to end and jump to the next connected nodes.
+The bottom buttons (NODE buttons) only affect the last selected node. This way you can start or stop playing something during the show. The STEP button ends a playing node and jumps to the next connected nodes.
 
 At the "Gear" submenu you can compress your project to export to other computer, change the default duration of new Text, Rect and Image nodes (default is 5 seconds) and change theme.
 
 The "Eye" turn fullscreen on/off. You can't do that while playing.
 
-Nodes with "Loop": it's expected to use "Step" to move forward.
+Nodes with "Loop": it's expected to use STEP to move forward.
 
-"Step" always respects End Paused and End Transition.
+STEP always respects End Paused and End Transition.
 
 An "Independent" node is not controlled by the global buttons (except the STOP button which stops everything). You must start/pause/step selecting it and using the NODE buttons. Also you can only play an Independent node if other non-independent nodes are already playing. You can't start a show with an Independent node.
+
+### Keyboard Shortcuts
+
+Ctrl+A: Select All
+
+Ctrl+LEFT: Select All at left of Cursor
+
+Ctrl+RIGHT: Select All at right of Cursor
+
+SPACE: Play/Pause (Global)
+
+RIGHT: Step (Global)
+
+ENTER: Stop (Global)
+
+P: Jumps to a Playing Node
+
+Shift+SPACE: Play/Pause (Last Selected Node)
+
+Shift+RIGHT: Step (Last Selected Node)
+
+Shift+ENTER: Stop (Last Selected Node)
 
 ### Accepted formats
 
@@ -119,3 +141,4 @@ Image buttons from [Fontawesome](http://fontawesome.io/)
 Stage icon from [Findicons](http://findicons.com)
 
 Control panel icon from [Iconarchive](http://www.iconarchive.com)
+

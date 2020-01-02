@@ -46,7 +46,7 @@ class Video extends Node {
 
     video = new VLCJVideo(main);
 
-    video.bind(VLCJVideo.MediaPlayerEventType.PLAYING, new VRunnable(this) { public void run() {
+    video.bind(VLCJVideo.MediaPlayerEventType.LENGTH_CHANGED, new VRunnable(this) { public void run() {
       if(parent.loading) {
         parent.video.setVolume(0);
         parent.loading = false;

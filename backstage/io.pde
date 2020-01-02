@@ -89,12 +89,16 @@ void loadProject(File file) {
 }
 
 void saveProject(File file) {
+  if(nodes.size() == 0) return;
+  int minX = nodes.get(0).x;
   if (file != null) {
     prevProjectPath = projectPath;
     String path = file.getPath();
     if(!path.endsWith(".stage")) path = path + ".stage";
     projectPath = Paths.get(path);
     cp.setTitle("Control Panel - " + projectPath.toString());
+    for(Node no: nodes) minX = min(minX, no.x);
+    for(Node no: nodes) no.x -= minX - 20;
     JSONObject json = new JSONObject();
     json.setInt("version", version);
     json.setInt("tracks", tracks);
@@ -268,6 +272,7 @@ void insertMedia(int x, int y, File file) {
 }
 
 void clearNodes() {
+  translation = 0;
   for(int n = 0; n < stage.length; n++) stage[n] = null;
   for(Node no: nodes) {
     no.clear();

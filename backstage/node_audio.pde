@@ -181,7 +181,7 @@ class Audio extends Node {
   void clear() {
     super.clear();
     audio.stop();
-    audio.dispose();
+    //audio.dispose(); //Crashes App
     audio = null;
   }
 }

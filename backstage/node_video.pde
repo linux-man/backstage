@@ -289,7 +289,7 @@ class Video extends Node {
   void clear() {
     super.clear();
     video.stop();
-    video.dispose();
+    //video.dispose(); //Crashes App
     video = null;
   }
 }

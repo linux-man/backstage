@@ -142,7 +142,13 @@ class Node {
       }
     }
     cp.strokeWeight(1);
+    if(playing) {
+      cp.fill(255);
+      cp.stroke(255);
+      cp.rect(x - 4, y - 4, w + 8, h + 8);
+    }
     cp.fill(fillColor);
+    cp.stroke(strokeColor);
     cp.rect(x, y, w, h);
     cp.fill(255);
     if(playing) {
@@ -165,11 +171,18 @@ class Node {
       cp.rect(x + 74, y + 24, 3, 8);
       cp.rect(x + 79, y + 24, 3, 8);
     }
-    cp.stroke(strokeColor);
     cp.fill(fillColor);
+    cp.stroke(strokeColor);
     for(int n = 0; n < next.length; n++) {
       int x1 = x + w;
       int y1 = round(y + (n + 1 / 2.0) * h  / next.length);
+      if(playing) {
+        cp.fill(255);
+        cp.stroke(255);
+        cp.arc(x1, y1, h / next.length + 8, h / next.length + 8, PI + HALF_PI, TWO_PI + HALF_PI);
+        cp.fill(fillColor);
+        cp.stroke(strokeColor);
+      }
       cp.arc(x1, y1, h / next.length, h / next.length, PI + HALF_PI, TWO_PI + HALF_PI);
     }
 

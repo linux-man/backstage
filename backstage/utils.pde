@@ -123,8 +123,9 @@ void changeScheme(int c) {
   if(c < 8) c = 12;
   colorScheme = c;
   G4P.setGlobalColorScheme(colorScheme);
-  if(colorScheme < 10) backgroundColor = 0;
-  else backgroundColor = 255;
+  backgroundColor = 0;
+  //if(colorScheme < 10) backgroundColor = 0;
+  //else backgroundColor = 255;
   switch(colorScheme) {
     case 8:
       borderColor = #ef3939;

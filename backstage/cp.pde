@@ -242,7 +242,7 @@ synchronized public void cp_mouse(PApplet appc, GWinData data, MouseEvent mevent
     case 1://mevent.PRESS
       if(overButton(buttonResize, x, y)) draggingWindow = true;
       if(buttonNodeSlider.isVisible() && overButton(buttonNodeSlider, x, y)) draggingSlider = true;
-      if(y < buttonFiles.getHeight() || y > cp.height - buttonNodePlay.getHeight() || controlPanel.isVisible() || durationPanel.isVisible()) return;
+      if(y < buttonFiles.getHeight() || y > cp.height - buttonNodePlay.getHeight() || controlPanel.isVisible() || durationPanel.isVisible() || aboutPanel.isVisible()) return;
       dragging = false;
       for(Node no: nodes) {
         if(no.mouseOver(x, y)) {
@@ -319,7 +319,7 @@ synchronized public void cp_mouse(PApplet appc, GWinData data, MouseEvent mevent
           case "Audio": ((Audio)last).audio.setTime((int)((Audio)last).beginAt * 1000 + last.presentTime); break;
         }
       }
-      if(y < buttonFiles.getHeight() || y > cp.height - buttonFiles.getHeight() || controlPanel.isVisible() || durationPanel.isVisible()) return;
+      if(y < buttonFiles.getHeight() || y > cp.height - buttonFiles.getHeight() || controlPanel.isVisible() || durationPanel.isVisible() || aboutPanel.isVisible()) return;
       if(button == LEFT) for(Node no: nodes) no.click(x, y, mevent.getCount(), ctrl);
       else if(button == RIGHT) {
         Node last = nodes.get(nodes.size()-1);
@@ -374,7 +374,7 @@ synchronized public void cp_mouse(PApplet appc, GWinData data, MouseEvent mevent
         cp.cursor(MOVE);
         for(Node no: nodes) no.drag(x - cp.pmouseX, y - cp.pmouseY);
       }
-      else if(!(y < buttonFiles.getHeight() || y > cp.height - buttonFiles.getHeight() || controlPanel.isVisible() || durationPanel.isVisible())) {
+      else if(!(y < buttonFiles.getHeight() || y > cp.height - buttonFiles.getHeight() || controlPanel.isVisible() || durationPanel.isVisible() || aboutPanel.isVisible())) {
         cp.cursor(MOVE);
         int maxTrans = 0;
         if(nodes.size() > 0) for(Node no: nodes) maxTrans = max(maxTrans, no.x + no.w + 84 - cp.width);

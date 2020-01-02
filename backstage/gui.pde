@@ -237,7 +237,7 @@ public void buttonNext_click(GButton source, GEvent event) { //_CODE_:buttonNext
 public void createGUI(){
   G4P.messagesEnabled(false);
   G4P.setGlobalColorScheme(GCScheme.RED_SCHEME);
-  G4P.setMouseOverEnabled(false);
+  G4P.setCursor(ARROW);
   GButton.useRoundCorners(false);
   surface.setTitle("Backstage");
   cp = GWindow.getWindow(this, "Control Panel", 0, 0, 600, 296, JAVA2D);

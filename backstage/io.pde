@@ -20,6 +20,7 @@ import java.util.zip.*;
 
 void loadProject(File file) {
   if (file != null && file.exists()) {
+    G4P.setCursor(WAIT);
     JSONObject json = loadJSONObject(file);
     clearNodes();
     projectPath = Paths.get(file.getPath());
@@ -85,6 +86,7 @@ void loadProject(File file) {
           break;
       }
     }
+    G4P.setCursor(ARROW);
   }
 }
 
@@ -166,6 +168,7 @@ void saveProject(File file) {
 
 void saveZip(File file) {
   if (file != null) {
+    G4P.setCursor(WAIT);
     String path = file.getPath();
     if(!path.endsWith(".zip")) path = path + ".zip";
     try{
@@ -217,6 +220,7 @@ void saveZip(File file) {
     catch (Exception e){
       println(e.getMessage());
     }
+    G4P.setCursor(ARROW);
   }
 }
 
@@ -226,7 +230,7 @@ void insertMedia(File file) {
 
 void insertMedia(int x, int y, File file) {
   if (file == null) return;
-  if(controlPanel.isVisible() || durationPanel.isVisible()) return;
+  if(controlPanel.isVisible() || durationPanel.isVisible() || aboutPanel.isVisible()) return;
   String path = file.getPath();
   String label = file.getName();
   String[] qname = splitTokens(label, ".");

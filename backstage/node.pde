@@ -337,7 +337,11 @@ class Node {
     if(isTime(textBeginTransition.getText())) beginTransitionDuration = stringToTime(textBeginTransition.getText());
     if(isTime(textEndTransition.getText())) endTransitionDuration = stringToTime(textEndTransition.getText());
   }
-  
+
+  void cancel() {
+    
+  }
+
   void clear() {
     g.removeCache(icon);
     icon = null;

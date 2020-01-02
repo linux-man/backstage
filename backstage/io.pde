@@ -249,7 +249,7 @@ void insertMedia(int x, int y, File file) {
   int beginTransitionType = 0; int endTransitionType = 0; float nX = 0; float nY = 0; float nW = 100; float nH = 100;
   boolean perX = false; boolean perY = false; boolean perW = true; boolean perH = true;
   boolean aspectRatio = true; boolean centered = true;
-  float volume = 0.5; float beginAt = 0; float endAt = 0;
+  float volume = 1.0; float beginAt = 0; float endAt = 0;
 
   switch(type) {
     case "Image":

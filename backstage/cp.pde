@@ -56,6 +56,7 @@ void initializeCp() {
   textW.addEventHandler(this, "textDim_change");
   textH.addEventHandler(this, "textDim_change");
   textDp.addEventHandler(this,"textTime_change");
+  sliderVolume.addEventHandler(this, "vol_change");
   PGraphics v = viewColor.getGraphics();
   v.beginDraw();
   v.background(255, 0, 0);
@@ -161,8 +162,7 @@ void initializeCp() {
 synchronized public void cp_draw(PApplet appc, GWinData data) {
   cp.background(backgroundColor);
   cp.stroke(selectedColor);
-  for(int n = 1; n < tracks + 2; n++) cp.line(0, trackHeight * n - 4, cp.width, trackHeight * n - 4); 
-
+  for(int n = 1; n < tracks + 2; n++) cp.line(0, trackHeight * n - 4, cp.width, trackHeight * n - 4);
   playing = false;
   paused = true;
   for(Node no: stage) if(no != null && !no.independent) {
@@ -423,6 +423,12 @@ public void textTime_change(GTextField source, GEvent event) {
 public void textDim_change(GTextField source, GEvent event) {
   if(isDim(source.getText())) source.setLocalColor(7, color(255));
   else source.setLocalColor(7, color(255,0,0));
+}
+
+public void vol_change(GSlider source, GEvent event) {
+  Node last = nodes.get(nodes.size() - 1);
+  if(last.getClass().getSimpleName().equals("Video")) ((Video)last).volume = sliderVolume.getValueF();
+  else ((Audio)last).volume = sliderVolume.getValueF();
 }
 
 void buttonsEnabled(boolean e) {

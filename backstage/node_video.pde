@@ -17,7 +17,7 @@ along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 class Video extends Node {
   String path;
   boolean centered, aspectRatio, perX, perY, perW, perH;
-  float nX, nY, nW, nH, volume, beginAt, endAt;
+  float nX, nY, nW, nH, volume, pVolume, beginAt, endAt;
   int beginTransitionType, endTransitionType;
   
   float pX, pY, pW, pH;
@@ -157,6 +157,7 @@ class Video extends Node {
 
   void load() {
     super.load();
+    pVolume = volume;
     textPath.setText(path);
     cboxCentered.setSelected(centered);
     cboxAspectRatio.setSelected(aspectRatio);
@@ -277,13 +278,16 @@ class Video extends Node {
     perY = cboxY.isSelected();
     perW = cboxW.isSelected();
     perH = cboxH.isSelected();
-    volume = sliderVolume.getValueF();
     if(isTime(textBegin.getText())) beginAt = stringToTime(textBegin.getText());
     if(isTime(textEnd.getText())) endAt = stringToTime(textEnd.getText());
     beginTransitionType = dListBeginTransition.getSelectedIndex();
     endTransitionType = dListEndTransition.getSelectedIndex();
     if(beginAt < 0 || beginAt >= duration) beginAt = 0;
     if(endAt <= 0 || endAt > duration || endAt <= beginAt) endAt = duration;
+  }
+
+  void cancel() {
+    volume = pVolume;
   }
 
   void clear() {

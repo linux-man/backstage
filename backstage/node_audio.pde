@@ -16,7 +16,7 @@ along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
 class Audio extends Node {
   String path;
-  float volume, beginAt, endAt;
+  float volume, pVolume, beginAt, endAt;
   
   boolean loading;
   VLCJVideo audio;
@@ -94,6 +94,7 @@ class Audio extends Node {
 
   void load() {
     super.load();
+    pVolume = volume;
     textPath.setText(path);
     textBeginTransition.setText(timeToString(beginTransitionDuration));
     textEndTransition.setText(timeToString(endTransitionDuration));
@@ -171,11 +172,14 @@ class Audio extends Node {
   void save() {
     super.save();
     path = trim(textPath.getText());
-    volume = sliderVolume.getValueF();
     if(isTime(textBegin.getText())) beginAt = stringToTime(textBegin.getText());
     if(isTime(textEnd.getText())) endAt = stringToTime(textEnd.getText());
     if(beginAt < 0 || beginAt >= duration) beginAt = 0;
     if(endAt <= 0 || endAt > duration || endAt <= beginAt) endAt = duration;
+  }
+
+  void cancel() {
+    volume = pVolume;
   }
 
   void clear() {

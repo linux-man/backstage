@@ -36,6 +36,8 @@ public void buttonOK_click(GButton source, GEvent event) { //_CODE_:buttonOK:412
 } //_CODE_:buttonOK:412325:
 
 public void buttonCancel_click(GButton source, GEvent event) { //_CODE_:buttonCancel:309314:
+  Node last = nodes.get(nodes.size() - 1);
+  last.cancel();
   controlPanel.setVisible(false);
   buttonsEnabled(true);
 } //_CODE_:buttonCancel:309314:
@@ -518,7 +520,7 @@ public void createGUI(){
   buttonAbout = new GButton(cp, 336, 0, 48, 24);
   buttonAbout.setIcon("help.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
   buttonAbout.addEventHandler(this, "buttonAbout_click");
-  aboutPanel = new GPanel(cp, 24, 64, 200, 152, "About");
+  aboutPanel = new GPanel(cp, 0, 96, 200, 152, "About");
   aboutPanel.setCollapsible(false);
   aboutPanel.setText("About");
   aboutPanel.setOpaque(true);

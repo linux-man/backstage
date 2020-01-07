@@ -14,15 +14,16 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
-import java.awt.Font;
 
 void initializeCp() {
   cp.getSurface().setIcon(loadImage("control-panel.png"));
   cp.setLocation(0, 0);
   tm = new GTabManager();
   controlPanel.setAlpha(232);
+  equalizerPanel.setAlpha(232);
   tracksChange(tracks);
   controlPanel.setVisible(false);
+  equalizerPanel.setVisible(false);
   durationPanel.setVisible(false);
   aboutPanel.setVisible(false);
   buttonNew.setVisible(false);
@@ -57,6 +58,17 @@ void initializeCp() {
   textH.addEventHandler(this, "textDim_change");
   textDp.addEventHandler(this,"textTime_change");
   sliderVolume.addEventHandler(this, "vol_change");
+  sliderEq0.addEventHandler(this, "vol_change");
+  sliderEq1.addEventHandler(this, "vol_change");
+  sliderEq2.addEventHandler(this, "vol_change");
+  sliderEq3.addEventHandler(this, "vol_change");
+  sliderEq4.addEventHandler(this, "vol_change");
+  sliderEq5.addEventHandler(this, "vol_change");
+  sliderEq6.addEventHandler(this, "vol_change");
+  sliderEq7.addEventHandler(this, "vol_change");
+  sliderEq8.addEventHandler(this, "vol_change");
+  sliderEq9.addEventHandler(this, "vol_change");
+  sliderPreamp.addEventHandler(this, "vol_change");
   PGraphics v = viewColor.getGraphics();
   v.beginDraw();
   v.background(255, 0, 0);
@@ -68,95 +80,7 @@ void initializeCp() {
   cp.addKeyHandler(this, "cp_key");
   cp.addOnCloseHandler(this, "cp_close");
   cp.textFont(loadFont("Ubuntu-12.vlw"), 12);
-  changeScheme(prefs.getInt("Scheme", 8));
-  Font cpFont = new Font("Sans", Font.PLAIN, 10);
-  buttonAddMedia.setFont(cpFont);
-  buttonShow.setFont(cpFont);
-  controlPanel.setFont(cpFont);
-  buttonOK.setFont(cpFont);
-  textLabel.setFont(cpFont);
-  labelLabel.setFont(cpFont);
-  labelPath.setFont(cpFont);
-  textPath.setFont(cpFont);
-  textBegin.setFont(cpFont);
-  textEnd.setFont(cpFont);
-  buttonCancel.setFont(cpFont);
-  labelX.setFont(cpFont);
-  labelY.setFont(cpFont);
-  labelW.setFont(cpFont);
-  labelH.setFont(cpFont);
-  textX.setFont(cpFont);
-  textY.setFont(cpFont);
-  textW.setFont(cpFont);
-  textH.setFont(cpFont);
-  textDuration.setFont(cpFont);
-  labelDuration.setFont(cpFont);
-  labelText.setFont(cpFont);
-  textArea.setFont(cpFont);
-  labelNotes.setFont(cpFont);
-  notesArea.setFont(cpFont);
-  buttonColor.setFont(cpFont);
-  buttonBegin.setFont(cpFont);
-  buttonEnd.setFont(cpFont);
-  cboxCentered.setFont(cpFont);
-  cboxAspectRatio.setFont(cpFont);
-  cboxBeginPaused.setFont(cpFont);
-  cboxEndPaused.setFont(cpFont);
-  cboxBeginTransition.setFont(cpFont);
-  cboxEndTransition.setFont(cpFont);
-  labelBeginTransition.setFont(cpFont);
-  labelEndTransition.setFont(cpFont);
-  textBeginTransition.setFont(cpFont);
-  textEndTransition.setFont(cpFont);
-  dListBeginTransition.setFont(cpFont);
-  dListEndTransition.setFont(cpFont);
-  labelVolume.setFont(cpFont);
-  cboxLoop.setFont(cpFont);
-  labelTextSize.setFont(cpFont);
-  textTextSize.setFont(cpFont);
-  dListTextAlignHor.setFont(cpFont);
-  dListTextAlignVer.setFont(cpFont);
-  dListTextFont.setFont(cpFont);
-  labelTextFont.setFont(cpFont);
-  labelTextAlign.setFont(cpFont);
-  cboxX.setFont(cpFont);
-  cboxH.setFont(cpFont);
-  cboxY.setFont(cpFont);
-  cboxW.setFont(cpFont);
-  cboxIndependent.setFont(cpFont);
-  buttonResize.setFont(cpFont);
-  buttonLoad.setFont(cpFont);
-  buttonSave.setFont(cpFont);
-  buttonZip.setFont(cpFont);
-  buttonFiles.setFont(cpFont);
-  buttonNew.setFont(cpFont);
-  buttonConfig.setFont(cpFont);
-  buttonScheme.setFont(cpFont);
-  buttonNodeNext.setFont(cpFont);
-  buttonStop.setFont(cpFont);
-  buttonPlay.setFont(cpFont);
-  buttonNodePlay.setFont(cpFont);
-  buttonNodeStop.setFont(cpFont);
-  buttonNodeSlider.setFont(cpFont);
-  buttonTracksPlus.setFont(cpFont);
-  buttonTracksMinus.setFont(cpFont);
-  buttonAdd.setFont(cpFont);
-  buttonAddLink.setFont(cpFont);
-  buttonAddText.setFont(cpFont);
-  buttonAddRect.setFont(cpFont);
-  durationPanel.setFont(cpFont);
-  textDp.setFont(cpFont);
-  buttonDpCancel.setFont(cpFont);
-  buttonDpOk.setFont(cpFont);
-  buttonDefaultDuration.setFont(cpFont);
-  buttonAbout.setFont(cpFont);
-  aboutPanel.setFont(cpFont);
-  labelTitle.setFont(cpFont);
-  buttonGithub.setFont(cpFont);
-  labelCopyright.setFont(cpFont);
-  buttonAboutOk.setFont(cpFont);
-  labelGPL.setFont(cpFont);
-  buttonNext.setFont(cpFont);
+  changeScheme(prefs.getInt("Scheme", 0));
 }
 
 synchronized public void cp_draw(PApplet appc, GWinData data) {
@@ -350,7 +274,7 @@ synchronized public void cp_mouse(PApplet appc, GWinData data, MouseEvent mevent
                   break;
               }
             }
-            else if(G4P.selectOption(cp, "Are you sure?", "Delete node " + last.label, G4P.QUERY, G4P.YES_NO) == G4P.OK){
+            else if(G4P.selectOption(cp, "Are you sure?", "Delete node " + last.label, G4P.QUERY_MESSAGE, G4P.YES_NO) == G4P.OK){
               for(Node no: stage) if(no == last) no.end(true);
               for(Node no: nodes) no.removeConnector(nodes.size()-1);
               nodes.get(nodes.size()-1).clear();
@@ -426,9 +350,42 @@ public void textDim_change(GTextField source, GEvent event) {
 }
 
 public void vol_change(GSlider source, GEvent event) {
+  if(event != GEvent.RELEASED && event != GEvent.CLICKED && event != GEvent.VALUE_STEADY) return;
   Node last = nodes.get(nodes.size() - 1);
-  if(last.getClass().getSimpleName().equals("Video")) ((Video)last).volume = sliderVolume.getValueF();
-  else ((Audio)last).volume = sliderVolume.getValueF();
+  if(last.type == "Video") {
+    if(source == sliderVolume) ((Video)last).volume = source.getValueF();
+    else {
+      if(event == GEvent.RELEASED || event == GEvent.CLICKED) dListPresets.setSelected(0);
+      if(source == sliderPreamp) ((Video)last).video.setPreamp(source.getValueF());
+      if(source == sliderEq0) ((Video)last).video.setAmp(0, -source.getValueF());
+      if(source == sliderEq1) ((Video)last).video.setAmp(1, -source.getValueF());
+      if(source == sliderEq2) ((Video)last).video.setAmp(2, -source.getValueF());
+      if(source == sliderEq3) ((Video)last).video.setAmp(3, -source.getValueF());
+      if(source == sliderEq4) ((Video)last).video.setAmp(4, -source.getValueF());
+      if(source == sliderEq5) ((Video)last).video.setAmp(5, -source.getValueF());
+      if(source == sliderEq6) ((Video)last).video.setAmp(6, -source.getValueF());
+      if(source == sliderEq7) ((Video)last).video.setAmp(7, -source.getValueF());
+      if(source == sliderEq8) ((Video)last).video.setAmp(8, -source.getValueF());
+      if(source == sliderEq9) ((Video)last).video.setAmp(9, -source.getValueF());
+    }
+  }
+  else {
+    if(source == sliderVolume) ((Audio)last).volume = source.getValueF();
+    else {
+      if(event == GEvent.RELEASED || event == GEvent.CLICKED) dListPresets.setSelected(0);
+      if(source == sliderPreamp) ((Audio)last).audio.setPreamp(sliderPreamp.getValueF());
+      if(source == sliderEq0) ((Audio)last).audio.setAmp(0, -source.getValueF());
+      if(source == sliderEq1) ((Audio)last).audio.setAmp(1, -source.getValueF());
+      if(source == sliderEq2) ((Audio)last).audio.setAmp(2, -source.getValueF());
+      if(source == sliderEq3) ((Audio)last).audio.setAmp(3, -source.getValueF());
+      if(source == sliderEq4) ((Audio)last).audio.setAmp(4, -source.getValueF());
+      if(source == sliderEq5) ((Audio)last).audio.setAmp(5, -source.getValueF());
+      if(source == sliderEq6) ((Audio)last).audio.setAmp(6, -source.getValueF());
+      if(source == sliderEq7) ((Audio)last).audio.setAmp(7, -source.getValueF());
+      if(source == sliderEq8) ((Audio)last).audio.setAmp(8, -source.getValueF());
+      if(source == sliderEq9) ((Audio)last).audio.setAmp(9, -source.getValueF());
+    }
+  }
 }
 
 void buttonsEnabled(boolean e) {

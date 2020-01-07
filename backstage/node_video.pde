@@ -17,32 +17,38 @@ along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 class Video extends Node {
   String path;
   boolean centered, aspectRatio, perX, perY, perW, perH;
-  float nX, nY, nW, nH, volume, pVolume, beginAt, endAt;
+  float nX, nY, nW, nH, volume, beginAt, endAt;
   int beginTransitionType, endTransitionType;
+  boolean equalizer;
+  int preset;
   
-  float pX, pY, pW, pH;
+  float pX, pY, pW, pH, pVolume, pPreamp;
   boolean loading, turnStarted;
+  float[] pAmps;
   VLCJVideo video;
 
   Video(Video no) {
-    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, new int[0],
+    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, no.highlight, new int[0],
     no.path, no.loop, no.beginTransition, no.endTransition, no.centered, no.aspectRatio,
     no.nX, no.nY, no.nW, no.nH, no.perX, no.perY, no.perW, no.perH, no.beginTransitionDuration, no.endTransitionDuration, no.volume, no.beginAt, no.endAt,
-    no.beginTransitionType, no.endTransitionType);
+    no.beginTransitionType, no.endTransitionType,
+    no.equalizer, no.preset, no.video.preamp(), no.video.amps());
   }
 
-  Video(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int[] next,
+  Video(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int highlight, int[] next,
   String path,
   boolean loop, boolean beginTransition, boolean endTransition, boolean centered, boolean aspectRatio,
   float nX, float nY, float nW, float nH, boolean perX, boolean perY, boolean perW, boolean perH, float beginTransitionDuration, float endTransitionDuration, float volume, float beginAt, float endAt,
-  int beginTransitionType, int endTransitionType) {
-    super("Video", label, notes, duration, beginPaused, endPaused, independent, index, x, y, next, iconVideo);
+  int beginTransitionType, int endTransitionType,
+  boolean equalizer, int preset, float preamp, float[] amps) {
+    super("Video", label, notes, duration, beginPaused, endPaused, independent, index, x, y, highlight, next, iconVideo);
     this.path = normalizePath(path);
     this.loop = loop; this.beginTransition = beginTransition; this.endTransition = endTransition; this.centered = centered; this.aspectRatio = aspectRatio;
     this.nX = nX; this.nY = nY; this.nW = nW; this.nH = nH; this.perX = perX; this.perY = perY; this.perW = perW; this.perH = perH;
     this.beginTransitionDuration = beginTransitionDuration; this.endTransitionDuration = endTransitionDuration;
     this.volume = volume; this.beginAt = beginAt; this.endAt = endAt;
     this.beginTransitionType = beginTransitionType; this.endTransitionType = endTransitionType;
+    this.equalizer = equalizer; this.preset = preset;
 
     video = new VLCJVideo(main);
 
@@ -60,6 +66,14 @@ class Video extends Node {
 
     loading = true;
     video.openAndPlay(projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString());
+    if(equalizer) {
+      if(preset >= 0) video.setEqualizer(preset);
+      else {
+        video.setEqualizer();
+        video.setPreamp(preamp);
+        video.setAmps(amps);
+      }
+    }
   }
 
   void turn() {
@@ -158,9 +172,12 @@ class Video extends Node {
   void load() {
     super.load();
     pVolume = volume;
+    pPreamp = video.preamp();
+    pAmps = video.amps();
     textPath.setText(path);
     cboxCentered.setSelected(centered);
     cboxAspectRatio.setSelected(aspectRatio);
+    cboxEqualizer.setSelected(equalizer);
     textX.setText(dimToString(nX));
     textY.setText(dimToString(nY));
     textW.setText(dimToString(nW));
@@ -260,6 +277,26 @@ class Video extends Node {
     dListTextFont.setVisible(false);
     labelNotes.moveTo(248, 144);
     notesArea.moveTo(248, 160);
+    cboxEqualizer.moveTo(8, 216);
+    cboxEqualizer.setVisible(true);
+    String[] presets = {"None"};
+    presets = concat(presets, video.presets());
+    dListPresets.setItems(presets, 0);
+    dListPresets.setSelected(preset + 1);
+    sliderEq0.setValue(-video.amp(0));
+    sliderEq1.setValue(-video.amp(1));
+    sliderEq2.setValue(-video.amp(2));
+    sliderEq3.setValue(-video.amp(3));
+    sliderEq4.setValue(-video.amp(4));
+    sliderEq5.setValue(-video.amp(5));
+    sliderEq6.setValue(-video.amp(6));
+    sliderEq7.setValue(-video.amp(7));
+    sliderEq8.setValue(-video.amp(8));
+    sliderEq9.setValue(-video.amp(9));
+    sliderPreamp.setValue(video.preamp());
+    equalizerPanel.moveTo(controlPanel.getX() + controlPanel.getWidth(), controlPanel.getY());
+    if(equalizer) equalizerPanel.setVisible(true);
+    dListHighlight.moveTo(368,24);
     tm.addControls(textPath, textLabel, textX, textY, textW, textH, textBegin, textEnd, textBeginTransition, textEndTransition, notesArea);
   }
   
@@ -284,10 +321,14 @@ class Video extends Node {
     endTransitionType = dListEndTransition.getSelectedIndex();
     if(beginAt < 0 || beginAt >= duration) beginAt = 0;
     if(endAt <= 0 || endAt > duration || endAt <= beginAt) endAt = duration;
+    equalizer = cboxEqualizer.isSelected();
+    preset = dListPresets.getSelectedIndex() - 1;
   }
 
   void cancel() {
     volume = pVolume;
+    video.setPreamp(pPreamp);
+    video.setAmps(pAmps);
   }
 
   void clear() {

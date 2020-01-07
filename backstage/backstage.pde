@@ -33,6 +33,12 @@ Preferences prefs;
 GTabManager tm;
 PApplet main = this;
 
+color schemes[][] = {{#ef3939, #ef6b6b, #f7abab, #ff0000},
+                     {#ffce40, #ffdb73, #ffe7a7, #ffbe00},
+                     {#399cc6, #5aa5c6, #dbebf3, #13bfff},
+                     {#39d639, #63d663, #d5f5d5, #00ff00},
+                     {#ef9439, #efad6b, #fae1c8, #ff780b}};
+
 void settings() {
 //OPENGL
 //*
@@ -48,7 +54,7 @@ void settings() {
 void setup() {
   prefs = Preferences.userRoot().node(this.getClass().getName());
   frameRate(30);
-  version = 1;
+  version = 2;
   defaultDuration = 5;
   tracks = 4;
   trackHeight = 48;
@@ -65,6 +71,9 @@ void setup() {
   iconRect = loadImage("rect_w.png");
   nodes = new ArrayList<Node>();
   stage = new Node[tracks];
+  G4P.setDisplayFont("Sans", G4P.PLAIN, 10);
+  G4P.setInputFont("Sans", G4P.PLAIN, 10);
+  G4P.setSliderFont("Sans", G4P.PLAIN, 10);
   createGUI();
   initializeCp();
   initializeDrop();
@@ -91,6 +100,7 @@ void turn() {
 
 void end(boolean fullStop) {
   for(Node no: stage) if(no != null) no.end(fullStop);
+  for(Node no: nodes) if(no != null) no.end(fullStop);//To stop nodes that play on load
 }
 
 void next() {

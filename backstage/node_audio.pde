@@ -16,25 +16,32 @@ along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
 class Audio extends Node {
   String path;
-  float volume, pVolume, beginAt, endAt;
+  float volume, beginAt, endAt;
+  boolean equalizer;
+  int preset;
   
   boolean loading;
+  float pVolume, pPreamp;
+  float[] pAmps;
   VLCJVideo audio;
 
   Audio(Audio no) {
-    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, new int[0],
+    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, no.highlight, new int[0],
     no.path, no.loop, no.beginTransition, no.endTransition,
-    no.beginTransitionDuration, no.endTransitionDuration, no.volume, no.beginAt, no.endAt);
+    no.beginTransitionDuration, no.endTransitionDuration, no.volume, no.beginAt, no.endAt,
+    no.equalizer, no.preset, no.audio.preamp(), no.audio.amps());
   }
 
-  Audio(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int[] next,
+  Audio(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int highlight, int[] next,
   String path,
   boolean loop, boolean beginTransition, boolean endTransition,
-  float beginTransitionDuration, float endTransitionDuration, float volume, float beginAt, float endAt) {
-    super("Audio", label, notes, duration, beginPaused, endPaused, independent, index, x, y, next, iconAudio);
+  float beginTransitionDuration, float endTransitionDuration, float volume, float beginAt, float endAt,
+  boolean equalizer, int preset, float preamp, float[] amps) {
+    super("Audio", label, notes, duration, beginPaused, endPaused, independent, index, x, y, highlight, next, iconAudio);
     this.path = normalizePath(path);
     this.loop = loop; this.beginTransition = beginTransition; this.endTransition = endTransition;
     this.beginTransitionDuration = beginTransitionDuration; this.endTransitionDuration = endTransitionDuration; this.volume = volume; this.beginAt = beginAt; this.endAt = endAt;
+    this.equalizer = equalizer; this.preset = preset; 
 
     audio = new VLCJVideo(main);
 
@@ -52,6 +59,14 @@ class Audio extends Node {
 
     loading = true;
     audio.openAndPlay(projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString());
+    if(equalizer) {
+      if(preset >= 0) audio.setEqualizer(preset);
+      else {
+        audio.setEqualizer();
+        audio.setPreamp(preamp);
+        audio.setAmps(amps);
+      }
+    }
   }
 
   void turn() {
@@ -95,10 +110,13 @@ class Audio extends Node {
   void load() {
     super.load();
     pVolume = volume;
+    pPreamp = audio.preamp();
+    pAmps = audio.amps();
     textPath.setText(path);
     textBeginTransition.setText(timeToString(beginTransitionDuration));
     textEndTransition.setText(timeToString(endTransitionDuration));
     sliderVolume.setValue(volume);
+    cboxEqualizer.setSelected(equalizer);
     textBegin.setText(timeToString(beginAt));
     textEnd.setText(timeToString(endAt));
 
@@ -166,6 +184,26 @@ class Audio extends Node {
     dListTextFont.setVisible(false);
     labelNotes.moveTo(248, 144);
     notesArea.moveTo(248, 160);
+    cboxEqualizer.moveTo(8, 144);
+    cboxEqualizer.setVisible(true);
+    String[] presets = {"None"};
+    presets = concat(presets, audio.presets());
+    dListPresets.setItems(presets, 0);
+    dListPresets.setSelected(preset + 1);
+    sliderEq0.setValue(-audio.amp(0));
+    sliderEq1.setValue(-audio.amp(1));
+    sliderEq2.setValue(-audio.amp(2));
+    sliderEq3.setValue(-audio.amp(3));
+    sliderEq4.setValue(-audio.amp(4));
+    sliderEq5.setValue(-audio.amp(5));
+    sliderEq6.setValue(-audio.amp(6));
+    sliderEq7.setValue(-audio.amp(7));
+    sliderEq8.setValue(-audio.amp(8));
+    sliderEq9.setValue(-audio.amp(9));
+    sliderPreamp.setValue(audio.preamp());
+    equalizerPanel.moveTo(controlPanel.getX() + controlPanel.getWidth(), controlPanel.getY());
+    if(equalizer) equalizerPanel.setVisible(true);
+    dListHighlight.moveTo(368,24);
     tm.addControls(textPath, textLabel, textBegin, textEnd, textBeginTransition, textEndTransition, notesArea);
   }
   
@@ -176,10 +214,14 @@ class Audio extends Node {
     if(isTime(textEnd.getText())) endAt = stringToTime(textEnd.getText());
     if(beginAt < 0 || beginAt >= duration) beginAt = 0;
     if(endAt <= 0 || endAt > duration || endAt <= beginAt) endAt = duration;
+    equalizer = cboxEqualizer.isSelected();
+    preset = dListPresets.getSelectedIndex() - 1;
   }
 
   void cancel() {
     volume = pVolume;
+    audio.setPreamp(pPreamp);
+    audio.setAmps(pAmps);
   }
 
   void clear() {

@@ -16,7 +16,7 @@ along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
 class Node {
   String type, label, notes;
-  int index, x, y, w, h; int[] next;
+  int index, x, y, w, h, highlight; int[] next;
   boolean beginPaused, endPaused, loop, beginTransition, endTransition, independent;
   float duration, beginTransitionDuration, endTransitionDuration;
   
@@ -24,9 +24,9 @@ class Node {
   boolean selected, connecting, dragged, mouseOver, playing, paused, onEndPause, noLoop, onLoop;
   PImage icon;
 
-  Node(String type, String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int[] next, PImage icon) {
+  Node(String type, String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int highlight, int[] next, PImage icon) {
     this.type = type; this.label = label; this.notes = notes; this.duration = duration; this.beginPaused = beginPaused; this.endPaused = endPaused; this.independent = independent;
-    this.index = index; this.x = x; this.y = y; this.next = next; this.icon = icon;
+    this.index = index; this.x = x; this.y = y; this.highlight = highlight; this.next = next; this.icon = icon;
     w = max(int(cp.textWidth(label)) + 8, 84);
     h = 40;
     track = tracks - int(round(float(y) / trackHeight));
@@ -110,12 +110,21 @@ class Node {
       else if(y % trackHeight > 0) y--;
       else if(x < 20 || isColliding() || x % 20 != 0) x++;
     }
-    
+
     color strokeColor, fillColor;
-    if(selected) fillColor = selectedColor;
-    else if(mouseOver) fillColor = overColor;
-    else fillColor = normalColor;
-    strokeColor = borderColor;
+
+    if(highlight == 0) {
+      if(selected) fillColor = selectedColor;
+      else if(mouseOver) fillColor = overColor;
+      else fillColor = normalColor;
+      strokeColor = borderColor;
+    }
+    else {
+      if(selected) fillColor = schemes[(colorScheme + highlight) % 5][3];
+      else if(mouseOver) fillColor = schemes[(colorScheme + highlight) % 5][2];
+      else fillColor = schemes[(colorScheme + highlight) % 5][1];
+      strokeColor = schemes[(colorScheme + highlight) % 5][0];
+    }
 
     cp.noFill();
     cp.stroke(strokeColor);
@@ -283,6 +292,7 @@ class Node {
 
   void load() {
     textLabel.setText(label);
+    dListHighlight.setSelected(highlight);
     textDuration.setText(timeToString(duration));
     cboxBeginPaused.setSelected(beginPaused);
     cboxEndPaused.setSelected(endPaused);
@@ -323,6 +333,7 @@ class Node {
 
   void save() {
     label = trim(textLabel.getText());
+    highlight = dListHighlight.getSelectedIndex();
     if(isTime(textDuration.getText())) duration = stringToTime(textDuration.getText());
     if(duration < 0) duration = 0;
     beginPaused = cboxBeginPaused.isSelected();
@@ -339,7 +350,7 @@ class Node {
   }
 
   void cancel() {
-    
+    //Placeholder for Audio and Video Classes
   }
 
   void clear() {

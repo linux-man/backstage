@@ -23,22 +23,22 @@ class Rect extends Node {
   float pX, pY, pW, pH;
 
   Rect(Rect no) {
-    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, new int[0],
+    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, no.highlight, new int[0],
     no.loop, no.beginTransition, no.endTransition, no.centered,
     no.nX, no.nY, no.nW, no.nH, no.perX, no.perY, no.perW, no.perH, no.beginTransitionDuration, no.endTransitionDuration,
     no.beginTransitionType, no.endTransitionType, no.bColor);
   }
 
   Rect() {
-    this("", "", defaultDuration, false, false, false, nodes.size(), -translation, trackHeight, new int[0], false, false, false, false, 0, 0, 100, 100, false, false, true, true, 1, 1, 0, 0, color(128));
+    this("", "", defaultDuration, false, false, false, nodes.size(), -translation, trackHeight, 0, new int[0], false, false, false, false, 0, 0, 100, 100, false, false, true, true, 1, 1, 0, 0, color(128));
   }
 
-  Rect(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int[] next,
+  Rect(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int highlight, int[] next,
   boolean loop, boolean beginTransition, boolean endTransition, boolean centered,
   float nX, float nY, float nW, float nH, boolean perX, boolean perY, boolean perW, boolean perH, float beginTransitionDuration, float endTransitionDuration,
   int beginTransitionType, int endTransitionType,
   color bColor) {
-    super("Rect", label, notes, duration, beginPaused, endPaused, independent, index, x, y, next, iconRect);
+    super("Rect", label, notes, duration, beginPaused, endPaused, independent, index, x, y, highlight, next, iconRect);
     this.loop = loop; this.beginTransition = beginTransition; this.endTransition = endTransition; this.centered = centered;
     this.nX = nX; this.nY = nY; this.nW = nW; this.nH = nH; this.perX = perX; this.perY = perY; this.perW = perW; this.perH = perH;
     this.beginTransitionDuration = beginTransitionDuration; this.endTransitionDuration = endTransitionDuration;
@@ -204,6 +204,8 @@ class Rect extends Node {
     dListTextFont.setVisible(false);
     labelNotes.moveTo(248, 144);
     notesArea.moveTo(248, 160);
+    cboxEqualizer.setVisible(false);
+    dListHighlight.moveTo(368,120);
     tm.addControls(textLabel, textX, textY, textW, textH, textDuration, textBeginTransition, textEndTransition, notesArea);
   }
   

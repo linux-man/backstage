@@ -25,7 +25,7 @@ class Text extends Node {
   PFont font;
 
   Text(Text no) {
-    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, new int[0],
+    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, no.highlight, new int[0],
     no.loop, no.beginTransition, no.endTransition, no.centered,
     no.nX, no.nY, no.nW, no.nH, no.perX, no.perY, no.perW, no.perH, no.beginTransitionDuration, no.endTransitionDuration,
     no.beginTransitionType, no.endTransitionType, no.textAlignHor, no.textAlignVer, no.textSize,
@@ -33,16 +33,16 @@ class Text extends Node {
   }
 
   Text() {
-    this("", "", defaultDuration, false, false, false, nodes.size(), -translation, trackHeight, new int[0], false, false, false, true, 0, 0, 100, 100, false, false, true, true, 1, 1, 0, 0, 1, 2, 48, "", "", color(255));
+    this("", "", defaultDuration, false, false, false, nodes.size(), -translation, trackHeight, 0, new int[0], false, false, false, true, 0, 0, 100, 100, false, false, true, true, 1, 1, 0, 0, 1, 2, 48, "", "", color(255));
   }
 
-  Text(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int[] next,
+  Text(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int highlight, int[] next,
   boolean loop, boolean beginTransition, boolean endTransition, boolean centered,
   float nX, float nY, float nW, float nH, boolean perX, boolean perY, boolean perW, boolean perH, float beginTransitionDuration, float endTransitionDuration,
   int beginTransitionType, int endTransitionType, int textAlignHor, int textAlignVer, int textSize,
   String text, String textFont,
   color bColor) {
-    super("Text", label, notes, duration, beginPaused, endPaused, independent, index, x, y, next, iconText);
+    super("Text", label, notes, duration, beginPaused, endPaused, independent, index, x, y, highlight, next, iconText);
     this.loop = loop; this.beginTransition = beginTransition; this.endTransition = endTransition; this.centered = centered;
     this.nX = nX; this.nY = nY; this.nW = nW; this.nH = nH; this.perX = perX; this.perY = perY; this.perW = perW; this.perH = perH;
     this.beginTransitionDuration = beginTransitionDuration; this.endTransitionDuration = endTransitionDuration;
@@ -233,6 +233,8 @@ class Text extends Node {
     dListTextFont.moveTo  (288, 120);
     labelNotes.moveTo(248, 144);
     notesArea.moveTo(248, 160);
+    cboxEqualizer.setVisible(false);
+    dListHighlight.moveTo(368,144);
     tm.addControls(textLabel, textX, textY, textW, textH, textDuration, textArea, textTextSize, textBeginTransition, textEndTransition, notesArea);
   }
   

@@ -22,6 +22,7 @@ void loadProject(File file) {
   if (file != null && file.exists()) {
     G4P.setCursor(WAIT);
     JSONObject json = loadJSONObject(file);
+    int saveVersion = json.getInt("version", 1);
     clearNodes();
     projectPath = Paths.get(file.getPath());
     prevProjectPath = Paths.get(json.getString("projectPath", projectPath.toString()));
@@ -33,11 +34,11 @@ void loadProject(File file) {
       switch(node.getString("type")) {
         case "Link":
           nodes.add(new Link(node.getString("label"), node.getString("notes"), node.getFloat("duration"), node.getBoolean("beginPaused"), node.getBoolean("endPaused"),
-          node.getBoolean("independent"), node.getInt("index"), node.getInt("x"), node.getInt("y"), node.getJSONArray("next").getIntArray()));
+          node.getBoolean("independent"), node.getInt("index"), node.getInt("x"), node.getInt("y"), node.getInt("highlight", 0), node.getJSONArray("next").getIntArray()));
           break;
         case "Rect":
           nodes.add(new Rect(node.getString("label"), node.getString("notes"), node.getFloat("duration"), node.getBoolean("beginPaused"), node.getBoolean("endPaused"),
-          node.getBoolean("independent"), node.getInt("index"), node.getInt("x"), node.getInt("y"), node.getJSONArray("next").getIntArray(),
+          node.getBoolean("independent"), node.getInt("index"), node.getInt("x"), node.getInt("y"), node.getInt("highlight", 0), node.getJSONArray("next").getIntArray(),
           node.getBoolean("loop"), node.getBoolean("beginTransition"), node.getBoolean("endTransition"), node.getBoolean("centered"),
           node.getFloat("nX"), node.getFloat("nY"), node.getFloat("nW"), node.getFloat("nH"),
           node.getBoolean("perX"), node.getBoolean("perY"), node.getBoolean("perW"), node.getBoolean("perH"),
@@ -47,7 +48,7 @@ void loadProject(File file) {
           break;
         case "Text":
           nodes.add(new Text(node.getString("label"), node.getString("notes"), node.getFloat("duration"), node.getBoolean("beginPaused"), node.getBoolean("endPaused"),
-          node.getBoolean("independent"), node.getInt("index"), node.getInt("x"), node.getInt("y"), node.getJSONArray("next").getIntArray(),
+          node.getBoolean("independent"), node.getInt("index"), node.getInt("x"), node.getInt("y"), node.getInt("highlight", 0), node.getJSONArray("next").getIntArray(),
           node.getBoolean("loop"), node.getBoolean("beginTransition"), node.getBoolean("endTransition"), node.getBoolean("centered"),
           node.getFloat("nX"), node.getFloat("nY"), node.getFloat("nW"), node.getFloat("nH"),
           node.getBoolean("perX"), node.getBoolean("perY"), node.getBoolean("perW"), node.getBoolean("perH"),
@@ -58,7 +59,7 @@ void loadProject(File file) {
           break;
         case "Image":
           nodes.add(new Image(node.getString("label"), node.getString("notes"), node.getFloat("duration"), node.getBoolean("beginPaused"), node.getBoolean("endPaused"),
-          node.getBoolean("independent"), node.getInt("index"), node.getInt("x"), node.getInt("y"), node.getJSONArray("next").getIntArray(),
+          node.getBoolean("independent"), node.getInt("index"), node.getInt("x"), node.getInt("y"), node.getInt("highlight", 0), node.getJSONArray("next").getIntArray(),
           node.getString("path"),
           node.getBoolean("loop"), node.getBoolean("beginTransition"), node.getBoolean("endTransition"), node.getBoolean("centered"), node.getBoolean("aspectRatio"),
           node.getFloat("nX"), node.getFloat("nY"), node.getFloat("nW"), node.getFloat("nH"),
@@ -68,21 +69,25 @@ void loadProject(File file) {
           break;
         case "Audio":
           nodes.add(new Audio(node.getString("label"), node.getString("notes"), node.getFloat("duration"), node.getBoolean("beginPaused"), node.getBoolean("endPaused"),
-          node.getBoolean("independent"), node.getInt("index"), node.getInt("x"), node.getInt("y"), node.getJSONArray("next").getIntArray(),
+          node.getBoolean("independent"), node.getInt("index"), node.getInt("x"), node.getInt("y"), node.getInt("highlight", 0), node.getJSONArray("next").getIntArray(),
           node.getString("path"),
           node.getBoolean("loop"), node.getBoolean("beginTransition"), node.getBoolean("endTransition"),
-          node.getFloat("beginTransitionDuration"), node.getFloat("endTransitionDuration"), node.getFloat("volume"), node.getFloat("beginAt"), node.getFloat("endAt")));
+          node.getFloat("beginTransitionDuration"), node.getFloat("endTransitionDuration"), node.getFloat("volume"), node.getFloat("beginAt"), node.getFloat("endAt"),
+          node.getBoolean("equalizer", false), node.getInt("preset", -1), node.getFloat("preamp", 0),
+          saveVersion > 1 ? node.getJSONArray("amps").getFloatArray() : new float[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
           break;
         case "Video":
           nodes.add(new Video(node.getString("label"), node.getString("notes"), node.getFloat("duration"), node.getBoolean("beginPaused"), node.getBoolean("endPaused"),
-          node.getBoolean("independent"), node.getInt("index"), node.getInt("x"), node.getInt("y"), node.getJSONArray("next").getIntArray(),
+          node.getBoolean("independent"), node.getInt("index"), node.getInt("x"), node.getInt("y"), node.getInt("highlight", 0), node.getJSONArray("next").getIntArray(),
           node.getString("path"),
           node.getBoolean("loop"), node.getBoolean("beginTransition"), node.getBoolean("endTransition"), node.getBoolean("centered"), node.getBoolean("aspectRatio"),
           node.getFloat("nX"), node.getFloat("nY"), node.getFloat("nW"), node.getFloat("nH"),
           node.getBoolean("perX"), node.getBoolean("perY"), node.getBoolean("perW"), node.getBoolean("perH"),
           node.getFloat("beginTransitionDuration"), node.getFloat("endTransitionDuration"),
           node.getFloat("volume"), node.getFloat("beginAt"), node.getFloat("endAt"),
-          node.getInt("beginTransitionType"), node.getInt("endTransitionType")));
+          node.getInt("beginTransitionType"), node.getInt("endTransitionType"),
+          node.getBoolean("equalizer", false), node.getInt("preset", -1), node.getFloat("preamp", 0),
+          saveVersion > 1 ? node.getJSONArray("amps").getFloatArray() : new float[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
           break;
       }
     }
@@ -110,7 +115,7 @@ void saveProject(File file) {
       JSONObject jsonNode = new JSONObject();
       jsonNode.setString("type", no.type);jsonNode.setString("label", no.label); jsonNode.setString("notes", no.notes);
       jsonNode.setFloat("duration", no.duration); jsonNode.setBoolean("beginPaused", no.beginPaused); jsonNode.setBoolean("endPaused", no.endPaused); 
-      jsonNode.setBoolean("independent", no.independent); jsonNode.setInt("index", no.index); jsonNode.setInt("x", no.x); jsonNode.setInt("y", no.y);
+      jsonNode.setBoolean("independent", no.independent); jsonNode.setInt("index", no.index); jsonNode.setInt("x", no.x); jsonNode.setInt("y", no.y); jsonNode.setInt("highlight", no.highlight);
       JSONArray values = new JSONArray(); for(int n = 0; n < no.next.length; n++) values.setInt(n, no.next[n]); jsonNode.setJSONArray("next", values);
       jsonNode.setBoolean("loop", no.loop); jsonNode.setBoolean("beginTransition", no.beginTransition); jsonNode.setBoolean("endTransition", no.endTransition);
       switch(no.type) {
@@ -146,6 +151,8 @@ void saveProject(File file) {
           jsonNode.setString("path", ((Audio)no).path);
           jsonNode.setFloat("beginTransitionDuration", ((Audio)no).beginTransitionDuration); jsonNode.setFloat("endTransitionDuration", ((Audio)no).endTransitionDuration);
           jsonNode.setFloat("volume", ((Audio)no).volume); jsonNode.setFloat("beginAt", ((Audio)no).beginAt); jsonNode.setFloat("endAt", ((Audio)no).endAt);
+          jsonNode.setBoolean("equalizer", ((Audio)no).equalizer); jsonNode.setInt("preset", ((Audio)no).preset); jsonNode.setFloat("preamp", ((Audio)no).audio.preamp());
+          JSONArray aamps = new JSONArray(); for(int n = 0; n < ((Audio)no).audio.amps().length; n++) aamps.setFloat(n, ((Audio)no).audio.amp(n)); jsonNode.setJSONArray("amps", aamps);
           break;
         case "Video":
           ((Video)no).path = projectPath.getParent().relativize(prevProjectPath.getParent().resolve(Paths.get(((Video)no).path)).normalize()).normalize().toString();
@@ -156,6 +163,8 @@ void saveProject(File file) {
           jsonNode.setFloat("beginTransitionDuration", ((Video)no).beginTransitionDuration); jsonNode.setFloat("endTransitionDuration", ((Video)no).endTransitionDuration);
           jsonNode.setFloat("volume", ((Video)no).volume); jsonNode.setFloat("beginAt", ((Video)no).beginAt); jsonNode.setFloat("endAt", ((Video)no).endAt);
           jsonNode.setInt("beginTransitionType", ((Video)no).beginTransitionType); jsonNode.setInt("endTransitionType", ((Video)no).endTransitionType);
+          jsonNode.setBoolean("equalizer", ((Video)no).equalizer); jsonNode.setInt("preset", ((Video)no).preset); jsonNode.setFloat("preamp", ((Video)no).video.preamp());
+          JSONArray vamps = new JSONArray(); for(int n = 0; n < ((Video)no).video.amps().length; n++) vamps.setFloat(n, ((Video)no).video.amp(n)); jsonNode.setJSONArray("amps", vamps);
           break;
       }
       jsonNodes.setJSONObject(no.index, jsonNode);
@@ -243,34 +252,40 @@ void insertMedia(int x, int y, File file) {
     default: type = "Unknown";
   }
   int index = nodes.size();
-  String notes = ""; int[] next = new int[0];
+  String notes = ""; int highlight = 0; int[] next = new int[0];
   boolean loop = false; boolean beginPaused = false; boolean endPaused = false; boolean independent = false; boolean beginTransition = false; boolean endTransition = false;
   float duration = defaultDuration; float beginTransitionDuration = 1; float endTransitionDuration = 1;
   int beginTransitionType = 0; int endTransitionType = 0; float nX = 0; float nY = 0; float nW = 100; float nH = 100;
   boolean perX = false; boolean perY = false; boolean perW = true; boolean perH = true;
   boolean aspectRatio = true; boolean centered = true;
   float volume = 1.0; float beginAt = 0; float endAt = 0;
+  boolean equalizer = false;
+  int preset = -1;
+  float preamp = 0;
+  float[] amps = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
   switch(type) {
     case "Image":
-      nodes.add(new Image(label, notes, duration, beginPaused, endPaused, independent, index, x, y, next,
+      nodes.add(new Image(label, notes, duration, beginPaused, endPaused, independent, index, x, y, highlight, next,
       path,
       loop, beginTransition, endTransition, centered, aspectRatio,
       nX, nY, nW, nH, perX, perY, perW, perH, beginTransitionDuration, endTransitionDuration,
       beginTransitionType, endTransitionType));
       break;
     case "Audio": 
-      nodes.add(new Audio(label, notes, duration, beginPaused, endPaused, independent, index, x, y, next,
+      nodes.add(new Audio(label, notes, duration, beginPaused, endPaused, independent, index, x, y, highlight, next,
       path,
       loop, beginTransition, endTransition,
-      beginTransitionDuration, endTransitionDuration, volume, beginAt, endAt));
+      beginTransitionDuration, endTransitionDuration, volume, beginAt, endAt,
+      equalizer, preset, preamp, amps));
       break;
     case "Video": 
-      nodes.add(new Video(label, notes, duration, beginPaused, endPaused, independent, index, x, y, next,
+      nodes.add(new Video(label, notes, duration, beginPaused, endPaused, independent, index, x, y, highlight, next,
       path,
       loop, beginTransition, endTransition, centered, aspectRatio,
       nX, nY, nW, nH, perX, perY, perW, perH, beginTransitionDuration, endTransitionDuration, volume, beginAt, endAt,
-      beginTransitionType, endTransitionType));
+      beginTransitionType, endTransitionType,
+      equalizer, preset, preamp, amps));
       break;
   }
 }

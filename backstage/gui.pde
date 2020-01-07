@@ -25,13 +25,17 @@ public void buttonShow_click(GButton source, GEvent event) { //_CODE_:buttonShow
 } //_CODE_:buttonShow:602257:
 
 public void controlPanel_Event(GPanel source, GEvent event) { //_CODE_:controlPanel:650884:
-  if(event == GEvent.DRAGGED) controlPanel.setDragArea();
+  if(event == GEvent.DRAGGED) {
+    controlPanel.setDragArea();
+    equalizerPanel.moveTo(controlPanel.getX() + controlPanel.getWidth(), controlPanel.getY());
+  }
 } //_CODE_:controlPanel:650884:
 
 public void buttonOK_click(GButton source, GEvent event) { //_CODE_:buttonOK:412325:
   Node last = nodes.get(nodes.size() - 1);
   last.save();
   controlPanel.setVisible(false);
+  equalizerPanel.setVisible(false);
   buttonsEnabled(true);
 } //_CODE_:buttonOK:412325:
 
@@ -39,6 +43,7 @@ public void buttonCancel_click(GButton source, GEvent event) { //_CODE_:buttonCa
   Node last = nodes.get(nodes.size() - 1);
   last.cancel();
   controlPanel.setVisible(false);
+  equalizerPanel.setVisible(false);
   buttonsEnabled(true);
 } //_CODE_:buttonCancel:309314:
 
@@ -66,6 +71,20 @@ public void buttonEnd_click(GButton source, GEvent event) { //_CODE_:buttonEnd:3
     else textEnd.setText(timeToString(((Audio)last).beginAt + ((Audio)last).presentTime  / 1000.0));
   }
 } //_CODE_:buttonEnd:376759:
+
+public void cboxEqualizer_click(GCheckbox source, GEvent event) { //_CODE_:cboxEqualizer:430098:
+  Node last = nodes.get(nodes.size() - 1);
+  if(event == GEvent.SELECTED) {
+    dListPresets.setSelected(0);
+    if(last.type == "Video") ((Video)last).video.setEqualizer();
+    else ((Audio)last).audio.setEqualizer();
+  }
+  else {
+    if(last.type == "Video") ((Video)last).video.noEqualizer();
+    else ((Audio)last).audio.noEqualizer();
+  }
+  equalizerPanel.setVisible(event == GEvent.SELECTED);
+} //_CODE_:cboxEqualizer:430098:
 
 public void buttonLoad_click(GButton source, GEvent event) { //_CODE_:buttonLoad:520173:
   buttonFiles_click(source, event);
@@ -98,7 +117,7 @@ public void buttonFiles_click(GButton source, GEvent event) { //_CODE_:buttonFil
 } //_CODE_:buttonFiles:591107:
 
 public void buttonNew_click(GButton source, GEvent event) { //_CODE_:buttonNew:668979:
-  if(G4P.selectOption(cp, "Are you sure?", "New Backstage", G4P.QUERY, G4P.YES_NO) == G4P.OK) {
+  if(G4P.selectOption(cp, "Are you sure?", "New Backstage", G4P.QUERY_MESSAGE, G4P.YES_NO) == G4P.OK) {
     buttonFiles_click(source, event);
     end(true);
     clearNodes();
@@ -183,7 +202,7 @@ public void buttonAddText_click(GButton source, GEvent event) { //_CODE_:buttonA
 
 public void buttonAddRect_click(GButton source, GEvent event) { //_CODE_:buttonAddRect:475144:
   buttonAdd_click(source, event);
-  nodes.add(new Rect());  
+  nodes.add(new Rect());
 } //_CODE_:buttonAddRect:475144:
 
 public void buttonDpCancel_click(GButton source, GEvent event) { //_CODE_:buttonDpCancel:273107:
@@ -201,10 +220,12 @@ public void buttonDefaultDuration_click(GButton source, GEvent event) { //_CODE_
   buttonConfig_click(source, event);
   textDp.setText(timeToString(defaultDuration));
   buttonsEnabled(false);
+  durationPanel.moveTo(144, 32);
   durationPanel.setVisible(true);
 } //_CODE_:buttonDefaultDuration:585100:
 
 public void buttonAbout_click(GButton source, GEvent event) { //_CODE_:buttonAbout:332361:
+  aboutPanel.moveTo(cp.width / 2 - aboutPanel.getWidth() / 2, 48);
   aboutPanel.setVisible(true);
 } //_CODE_:buttonAbout:332361:
 
@@ -221,6 +242,41 @@ public void buttonNext_click(GButton source, GEvent event) { //_CODE_:buttonNext
   next();
 } //_CODE_:buttonNext:977240:
 
+public void dListPresets_click(GDropList source, GEvent event) { //_CODE_:dListPresets:860119:
+  Node last = nodes.get(nodes.size() - 1);
+  int newPreset = dListPresets.getSelectedIndex() - 1;
+  if(newPreset >= 0) {
+    if(last.type == "Video") {
+      ((Video)last).video.setEqualizer(newPreset);
+      sliderPreamp.setValue(((Video)last).video.preamp());
+      sliderEq0.setValue(-((Video)last).video.amp(0));
+      sliderEq1.setValue(-((Video)last).video.amp(1));
+      sliderEq2.setValue(-((Video)last).video.amp(2));
+      sliderEq3.setValue(-((Video)last).video.amp(3));
+      sliderEq4.setValue(-((Video)last).video.amp(4));
+      sliderEq5.setValue(-((Video)last).video.amp(5));
+      sliderEq6.setValue(-((Video)last).video.amp(6));
+      sliderEq7.setValue(-((Video)last).video.amp(7));
+      sliderEq8.setValue(-((Video)last).video.amp(8));
+      sliderEq9.setValue(-((Video)last).video.amp(9));
+    }
+    else {
+      ((Audio)last).audio.setEqualizer(newPreset);
+      sliderPreamp.setValue(((Audio)last).audio.preamp());
+      sliderEq0.setValue(-((Audio)last).audio.amp(0));
+      sliderEq1.setValue(-((Audio)last).audio.amp(1));
+      sliderEq2.setValue(-((Audio)last).audio.amp(2));
+      sliderEq3.setValue(-((Audio)last).audio.amp(3));
+      sliderEq4.setValue(-((Audio)last).audio.amp(4));
+      sliderEq5.setValue(-((Audio)last).audio.amp(5));
+      sliderEq6.setValue(-((Audio)last).audio.amp(6));
+      sliderEq7.setValue(-((Audio)last).audio.amp(7));
+      sliderEq8.setValue(-((Audio)last).audio.amp(8));
+      sliderEq9.setValue(-((Audio)last).audio.amp(9));
+    }
+  }
+} //_CODE_:dListPresets:860119:
+
 
 
 // Create all the GUI controls. 
@@ -231,7 +287,7 @@ public void createGUI(){
   G4P.setCursor(ARROW);
   GButton.useRoundCorners(false);
   surface.setTitle("Backstage");
-  cp = GWindow.getWindow(this, "Control Panel", 0, 0, 600, 296, JAVA2D);
+  cp = GWindow.getWindow(this, "Control Panel", 0, 0, 900, 296, JAVA2D);
   cp.noLoop();
   cp.setActionOnClose(G4P.CLOSE_WINDOW);
   buttonAddMedia = new GButton(cp, 96, 96, 48, 24);
@@ -240,7 +296,7 @@ public void createGUI(){
   buttonShow = new GButton(cp, 144, 0, 48, 24);
   buttonShow.setIcon("eye.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
   buttonShow.addEventHandler(this, "buttonShow_click");
-  controlPanel = new GPanel(cp, 56, 24, 488, 240, "Control Panel");
+  controlPanel = new GPanel(cp, 144, 24, 488, 240, "Control Panel");
   controlPanel.setCollapsible(false);
   controlPanel.setText("Control Panel");
   controlPanel.setOpaque(true);
@@ -256,7 +312,7 @@ public void createGUI(){
   labelPath = new GLabel(cp, 8, 24, 40, 16);
   labelPath.setText("Path");
   labelPath.setOpaque(false);
-  textPath = new GTextField(cp, 48, 24, 432, 16, G4P.SCROLLBARS_NONE);
+  textPath = new GTextField(cp, 48, 24, 312, 16, G4P.SCROLLBARS_NONE);
   textPath.setOpaque(true);
   textBegin = new GTextField(cp, 72, 144, 48, 16, G4P.SCROLLBARS_NONE);
   textBegin.setOpaque(true);
@@ -365,9 +421,9 @@ public void createGUI(){
   dListTextAlignHor.setItems(loadStrings("list_355854"), 0);
   dListTextAlignVer = new GDropList(cp, 368, 192, 112, 80, 4, 10);
   dListTextAlignVer.setItems(loadStrings("list_625198"), 0);
-  dListTextFont = new GDropList(cp, 488, 160, 192, 144, 8, 10);
+  dListTextFont = new GDropList(cp, 488, 168, 192, 144, 8, 10);
   dListTextFont.setItems(loadStrings("list_672062"), 0);
-  labelTextFont = new GLabel(cp, 488, 144, 64, 16);
+  labelTextFont = new GLabel(cp, 504, 112, 64, 16);
   labelTextFont.setText("Font");
   labelTextFont.setOpaque(false);
   labelTextAlign = new GLabel(cp, 368, 144, 80, 16);
@@ -388,6 +444,13 @@ public void createGUI(){
   cboxIndependent = new GCheckbox(cp, 368, 176, 112, 16);
   cboxIndependent.setText("Independent");
   cboxIndependent.setOpaque(false);
+  cboxEqualizer = new GCheckbox(cp, 128, 216, 112, 16);
+  cboxEqualizer.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
+  cboxEqualizer.setText("Equalizer");
+  cboxEqualizer.setOpaque(false);
+  cboxEqualizer.addEventHandler(this, "cboxEqualizer_click");
+  dListHighlight = new GDropList(cp, 368, 224, 112, 96, 5, 10);
+  dListHighlight.setItems(loadStrings("list_789790"), 0);
   controlPanel.addControl(buttonOK);
   controlPanel.addControl(textLabel);
   controlPanel.addControl(labelLabel);
@@ -441,6 +504,8 @@ public void createGUI(){
   controlPanel.addControl(cboxY);
   controlPanel.addControl(cboxW);
   controlPanel.addControl(cboxIndependent);
+  controlPanel.addControl(cboxEqualizer);
+  controlPanel.addControl(dListHighlight);
   buttonResize = new GButton(cp, 576, 0, 24, 24);
   buttonResize.setIcon("resize.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
   buttonLoad = new GButton(cp, 0, 48, 48, 24);
@@ -520,13 +585,13 @@ public void createGUI(){
   buttonAbout = new GButton(cp, 336, 0, 48, 24);
   buttonAbout.setIcon("help.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
   buttonAbout.addEventHandler(this, "buttonAbout_click");
-  aboutPanel = new GPanel(cp, 0, 96, 200, 152, "About");
+  aboutPanel = new GPanel(cp, 0, 120, 200, 152, "About");
   aboutPanel.setCollapsible(false);
   aboutPanel.setText("About");
   aboutPanel.setOpaque(true);
   labelTitle = new GLabel(cp, 8, 24, 184, 24);
   labelTitle.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
-  labelTitle.setText("Backstage v.2.0.1");
+  labelTitle.setText("Backstage v.2.1");
   labelTitle.setTextBold();
   labelTitle.setOpaque(false);
   buttonGithub = new GButton(cp, 8, 120, 72, 24);
@@ -534,7 +599,7 @@ public void createGUI(){
   buttonGithub.addEventHandler(this, "buttonGithub_click");
   labelCopyright = new GLabel(cp, 8, 48, 184, 24);
   labelCopyright.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
-  labelCopyright.setText("© 2019 Caldas Lopes");
+  labelCopyright.setText("© 2020 Caldas Lopes");
   labelCopyright.setOpaque(false);
   buttonAboutOk = new GButton(cp, 144, 120, 48, 24);
   buttonAboutOk.setIcon("ok.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
@@ -551,6 +616,121 @@ public void createGUI(){
   buttonNext = new GButton(cp, 288, 0, 48, 24);
   buttonNext.setIcon("step_forward.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
   buttonNext.addEventHandler(this, "buttonNext_click");
+  equalizerPanel = new GPanel(cp, 632, 24, 248, 240, "Equalizer");
+  equalizerPanel.setCollapsible(false);
+  equalizerPanel.setDraggable(false);
+  equalizerPanel.setText("Equalizer");
+  equalizerPanel.setOpaque(true);
+  sliderEq0 = new GSlider(cp, 24, 48, 160, 16, 10.0);
+  sliderEq0.setShowValue(true);
+  sliderEq0.setRotation(PI/2, GControlMode.CORNER);
+  sliderEq0.setLimits(0.0, -20.0, 20.0);
+  sliderEq0.setNbrTicks(21);
+  sliderEq0.setShowTicks(true);
+  sliderEq0.setNumberFormat(G4P.DECIMAL, 2);
+  sliderEq0.setOpaque(false);
+  sliderEq1 = new GSlider(cp, 48, 48, 160, 16, 10.0);
+  sliderEq1.setShowValue(true);
+  sliderEq1.setRotation(PI/2, GControlMode.CORNER);
+  sliderEq1.setLimits(0.0, -20.0, 20.0);
+  sliderEq1.setNbrTicks(21);
+  sliderEq1.setShowTicks(true);
+  sliderEq1.setNumberFormat(G4P.DECIMAL, 2);
+  sliderEq1.setOpaque(false);
+  sliderEq2 = new GSlider(cp, 72, 48, 160, 16, 10.0);
+  sliderEq2.setShowValue(true);
+  sliderEq2.setRotation(PI/2, GControlMode.CORNER);
+  sliderEq2.setLimits(0.0, -20.0, 20.0);
+  sliderEq2.setNbrTicks(21);
+  sliderEq2.setShowTicks(true);
+  sliderEq2.setNumberFormat(G4P.DECIMAL, 2);
+  sliderEq2.setOpaque(false);
+  sliderEq3 = new GSlider(cp, 96, 48, 160, 16, 10.0);
+  sliderEq3.setShowValue(true);
+  sliderEq3.setRotation(PI/2, GControlMode.CORNER);
+  sliderEq3.setLimits(0.0, -20.0, 20.0);
+  sliderEq3.setNbrTicks(21);
+  sliderEq3.setShowTicks(true);
+  sliderEq3.setNumberFormat(G4P.DECIMAL, 2);
+  sliderEq3.setOpaque(false);
+  sliderEq4 = new GSlider(cp, 120, 48, 160, 16, 10.0);
+  sliderEq4.setShowValue(true);
+  sliderEq4.setRotation(PI/2, GControlMode.CORNER);
+  sliderEq4.setLimits(0.0, -20.0, 20.0);
+  sliderEq4.setNbrTicks(21);
+  sliderEq4.setShowTicks(true);
+  sliderEq4.setNumberFormat(G4P.DECIMAL, 2);
+  sliderEq4.setOpaque(false);
+  sliderEq5 = new GSlider(cp, 144, 48, 160, 16, 10.0);
+  sliderEq5.setShowValue(true);
+  sliderEq5.setRotation(PI/2, GControlMode.CORNER);
+  sliderEq5.setLimits(0.0, -20.0, 20.0);
+  sliderEq5.setNbrTicks(21);
+  sliderEq5.setShowTicks(true);
+  sliderEq5.setNumberFormat(G4P.DECIMAL, 2);
+  sliderEq5.setOpaque(false);
+  sliderEq6 = new GSlider(cp, 168, 48, 160, 16, 10.0);
+  sliderEq6.setShowValue(true);
+  sliderEq6.setRotation(PI/2, GControlMode.CORNER);
+  sliderEq6.setLimits(0.0, -20.0, 20.0);
+  sliderEq6.setNbrTicks(21);
+  sliderEq6.setShowTicks(true);
+  sliderEq6.setNumberFormat(G4P.DECIMAL, 2);
+  sliderEq6.setOpaque(false);
+  sliderEq7 = new GSlider(cp, 192, 48, 160, 16, 10.0);
+  sliderEq7.setShowValue(true);
+  sliderEq7.setRotation(PI/2, GControlMode.CORNER);
+  sliderEq7.setLimits(0.0, -20.0, 20.0);
+  sliderEq7.setNbrTicks(21);
+  sliderEq7.setShowTicks(true);
+  sliderEq7.setNumberFormat(G4P.DECIMAL, 2);
+  sliderEq7.setOpaque(false);
+  sliderEq8 = new GSlider(cp, 216, 48, 160, 16, 10.0);
+  sliderEq8.setShowValue(true);
+  sliderEq8.setRotation(PI/2, GControlMode.CORNER);
+  sliderEq8.setLimits(0.0, -20.0, 20.0);
+  sliderEq8.setNbrTicks(21);
+  sliderEq8.setShowTicks(true);
+  sliderEq8.setNumberFormat(G4P.DECIMAL, 2);
+  sliderEq8.setOpaque(false);
+  sliderEq9 = new GSlider(cp, 240, 48, 160, 16, 10.0);
+  sliderEq9.setShowValue(true);
+  sliderEq9.setRotation(PI/2, GControlMode.CORNER);
+  sliderEq9.setLimits(0.0, -20.0, 20.0);
+  sliderEq9.setNbrTicks(21);
+  sliderEq9.setShowTicks(true);
+  sliderEq9.setNumberFormat(G4P.DECIMAL, 2);
+  sliderEq9.setOpaque(false);
+  sliderPreamp = new GSlider(cp, 72, 216, 168, 16, 10.0);
+  sliderPreamp.setShowValue(true);
+  sliderPreamp.setLimits(0.0, -20.0, 20.0);
+  sliderPreamp.setNbrTicks(21);
+  sliderPreamp.setShowTicks(true);
+  sliderPreamp.setNumberFormat(G4P.DECIMAL, 2);
+  sliderPreamp.setOpaque(false);
+  labelPreamp = new GLabel(cp, 8, 216, 64, 16);
+  labelPreamp.setText("Preamp");
+  labelPreamp.setOpaque(false);
+  labelPresets = new GLabel(cp, 8, 24, 64, 16);
+  labelPresets.setText("Presets");
+  labelPresets.setOpaque(false);
+  dListPresets = new GDropList(cp, 72, 24, 168, 176, 10, 10);
+  dListPresets.setItems(loadStrings("list_860119"), 0);
+  dListPresets.addEventHandler(this, "dListPresets_click");
+  equalizerPanel.addControl(sliderEq0);
+  equalizerPanel.addControl(sliderEq1);
+  equalizerPanel.addControl(sliderEq2);
+  equalizerPanel.addControl(sliderEq3);
+  equalizerPanel.addControl(sliderEq4);
+  equalizerPanel.addControl(sliderEq5);
+  equalizerPanel.addControl(sliderEq6);
+  equalizerPanel.addControl(sliderEq7);
+  equalizerPanel.addControl(sliderEq8);
+  equalizerPanel.addControl(sliderEq9);
+  equalizerPanel.addControl(sliderPreamp);
+  equalizerPanel.addControl(labelPreamp);
+  equalizerPanel.addControl(labelPresets);
+  equalizerPanel.addControl(dListPresets);
   cp.loop();
 }
 
@@ -613,6 +793,8 @@ GCheckbox cboxH;
 GCheckbox cboxY; 
 GCheckbox cboxW; 
 GCheckbox cboxIndependent; 
+GCheckbox cboxEqualizer; 
+GDropList dListHighlight; 
 GButton buttonResize; 
 GButton buttonLoad; 
 GButton buttonSave; 
@@ -646,3 +828,18 @@ GLabel labelCopyright;
 GButton buttonAboutOk; 
 GLabel labelGPL; 
 GButton buttonNext; 
+GPanel equalizerPanel; 
+GSlider sliderEq0; 
+GSlider sliderEq1; 
+GSlider sliderEq2; 
+GSlider sliderEq3; 
+GSlider sliderEq4; 
+GSlider sliderEq5; 
+GSlider sliderEq6; 
+GSlider sliderEq7; 
+GSlider sliderEq8; 
+GSlider sliderEq9; 
+GSlider sliderPreamp; 
+GLabel labelPreamp; 
+GLabel labelPresets; 
+GDropList dListPresets; 

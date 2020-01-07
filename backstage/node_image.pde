@@ -24,18 +24,18 @@ class Image extends Node {
   PImage image;
 
   Image(Image no) {
-    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, new int[0],
+    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, no.highlight, new int[0],
     no.path, no.loop, no.beginTransition, no.endTransition, no.centered, no.aspectRatio,
     no.nX, no.nY, no.nW, no.nH, no.perX, no.perY, no.perW, no.perH, no.beginTransitionDuration, no.endTransitionDuration,
     no.beginTransitionType, no.endTransitionType);
   }
 
-  Image(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int[] next,
+  Image(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int highlight, int[] next,
   String path,
   boolean loop, boolean beginTransition, boolean endTransition, boolean centered, boolean aspectRatio,
   float nX, float nY, float nW, float nH, boolean perX, boolean perY, boolean perW, boolean perH, float beginTransitionDuration, float endTransitionDuration,
   int beginTransitionType, int endTransitionType) {
-    super("Image", label, notes, duration, beginPaused, endPaused, independent, index, x, y, next, iconImage);
+    super("Image", label, notes, duration, beginPaused, endPaused, independent, index, x, y, highlight, next, iconImage);
     this.path = normalizePath(path);
     this.loop = loop; this.beginTransition = beginTransition; this.endTransition = endTransition; this.centered = centered; this.aspectRatio = aspectRatio;
     this.nX = nX; this.nY = nY; this.nW = nW; this.nH = nH; this.perX = perX; this.perY = perY; this.perW = perW; this.perH = perH;
@@ -204,6 +204,8 @@ class Image extends Node {
     dListTextFont.setVisible(false);
     labelNotes.moveTo(248, 144);
     notesArea.moveTo(248, 160);
+    cboxEqualizer.setVisible(false);
+    dListHighlight.moveTo(368,24);
     tm.addControls(textPath, textLabel, textX, textY, textW, textH, textDuration, textBeginTransition, textEndTransition, notesArea);
   }
   

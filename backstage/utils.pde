@@ -119,45 +119,17 @@ boolean overButton(GButton b, int x, int y) {
 }
 
 void changeScheme(int c) {
-  if(c > 12) c = 8;
-  if(c < 8) c = 12;
+  if(c > 4) c = 0;
+  if(c < 0) c = 4;
   colorScheme = c;
-  G4P.setGlobalColorScheme(colorScheme);
+  G4P.setGlobalColorScheme(colorScheme + 8);
   backgroundColor = 0;
   //if(colorScheme < 10) backgroundColor = 0;
   //else backgroundColor = 255;
-  switch(colorScheme) {
-    case 8:
-      borderColor = #ef3939;
-      normalColor = #ef6b6b;
-      overColor = #f7abab;
-      selectedColor = #ff0000;
-      break;
-    case 9:
-      borderColor = #ffce40;
-      normalColor = #ffdb73;
-      overColor = #ffe7a7;
-      selectedColor = #ffbe00;
-      break;
-    case 10:
-      borderColor = #399cc6;
-      normalColor = #5aa5c6;
-      overColor = #dbebf3;
-      selectedColor = #13bfff;
-      break;
-    case 11:
-      borderColor = #39d639;
-      normalColor = #63d663;
-      overColor = #d5f5d5;
-      selectedColor = #00ff00;
-      break;
-    case 12:
-      borderColor = #ef9439;
-      normalColor = #efad6b;
-      overColor = #fae1c8;
-      selectedColor = #ff780b;
-      break;
-  }
+  borderColor = schemes[colorScheme][0];
+  normalColor = schemes[colorScheme][1];
+  overColor = schemes[colorScheme][2];
+  selectedColor = schemes[colorScheme][3];
   cp.redraw();
 }
 

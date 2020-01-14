@@ -71,9 +71,6 @@ void setup() {
   iconRect = loadImage("rect_w.png");
   nodes = new ArrayList<Node>();
   stage = new Node[tracks];
-  G4P.setDisplayFont("Sans", G4P.PLAIN, 10);
-  G4P.setInputFont("Sans", G4P.PLAIN, 10);
-  G4P.setSliderFont("Sans", G4P.PLAIN, 10);
   createGUI();
   initializeCp();
   initializeDrop();

@@ -296,7 +296,6 @@ class Video extends Node {
     sliderPreamp.setValue(video.preamp());
     equalizerPanel.moveTo(controlPanel.getX() + controlPanel.getWidth(), controlPanel.getY());
     if(equalizer) equalizerPanel.setVisible(true);
-    dListHighlight.moveTo(368,24);
     tm.addControls(textPath, textLabel, textX, textY, textW, textH, textBegin, textEnd, textBeginTransition, textEndTransition, notesArea);
   }
   

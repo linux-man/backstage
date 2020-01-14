@@ -203,7 +203,6 @@ class Audio extends Node {
     sliderPreamp.setValue(audio.preamp());
     equalizerPanel.moveTo(controlPanel.getX() + controlPanel.getWidth(), controlPanel.getY());
     if(equalizer) equalizerPanel.setVisible(true);
-    dListHighlight.moveTo(368,24);
     tm.addControls(textPath, textLabel, textBegin, textEnd, textBeginTransition, textEndTransition, notesArea);
   }
   

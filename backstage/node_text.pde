@@ -234,7 +234,6 @@ class Text extends Node {
     labelNotes.moveTo(248, 144);
     notesArea.moveTo(248, 160);
     cboxEqualizer.setVisible(false);
-    dListHighlight.moveTo(368,144);
     tm.addControls(textLabel, textX, textY, textW, textH, textDuration, textArea, textTextSize, textBeginTransition, textEndTransition, notesArea);
   }
   

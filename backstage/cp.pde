@@ -14,7 +14,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 void initializeCp() {
   cp.getSurface().setIcon(loadImage("control-panel.png"));
   cp.setLocation(0, 0);
@@ -73,7 +72,7 @@ void initializeCp() {
   v.beginDraw();
   v.background(255, 0, 0);
   v.endDraw();
-  cp.frame.setSize(max(min(prefs.getInt("Width", 600), screenWidth), 600), cp.height);
+  cp.getSurface().setSize(max(min(prefs.getInt("Width", 600), screenWidth), 600), cp.height);
   resizeCp();
   cp.addMouseHandler(this, "cp_mouse");  
   cp.addDrawHandler(this, "cp_draw");
@@ -293,7 +292,7 @@ synchronized public void cp_mouse(PApplet appc, GWinData data, MouseEvent mevent
       }
       else if(draggingWindow) {
         cp.cursor(MOVE);
-        cp.frame.setSize(max(min(x + 8, screenWidth), 600), cp.height);
+        cp.getSurface().setSize(max(min(x + 8, screenWidth), 600), cp.height);
         resizeCp();
       }
       else if(dragging) {

@@ -40,7 +40,7 @@ File openDialog(String title) {
   }
   chooser.setFileFilter(f);
   chooser.setDialogTitle(title);
-  int returnVal = chooser.showOpenDialog(this.frame);
+  int returnVal = chooser.showOpenDialog((SmoothCanvas) cp.getSurface().getNative());
   if (returnVal == JFileChooser.APPROVE_OPTION) return chooser.getSelectedFile();
   return null;
 }
@@ -59,7 +59,7 @@ File saveDialog(String type) {
   }
   chooser.addChoosableFileFilter(f);
   chooser.setFileFilter(f);
-  int returnVal = chooser.showSaveDialog(this.frame);
+  int returnVal = chooser.showSaveDialog((SmoothCanvas) cp.getSurface().getNative());
   if (returnVal == JFileChooser.APPROVE_OPTION) {
     return chooser.getSelectedFile();
   }
@@ -79,7 +79,7 @@ color colorChooser(color c) {
       CC.removeChooserPanel(accp);
     }
   }
-  JDialog dialog = JColorChooser.createDialog(this.frame, "Select color", true, CC,
+  JDialog dialog = JColorChooser.createDialog((SmoothCanvas) cp.getSurface().getNative(), "Select color", true, CC,
   new ActionListener() {
     public void actionPerformed(ActionEvent e) {
       result = CC.getColor();

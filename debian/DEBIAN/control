@@ -1,10 +1,10 @@
 Package: backstage
-Version: 2.1
+Version: 2.2
 License: GPL-3.0
 Vendor: Caldas Lopes <joao.caldas.lopes@gmail.com>
 Architecture: amd64
 Maintainer: Caldas Lopes <joao.caldas.lopes@gmail.com>
-Depends: openjdk-8-jre | oracle-java8-installer, vlc
+Depends: openjdk-11-jre | oracle-java11-installer, vlc
 Section: Contrib
 Priority: extra
 Homepage: https://github.com/linux-man/backstage#readme

@@ -106,19 +106,19 @@ Video: avi, mp4, mov, ogv, mkv, 3gp, wmv, flv, ts, mpeg, rm, dv, vid.
 
 ### Requirements
 
-Java JRE 8
+Java JRE 11
 
 VLC Media Player 3.x or later
 
 ### Issues
-
-Main window can be maximized on Windows. It shouldn't be. The GLWindow is misbehaving.
 
 If you install Backstage you can open a project by double clicking the file. On Windows, a console window is opened. You can close it. That happens because Processing apps must be run on their working directories. I couldn't find a registry key to force that, so I had to open a command line and run Backstage after a "change dir". If someone knows how to avoid this please tell me.
 
 On Linux, Java has a tendency to crash when a monitor is connected/disconnected. Looks like a long time [bug](https://www.google.pt/search?q=sun.awt.image.BufImgSurfaceData+cannot+be+cast+to+sun.java2d.xr.XRSurfaceData).
 
 Sometimes at start the theme is not correctly applied.
+
+Sometimes, when loading a video/audio the sound keeps playing. Just stop it.
 
 During the limited tests I did on Mac, I found that the original Opengl version crash, so I added an alternative JAVA2D version.
 There are 3 labeled code blocks on backstage.pde and utils.pde that must be commented/uncommented to change the renderer.

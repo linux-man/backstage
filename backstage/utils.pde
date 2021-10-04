@@ -143,7 +143,7 @@ void tracksChange(int n) {
     no.y += dif * trackHeight;
     no.track = max(0, min(tracks - 1, tracks - round(float(no.y) / trackHeight)));
   }
-  cp.frame.setSize(cp.width, trackHeight * (tracks + 2) + 8);
+  cp.getSurface().setSize(cp.width, trackHeight * (tracks + 2) + 8);
   buttonNodePlay.moveTo(buttonNodePlay.getX(), cp.height - buttonNodePlay.getHeight());
   buttonNodeStop.moveTo(buttonNodeStop.getX(), cp.height - buttonNodeStop.getHeight());
   buttonNodeNext.moveTo(buttonNodeNext.getX(), cp.height - buttonNodeNext.getHeight());

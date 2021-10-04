@@ -53,7 +53,7 @@ void settings() {
 
 void setup() {
   prefs = Preferences.userRoot().node(this.getClass().getName());
-  frameRate(30);
+  frameRate(60);
   version = 2;
   defaultDuration = 5;
   tracks = 4;

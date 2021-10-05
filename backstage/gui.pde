@@ -612,7 +612,7 @@ public void createGUI(){
   labelTitle.setOpaque(false);
   labelCopyright = new GLabel(cp, 8, 48, 184, 24);
   labelCopyright.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
-  labelCopyright.setText("© 2020 Caldas Lopes");
+  labelCopyright.setText("© 2021 Caldas Lopes");
   labelCopyright.setOpaque(false);
   labelGPL = new GLabel(cp, 8, 72, 184, 48);
   labelGPL.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);

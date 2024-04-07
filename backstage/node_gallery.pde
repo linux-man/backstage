@@ -14,7 +14,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
-class Image extends Node {
+class Gallery extends Node {
   String path;
   boolean centered, aspectRatio, perX, perY, perW, perH;
   float nX, nY, nW, nH;
@@ -23,26 +23,38 @@ class Image extends Node {
   float pX, pY, pW, pH;
   PImage image;
 
-  Image(Image no) {
+  String[] filenames = new String[0];
+  String folder;
+  int imgIndex = 0;
+
+  Gallery(Gallery no) {
     this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, no.highlight, new int[0],
     no.path, no.loop, no.beginTransition, no.endTransition, no.centered, no.aspectRatio,
     no.nX, no.nY, no.nW, no.nH, no.perX, no.perY, no.perW, no.perH, no.beginTransitionDuration, no.endTransitionDuration,
     no.beginTransitionType, no.endTransitionType);
   }
 
-  Image(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int highlight, int[] next,
+  Gallery(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int highlight, int[] next,
   String path,
   boolean loop, boolean beginTransition, boolean endTransition, boolean centered, boolean aspectRatio,
   float nX, float nY, float nW, float nH, boolean perX, boolean perY, boolean perW, boolean perH, float beginTransitionDuration, float endTransitionDuration,
   int beginTransitionType, int endTransitionType) {
-    super("Image", label, notes, duration, beginPaused, endPaused, independent, index, x, y, highlight, next, iconImage);
+    super("Gallery", label, notes, duration, beginPaused, endPaused, independent, index, x, y, highlight, next, iconGallery);
     this.path = normalizePath(path);
     this.loop = loop; this.beginTransition = beginTransition; this.endTransition = endTransition; this.centered = centered; this.aspectRatio = aspectRatio;
     this.nX = nX; this.nY = nY; this.nW = nW; this.nH = nH; this.perX = perX; this.perY = perY; this.perW = perW; this.perH = perH;
     this.beginTransitionDuration = beginTransitionDuration; this.endTransitionDuration = endTransitionDuration;
     this.beginTransitionType = beginTransitionType; this.endTransitionType = endTransitionType;
 
-    image = loadImage(projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString());
+    folder = projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString();
+    File f = new File(folder);
+    String[] fns = f.list();
+    for (String fn: fns) {
+      if(fn.endsWith(".jpg") || fn.endsWith(".jpeg") || fn.endsWith(".png")  || fn.endsWith(".gif")  || fn.endsWith(".bmp")) filenames = append(filenames, fn);
+    }
+    if(filenames == null) throw new IllegalArgumentException("There are no images");
+    Arrays.sort(filenames);
+    image = loadImage(Paths.get(folder, filenames[imgIndex]).toString());
     if(image.width <= 0) throw new IllegalArgumentException("This is not an Image!");
   }
   
@@ -108,7 +120,42 @@ class Image extends Node {
 
     finalizePlay();
   }
-  
+
+  void finalizePlay() {
+    int presentMillis = millis();
+    if(!paused) {
+      presentTime += presentMillis - prevMillis;
+      if(presentTime >= endTime) {
+        imgIndex++;
+        if(imgIndex < filenames.length) {
+          image = loadImage(Paths.get(folder, filenames[imgIndex]).toString());
+          if(image.width <= 0) throw new IllegalArgumentException("This is not an Image!");
+          presentTime = 0;
+        }
+/*        else if(loop && !noLoop && !onEndPause) {
+          onLoop = true;
+          presentTime = 0;
+        }*/
+        else {
+          end(false);
+        }
+      }
+    }
+    prevMillis = presentMillis;
+  }
+
+  void finalizeEnd(boolean fullStop) {
+    imgIndex = 0;
+    image = loadImage(Paths.get(folder, filenames[imgIndex]).toString());
+    if(image.width <= 0) throw new IllegalArgumentException("This is not an Image!");
+    super.finalizeEnd(fullStop);
+  }
+
+  void next() {
+    super.next();
+    imgIndex = filenames.length;
+  }
+
   void load() {
     super.load();
     labelPath.setText("Path");
@@ -170,8 +217,7 @@ class Image extends Node {
     labelDuration.moveTo(8, 144);
     textDuration.setEnabled(true);
     textDuration.moveTo(72, 144);
-    cboxLoop.setVisible(true);
-    cboxLoop.moveTo(128, 144);
+    cboxLoop.setVisible(false);
     labelVolume.setVisible(false);
     sliderVolume.setVisible(false);
     buttonColor.setVisible(false);

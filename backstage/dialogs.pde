@@ -23,6 +23,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 
+File openGallery(String title) {
+  JFileChooser chooser = new JFileChooser();
+  chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+  chooser.setDialogTitle(title);
+  int returnVal = chooser.showOpenDialog((SmoothCanvas) cp.getSurface().getNative());
+  if (returnVal == JFileChooser.APPROVE_OPTION) return chooser.getSelectedFile();
+  return null;
+}
 
 File openDialog(String title) {
   FileNameExtensionFilter f;

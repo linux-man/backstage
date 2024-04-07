@@ -45,6 +45,12 @@ void initializeCp() {
   buttonAddRect.moveTo(buttonAdd.getX() + buttonAdd.getWidth() * 3, 0);
   buttonAddMedia.setVisible(false);
   buttonAddMedia.moveTo(buttonAdd.getX() + buttonAdd.getWidth() * 4, 0);
+  buttonAddGallery.setVisible(false);
+  buttonAddGallery.moveTo(buttonAdd.getX() + buttonAdd.getWidth() * 5, 0);
+  buttonAddRandom.setVisible(false);
+  buttonAddRandom.moveTo(buttonAdd.getX() + buttonAdd.getWidth() * 6, 0);
+  buttonAddExec.setVisible(false);
+  buttonAddExec.moveTo(buttonAdd.getX() + buttonAdd.getWidth() * 7, 0);
   textBegin.addEventHandler(this, "textTime_change");
   textEnd.addEventHandler(this, "textTime_change");
   textDuration.addEventHandler(this, "textTime_change");
@@ -74,11 +80,14 @@ void initializeCp() {
   v.endDraw();
   cp.getSurface().setSize(max(min(prefs.getInt("Width", 600), screenWidth), 600), cp.height);
   resizeCp();
-  cp.addMouseHandler(this, "cp_mouse");  
+  cp.addMouseHandler(this, "cp_mouse");
   cp.addDrawHandler(this, "cp_draw");
   cp.addKeyHandler(this, "cp_key");
   cp.addOnCloseHandler(this, "cp_close");
   cp.textFont(loadFont("Ubuntu-12.vlw"), 12);
+  cp.setAlwaysOnTop(GL);
+  if(GL) switchFullScreen(true);
+  ((SmoothCanvas) cp.getSurface().getNative()).getFrame().toFront();
   changeScheme(prefs.getInt("Scheme", 0));
 }
 
@@ -94,7 +103,9 @@ synchronized public void cp_draw(PApplet appc, GWinData data) {
   }
   if(!playing) paused = false;
 
-  if(!playing || paused) buttonPlay.setIcon("play.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
+  if(!playing || paused) {
+    buttonPlay.setIcon("play.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
+  }
   else buttonPlay.setIcon("pause.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
 
   if(nodes.size() > 0) {
@@ -401,6 +412,9 @@ void buttonsEnabled(boolean e) {
   buttonAddText.setEnabled(e);
   buttonAddRect.setEnabled(e);
   buttonAddMedia.setEnabled(e);
+  buttonAddRandom.setEnabled(e);
+  buttonAddGallery.setEnabled(e);
+  buttonAddExec.setEnabled(e);
   buttonShow.setEnabled(e);
   buttonPlay.setEnabled(e);
   buttonStop.setEnabled(e);

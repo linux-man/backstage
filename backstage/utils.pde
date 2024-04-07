@@ -14,79 +14,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
-//OPENGL
-//*
-import com.jogamp.newt.opengl.GLWindow;
-import com.jogamp.newt.Screen;
-import com.jogamp.newt.MonitorDevice;
-
-int getPrimaryWidth() {
-  return Screen.getAllScreens().iterator().next().getPrimaryMonitor().getCurrentMode().getSurfaceSize().getResolution().getWidth();
-}
-
-int getPrimaryHeight() {
-  return Screen.getAllScreens().iterator().next().getPrimaryMonitor().getCurrentMode().getSurfaceSize().getResolution().getHeight();
-}
-
-MonitorDevice secondaryDevice() {
-  try {
-    if(Screen.getAllScreens().iterator().next().getMonitorDevices().size() > 1)
-      for(MonitorDevice m: Screen.getAllScreens().iterator().next().getMonitorDevices()) if(!m.isPrimary()) return m;
-    return Screen.getAllScreens().iterator().next().getPrimaryMonitor();
-  } catch (Exception e) {
-      System.err.println("Get monitor devices error");
-      return null;
-  }
-}
-
-void switchFullScreen() {
-  if(((GLWindow) surface.getNative()).isFullscreen()) {
-    ((GLWindow) surface.getNative()).setFullscreen(false);
-    surface.setSize(640, 480);
-    surface.setLocation(screenWidth - 640, screenHeight - 480);
-    buttonShow.setIcon("eye.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
-  }
-  else  {
-    MonitorDevice d = secondaryDevice();
-    ArrayList<MonitorDevice> list = new ArrayList<MonitorDevice>();
-    list.add(d);
-    ((GLWindow) surface.getNative()).setFullscreen(list);
-    ((GLWindow) surface.getNative()).setFullscreen(true);
-    buttonShow.setIcon("eye_slash.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
-  }
-}
-//*/
-
-//JAVA2D
-/*
-import java.awt.GraphicsEnvironment;
-import java.awt.GraphicsDevice;
-
-GraphicsDevice[] screens() {
-  GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-  return env.getScreenDevices();
-}
-
-int getPrimaryWidth() {
-  return screens()[0].getDisplayMode().getWidth();
-}
-
-int getPrimaryHeight() {
-  return screens()[0].getDisplayMode().getHeight();
-}
-
-void switchFullScreen() {
-  if(((SmoothCanvas) (surface).getNative()).getFrame().getState() == 0) {
-    ((SmoothCanvas) (surface).getNative()).getFrame().setState(1);
-    buttonShow.setIcon("eye.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
-  }
-  else {
-    ((SmoothCanvas) (surface).getNative()).getFrame().setState(0);
-    buttonShow.setIcon("eye_slash.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
-  }
-  cp.getSurface().setAlwaysOnTop(((SmoothCanvas) (surface).getNative()).getFrame().getState() == 0 && screens().length == 1);
-}
-//*/
 
 boolean isDim(String s) {
   return !(Float.isNaN(float(s)));
@@ -124,8 +51,6 @@ void changeScheme(int c) {
   colorScheme = c;
   G4P.setGlobalColorScheme(colorScheme + 8);
   backgroundColor = 0;
-  //if(colorScheme < 10) backgroundColor = 0;
-  //else backgroundColor = 255;
   borderColor = schemes[colorScheme][0];
   normalColor = schemes[colorScheme][1];
   overColor = schemes[colorScheme][2];

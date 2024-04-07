@@ -174,6 +174,7 @@ class Video extends Node {
     pVolume = volume;
     pPreamp = video.preamp();
     pAmps = video.amps();
+    labelPath.setText("Path");
     textPath.setText(path);
     cboxCentered.setSelected(centered);
     cboxAspectRatio.setSelected(aspectRatio);

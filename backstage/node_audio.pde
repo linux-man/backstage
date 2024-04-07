@@ -112,6 +112,7 @@ class Audio extends Node {
     pVolume = volume;
     pPreamp = audio.preamp();
     pAmps = audio.amps();
+    labelPath.setText("Path");
     textPath.setText(path);
     textBeginTransition.setText(timeToString(beginTransitionDuration));
     textEndTransition.setText(timeToString(endTransitionDuration));

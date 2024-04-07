@@ -16,18 +16,20 @@ along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
 import VLCJVideo.*;
 import g4p_controls.*;
-import drop.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.prefs.Preferences;
+import java.util.Arrays;
+import processing.awt.PSurfaceAWT.SmoothCanvas;
 
+boolean GL = false;
 boolean dragging, draggingWindow, draggingSlider, playing, paused;
 int screenWidth, screenHeight, colorScheme, trackHeight, translation, tracks, version;
 color backgroundColor, normalColor, overColor, selectedColor, borderColor;
 float defaultDuration;
 ArrayList<Node> nodes;
 Node[] stage;
-PImage iconImage, iconVideo, iconAudio, iconText, iconRect, iconLink;
+PImage iconImage, iconVideo, iconAudio, iconText, iconRect, iconLink, iconRandom, iconGallery, iconExec;
 Path projectPath, prevProjectPath;
 Preferences prefs;
 GTabManager tm;
@@ -40,21 +42,13 @@ color schemes[][] = {{#ef3939, #ef6b6b, #f7abab, #ff0000},
                      {#ef9439, #efad6b, #fae1c8, #ff780b}};
 
 void settings() {
-//OPENGL
-//*
-  size(640, 480, P2D);
-  //PJOGL.setIcon("stage.png");
-//*/
-//JAVA2D
-/*
-  fullScreen(2);
-//*/
+  initSettings();
 }
 
 void setup() {
   prefs = Preferences.userRoot().node(this.getClass().getName());
   frameRate(60);
-  version = 2;
+  version = 3;
   defaultDuration = 5;
   tracks = 4;
   trackHeight = 48;
@@ -69,20 +63,22 @@ void setup() {
   iconLink = loadImage("link_w.png");
   iconText = loadImage("text_w.png");
   iconRect = loadImage("rect_w.png");
+  iconRandom = loadImage("random_w.png");
+  iconGallery = loadImage("gallery_w.png");
+  iconExec = loadImage("exec_w.png");
   nodes = new ArrayList<Node>();
   stage = new Node[tracks];
   createGUI();
   initializeCp();
   initializeDrop();
-  if(args != null) loadProject(new File(args[0]));
-//OPENGL
-//*
-  surface.setLocation(screenWidth - 640, screenHeight - 480);
-//*/
-//JAVA2D
-/*
-  switchFullScreen();
-//*/
+
+  if (args != null) {
+    loadProject(new File(args[0]));
+    turn();
+    //cp.setAlwaysOnTop(false);//Not needed
+    ((SmoothCanvas) cp.getSurface().getNative()).getFrame().toBack();
+    surface.setAlwaysOnTop(true);
+  }
 }
 
 void draw() {

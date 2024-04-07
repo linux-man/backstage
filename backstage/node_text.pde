@@ -230,7 +230,7 @@ class Text extends Node {
     labelTextFont.setVisible(true);
     labelTextFont.moveTo(248, 120);
     dListTextFont.setVisible(true);
-    dListTextFont.moveTo  (288, 120);
+    dListTextFont.moveTo(296, 120);
     labelNotes.moveTo(248, 144);
     notesArea.moveTo(248, 160);
     cboxEqualizer.setVisible(false);

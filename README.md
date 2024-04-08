@@ -22,7 +22,7 @@ There are 6 types:
 
 Link ![Arrow](backstage/data/link.png), Text ![T](backstage/data/text.png) and Rect ![Square](backstage/data/rect.png) are created using the menu.
 
-To add Image ![Image](backstage/data/picture.png), Audio ![Audio](backstage/data/audio.png) and Video ![Video](backstage/data/media.png) you can also drag and drop the wanted files.
+To add Image ![Image](backstage/data/picture.png), Audio ![Audio](backstage/data/audio.png) and Video ![Video](backstage/data/media.png) you can also drag and drop the wanted files (not working on FX2D Renderer).
 
 Initially you have 4 tracks. It's important to understand that at each time only one node can be active (playing) on each track.
 
@@ -106,12 +106,24 @@ Video: avi, mp4, mov, ogv, mkv, 3gp, wmv, flv, ts, mpeg, rm, dv, vid.
 
 ### Requirements
 
-Java JRE 11
+Java JRE 17
 
 VLC Media Player 3.x or later
 
+### New on 3.0
+
+There are 3 files - DEFAULT, P2D and FX2D (FX2D Library must be installed) - that must be commented/uncommented (at line 18) to change the renderer. The presentation window start fullscreen at the secondary monitor (if present) and can be windowed.
+
+New Nodes:
+- Gallery ![Gallery](backstage/data/gallery.png) - select a folder of images
+- Random ![R](backstage/data/random.png) - select one of the connected nodes to continue
+- Exec ![E](backstage/data/exec.png) call and terminate a Process (probably needs some adjustments)
+
+Backstage will auto-start if called with a parameter (stage file path), like "backstage ~/presentation.stage"
+
 ### Issues
 
+Drag n' Drop is disable on FX2D renderer.
 If you install Backstage you can open a project by double clicking the file. On Windows, a console window is opened. You can close it. That happens because Processing apps must be run on their working directories. I couldn't find a registry key to force that, so I had to open a command line and run Backstage after a "change dir". If someone knows how to avoid this please tell me.
 
 On Linux, Java has a tendency to crash when a monitor is connected/disconnected. Looks like a long time [bug](https://www.google.pt/search?q=sun.awt.image.BufImgSurfaceData+cannot+be+cast+to+sun.java2d.xr.XRSurfaceData).
@@ -120,9 +132,7 @@ Sometimes at start the theme is not correctly applied.
 
 Sometimes, when loading a video/audio the sound keeps playing. Just stop it.
 
-During the limited tests I did on Mac, I found that the original Opengl version crash, so I added an alternative JAVA2D version.
-There are 3 labeled code blocks on backstage.pde and utils.pde that must be commented/uncommented to change the renderer.
-The main difference between versions is that the presentation window start fullscreen minimized and can't be windowed.
+During the limited tests I did on Mac, I found that the original Opengl version crash, so I added an alternative DEFAULT (JAVA2D) version.
 
 ### Acknowledgements
 

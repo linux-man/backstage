@@ -41,12 +41,12 @@ boolean isFullScreen() {
 }
 
 void switchFullScreen(boolean full) {
-  if(full && !isFullScreen()) {
+  if(full) {
     surface.setLocation(0, 0);
     surface.setSize(displayWidth, displayHeight);
     buttonShow.setIcon("eye_slash.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
   }
-  else if (!full && isFullScreen()){
+  else {
     surface.setSize(640, 480);
     surface.setLocation(getPrimaryWidth() - 640, getPrimaryHeight() - 480);
     buttonShow.setIcon("eye.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);

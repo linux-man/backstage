@@ -73,16 +73,25 @@ void setup() {
   initializeDrop();
 
   if (args != null) {
-    loadProject(new File(args[0]));
-    turn();
     //cp.setAlwaysOnTop(false);//Not needed
-    ((SmoothCanvas) cp.getSurface().getNative()).getFrame().toBack();
+    ((JFrame) ((SmoothCanvas) cp.getSurface().getNative()).getFrame()).toBack();
     surface.setAlwaysOnTop(true);
+    thread("loadArgs");    
   }
+}
+
+void loadArgs() {
+  delay(3000);
+  loadProject(new File(args[0]));
+  delay(6000);
+  end(true);
+  delay(1000);
+  turn();  
 }
 
 void draw() {
   background(0);
+  noCursor();
   if(playing) for(Node no: stage) if(no != null) no.play();
 }
 

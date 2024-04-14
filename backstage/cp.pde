@@ -85,9 +85,12 @@ void initializeCp() {
   cp.addKeyHandler(this, "cp_key");
   cp.addOnCloseHandler(this, "cp_close");
   cp.textFont(loadFont("Ubuntu-12.vlw"), 12);
-  cp.setAlwaysOnTop(GL);
-  if(GL) switchFullScreen(true);
-  ((SmoothCanvas) cp.getSurface().getNative()).getFrame().toFront();
+  if(GL) {
+    switchFullScreen(true);
+    cp.setAlwaysOnTop(true);
+  }
+  buttonShow.setIcon("eye_slash.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
+  ((JFrame) ((SmoothCanvas) cp.getSurface().getNative()).getFrame()).toFront();
   changeScheme(prefs.getInt("Scheme", 0));
 }
 

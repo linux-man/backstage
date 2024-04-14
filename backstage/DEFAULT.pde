@@ -43,7 +43,7 @@ boolean isFullScreen() {
 }
 
 void switchFullScreen(boolean full) {
-  if(full && !isFullScreen()) {
+  if(full) {
     ((SmoothCanvas) surface.getNative()).getFrame().removeNotify();
     ((SmoothCanvas) surface.getNative()).getFrame().setUndecorated(true);
     ((SmoothCanvas) surface.getNative()).getFrame().setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -56,7 +56,7 @@ void switchFullScreen(boolean full) {
     //surface.setSize(displayWidth, displayHeight);
     buttonShow.setIcon("eye_slash.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
   }
-  else if (!full && isFullScreen()) {
+  else {
     ((SmoothCanvas) surface.getNative()).getFrame().removeNotify();
     ((SmoothCanvas) surface.getNative()).getFrame().setUndecorated(false);
     ((SmoothCanvas) surface.getNative()).getFrame().setExtendedState(JFrame.NORMAL);

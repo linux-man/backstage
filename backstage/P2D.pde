@@ -52,7 +52,7 @@ boolean isFullScreen() {
 }
 
 void switchFullScreen(boolean full) {
-  if(full && !isFullScreen()) {
+  if(full) {
     MonitorDevice d = secondaryDevice();
     ArrayList<MonitorDevice> list = new ArrayList<MonitorDevice>();
     list.add(d);
@@ -60,7 +60,7 @@ void switchFullScreen(boolean full) {
     ((GLWindow) surface.getNative()).setFullscreen(true);
     buttonShow.setIcon("eye_slash.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
   }
-  else if(!full && isFullScreen()){
+  else {
     ((GLWindow) surface.getNative()).setFullscreen(false);
     surface.setSize(640, 480);
     surface.setLocation(screenWidth - 640, screenHeight - 480);

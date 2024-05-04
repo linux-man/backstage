@@ -58,9 +58,7 @@ class Gallery extends Node {
     if(image.width <= 0) throw new IllegalArgumentException("This is not an Image!");
   }
   
-  void turn() {
-    if(!playing) {
-      initializeTurn();
+  void calcDim() {
       if(perX) pX = width * nX / 100.0; else pX = nX;
       if(perY) pY = height * nY / 100.0; else pY = nY;
       if(perW) pW = width * nW / 100.0; else pW = nW;
@@ -74,6 +72,12 @@ class Gallery extends Node {
         pX = (width - pW) / 2;
         pY = (height - pH) / 2;
       }
+  }
+
+  void turn() {
+    if(!playing) {
+      initializeTurn();
+      calcDim();
       endTime = int(duration * 1000);
       finalizeTurn();
     }
@@ -130,6 +134,7 @@ class Gallery extends Node {
         if(imgIndex < filenames.length) {
           image = loadImage(Paths.get(folder, filenames[imgIndex]).toString());
           if(image.width <= 0) throw new IllegalArgumentException("This is not an Image!");
+          calcDim();
           presentTime = 0;
         }
 /*        else if(loop && !noLoop && !onEndPause) {

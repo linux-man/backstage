@@ -184,6 +184,7 @@ void saveProject(File file) {
           jsonNode.setFloat("volume", ((Audio)no).volume); jsonNode.setFloat("beginAt", ((Audio)no).beginAt); jsonNode.setFloat("endAt", ((Audio)no).endAt);
           jsonNode.setBoolean("equalizer", ((Audio)no).equalizer); jsonNode.setInt("preset", ((Audio)no).preset); jsonNode.setFloat("preamp", ((Audio)no).audio.preamp());
           JSONArray aamps = new JSONArray(); for(int n = 0; n < ((Audio)no).audio.amps().length; n++) aamps.setFloat(n, ((Audio)no).audio.amp(n)); jsonNode.setJSONArray("amps", aamps);
+          if(aarch64) delay(2000);
           break;
         case "Video":
           ((Video)no).path = projectPath.getParent().relativize(prevProjectPath.getParent().resolve(Paths.get(((Video)no).path)).normalize()).normalize().toString();
@@ -196,6 +197,7 @@ void saveProject(File file) {
           jsonNode.setInt("beginTransitionType", ((Video)no).beginTransitionType); jsonNode.setInt("endTransitionType", ((Video)no).endTransitionType);
           jsonNode.setBoolean("equalizer", ((Video)no).equalizer); jsonNode.setInt("preset", ((Video)no).preset); jsonNode.setFloat("preamp", ((Video)no).video.preamp());
           JSONArray vamps = new JSONArray(); for(int n = 0; n < ((Video)no).video.amps().length; n++) vamps.setFloat(n, ((Video)no).video.amp(n)); jsonNode.setJSONArray("amps", vamps);
+          if(aarch64) delay(4000);
           break;
         case "Gallery":
           ((Gallery)no).path = projectPath.getParent().relativize(prevProjectPath.getParent().resolve(Paths.get(((Gallery)no).path)).normalize()).normalize().toString();

@@ -22,6 +22,7 @@ import java.util.prefs.Preferences;
 import java.util.Arrays;
 import processing.awt.PSurfaceAWT.SmoothCanvas;
 
+boolean aarch64;
 boolean GL = false;
 boolean dragging, draggingWindow, draggingSlider, playing, paused;
 int screenWidth, screenHeight, colorScheme, trackHeight, translation, tracks, version;
@@ -46,6 +47,7 @@ void settings() {
 }
 
 void setup() {
+  aarch64 = System.getProperty("os.arch") == "aarch64";
   prefs = Preferences.userRoot().node(this.getClass().getName());
   frameRate(60);
   version = 3;

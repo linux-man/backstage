@@ -641,7 +641,7 @@ public void createGUI(){
   aboutPanel.setOpaque(true);
   labelTitle = new GLabel(cp, 8, 24, 184, 24);
   labelTitle.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
-  labelTitle.setText("Backstage v.3.0");
+  labelTitle.setText("Backstage v.3.1");
   labelTitle.setOpaque(false);
   labelCopyright = new GLabel(cp, 8, 48, 184, 24);
   labelCopyright.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);

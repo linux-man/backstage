@@ -85,7 +85,7 @@ String normalizePath(String path) {
   File file = new File(path);
   if(!file.isAbsolute()) {
     file = new File(projectPath.getParent().resolve(Paths.get(path)).normalize().toString());
-    if(file.isFile()) path = projectPath.getParent().resolve(Paths.get(path)).normalize().toString();
+    if(file.isFile() || file.isDirectory()) path = projectPath.getParent().resolve(Paths.get(path)).normalize().toString();
     else path = prevProjectPath.getParent().resolve(Paths.get(path)).normalize().toString();
   }
   path = projectPath.getParent().relativize(Paths.get(path)).normalize().toString();

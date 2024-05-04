@@ -16,7 +16,7 @@ along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
 class Exec extends Node {
   String command;
-  boolean wasFullScreen = false;
+  //boolean wasFullScreen = false;
   Process process;
 
   Exec(Exec no) {
@@ -39,7 +39,7 @@ class Exec extends Node {
     String[] params = command.split("\\s+(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
     for(int n = 0; n < params.length; n++) params[n] = params[n].replaceAll("^\"|\"$", "");
 
-    wasFullScreen = isFullScreen();
+    //wasFullScreen = isFullScreen();
     //surface.setVisible(false);//More testing
     //if(wasFullScreen) switchFullScreen(false);
 
@@ -121,7 +121,7 @@ class Exec extends Node {
     cboxEqualizer.setVisible(false);
     tm.addControls(textLabel, textDuration, notesArea);
   }
-  
+
   void save() {
     super.save();
     command = trim(textPath.getText());

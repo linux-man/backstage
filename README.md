@@ -115,16 +115,16 @@ VLC Media Player 3.x or later
 There are 3 files - DEFAULT, P2D and FX2D (FX2D Library must be installed) - that must be commented/uncommented (at line 18) to change the renderer. The presentation window start fullscreen at the secondary monitor (if present) and can be windowed.
 
 New Nodes:
-- Gallery ![Gallery](backstage/data/gallery.png) - select a folder of images
-- Random ![R](backstage/data/random.png) - select one of the connected nodes to continue
-- Exec ![E](backstage/data/exec.png) call and terminate a Process (probably needs some adjustments)
+- Gallery ![Gallery](backstage/data/gallery.png) - shows a folder of images
+- Random ![R](backstage/data/random.png) - randomly selects one of the connected nodes to continue
+- Exec ![E](backstage/data/exec.png) call and terminate a Process. Need to use absolute path (probably needs some adjustments)
 
 Backstage will auto-start if called with a parameter (stage file path), like "backstage ~/presentation.stage"
 
 ### Issues
 
 Drag n' Drop is disable on FX2D renderer.
-If you install Backstage you can open a project by double clicking the file. On Windows, a console window is opened. You can close it. That happens because Processing apps must be run on their working directories. I couldn't find a registry key to force that, so I had to open a command line and run Backstage after a "change dir". If someone knows how to avoid this please tell me.
+If you install Backstage you can open a project by double clicking the file. On Windows, a console window is opened. You can close it. That happens because Processing apps must be run on their working directories. I couldn't find a registry key to force that, so I had to open a command line and run Backstage after a "change dir". If someone knows how to avoid this please tell me. UPDATE: currently, the installer is not compiled.
 
 On Linux, Java has a tendency to crash when a monitor is connected/disconnected. Looks like a long time [bug](https://www.google.pt/search?q=sun.awt.image.BufImgSurfaceData+cannot+be+cast+to+sun.java2d.xr.XRSurfaceData).
 

@@ -22,12 +22,12 @@ import java.util.prefs.Preferences;
 import java.util.Arrays;
 import processing.awt.PSurfaceAWT.SmoothCanvas;
 
-boolean aarch64;
 boolean GL = false;
 boolean dragging, draggingWindow, draggingSlider, playing, paused;
 int screenWidth, screenHeight, colorScheme, trackHeight, translation, tracks, version;
 color backgroundColor, normalColor, overColor, selectedColor, borderColor;
 float defaultDuration;
+boolean hideCursor = false;
 ArrayList<Node> nodes;
 Node[] stage;
 PImage iconImage, iconVideo, iconAudio, iconText, iconRect, iconLink, iconRandom, iconGallery, iconExec;
@@ -47,10 +47,9 @@ void settings() {
 }
 
 void setup() {
-  aarch64 = System.getProperty("os.arch") == "aarch64";
   prefs = Preferences.userRoot().node(this.getClass().getName());
   frameRate(60);
-  version = 3;
+  version = 4;
   defaultDuration = 5;
   tracks = 4;
   trackHeight = 48;
@@ -75,7 +74,6 @@ void setup() {
   initializeDrop();
 
   if (args != null) {
-    //cp.setAlwaysOnTop(false);//Not needed
     ((JFrame) ((SmoothCanvas) cp.getSurface().getNative()).getFrame()).toBack();
     surface.setAlwaysOnTop(true);
     thread("loadArgs");    
@@ -83,18 +81,21 @@ void setup() {
 }
 
 void loadArgs() {
-  delay(3000);
   loadProject(new File(args[0]));
-  delay(6000);
+  hideCursor();
   end(true);
-  delay(1000);
   turn();  
 }
 
 void draw() {
   background(0);
-  noCursor();
   if(playing) for(Node no: stage) if(no != null) no.play();
+}
+
+void mouseClicked() {
+  if(playing) for(Node no: stage) if(no != null) {
+    if(no.isOver()) no.jump();
+  }
 }
 
 void turn() {
@@ -111,6 +112,17 @@ void next() {
   for(Node no: stage) if(no != null && !no.independent) no.next();
 }
 
-void keyPressed(){
+void keyPressed() {
   key = keyCode == ESC ? 0 : key;
+}
+
+void hideCursor() {
+  if(hideCursor) {
+    noCursor();
+    buttonCursor.setIcon("cursor.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
+  }
+  else {
+    cursor(ARROW);
+    buttonCursor.setIcon("nocursor.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
+  }
 }

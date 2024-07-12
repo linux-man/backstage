@@ -15,8 +15,8 @@ You should have received a copy of the GNU General Public License
 along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
 class Image extends Node {
-  String path;
-  boolean centered, aspectRatio, perX, perY, perW, perH;
+  String path, target;
+  boolean centered, aspectRatio, perX, perY, perW, perH, clickable;
   float nX, nY, nW, nH;
   int beginTransitionType, endTransitionType;
 
@@ -24,26 +24,36 @@ class Image extends Node {
   PImage image;
 
   Image(Image no) {
-    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, no.highlight, new int[0],
+    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, no.targetable, nodes.size(), no.x + 1, no.y, no.highlight, new int[0],
     no.path, no.loop, no.beginTransition, no.endTransition, no.centered, no.aspectRatio,
     no.nX, no.nY, no.nW, no.nH, no.perX, no.perY, no.perW, no.perH, no.beginTransitionDuration, no.endTransitionDuration,
-    no.beginTransitionType, no.endTransitionType);
+    no.beginTransitionType, no.endTransitionType,
+    no.clickable, no.target);
   }
 
-  Image(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int highlight, int[] next,
+  Image(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, boolean targetable, int index, int x, int y, int highlight, int[] next,
   String path,
   boolean loop, boolean beginTransition, boolean endTransition, boolean centered, boolean aspectRatio,
   float nX, float nY, float nW, float nH, boolean perX, boolean perY, boolean perW, boolean perH, float beginTransitionDuration, float endTransitionDuration,
-  int beginTransitionType, int endTransitionType) {
-    super("Image", label, notes, duration, beginPaused, endPaused, independent, index, x, y, highlight, next, iconImage);
+  int beginTransitionType, int endTransitionType,
+  boolean clickable, String target) {
+    super("Image", label, notes, duration, beginPaused, endPaused, independent, targetable, index, x, y, highlight, next, iconImage);
     this.path = normalizePath(path);
     this.loop = loop; this.beginTransition = beginTransition; this.endTransition = endTransition; this.centered = centered; this.aspectRatio = aspectRatio;
     this.nX = nX; this.nY = nY; this.nW = nW; this.nH = nH; this.perX = perX; this.perY = perY; this.perW = perW; this.perH = perH;
     this.beginTransitionDuration = beginTransitionDuration; this.endTransitionDuration = endTransitionDuration;
     this.beginTransitionType = beginTransitionType; this.endTransitionType = endTransitionType;
+    this.clickable = clickable; this.target = target;
 
-    image = loadImage(projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString());
-    if(image.width <= 0) throw new IllegalArgumentException("This is not an Image!");
+    try {
+      image = loadImage(projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString());
+      if(image.width <= 0) throw new IllegalArgumentException("This is not an Image!");
+    }
+    catch(Exception e) {
+      println(e.toString());
+      println(projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString());
+      presentTime = endTime;
+    }
   }
   
   void turn() {
@@ -103,9 +113,14 @@ class Image extends Node {
         case 5: y = height +  (pY  - height) * (endTime - presentTime) / endTransitionDuration / 1000; break;
       }
     }
-
-    image(image, x, y, w, h);
-
+    try {
+      image(image, x, y, w, h);
+    }
+    catch(Exception e) {
+      println(e.toString());
+      println(projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString());
+      presentTime = endTime;
+    }
     finalizePlay();
   }
   
@@ -130,6 +145,15 @@ class Image extends Node {
     dListEndTransition.setItems(t, 0);
     dListBeginTransition.setSelected(beginTransitionType);
     dListEndTransition.setSelected(endTransitionType);
+    cboxClickable.setSelected(clickable);
+
+    StringList targets;
+    targets = new StringList();
+    targets.append(" ");
+    for(Node no: nodes) if(no.targetable) targets.append(no.label);
+    targets.sort();
+    dListTarget.setItems(targets.toArray(), 0);
+    for(int n = 0; n < targets.size(); n++) if(targets.get(n).equals(target)) dListTarget.setSelected(n);
 
     labelPath.setVisible(true);
     textPath.setVisible(true);
@@ -206,6 +230,8 @@ class Image extends Node {
     labelNotes.moveTo(248, 144);
     notesArea.moveTo(248, 160);
     cboxEqualizer.setVisible(false);
+    cboxClickable.setVisible(true);
+    dListTarget.setVisible(true);
     tm.addControls(textPath, textLabel, textX, textY, textW, textH, textDuration, textBeginTransition, textEndTransition, notesArea);
   }
   
@@ -226,11 +252,34 @@ class Image extends Node {
     perH = cboxH.isSelected();
     beginTransitionType = dListBeginTransition.getSelectedIndex();
     endTransitionType = dListEndTransition.getSelectedIndex();
+    clickable = cboxClickable.isSelected();
+    if(clickable) target = dListTarget.getSelectedText(); else target = "";
   }
 
   void clear() {
     super.clear();
     g.removeCache(image);
     image = null;
+  }
+
+  boolean isOver() {
+    return clickable & mouseX > pX & mouseX < pX + pW & mouseY > pY & mouseY < pY + pH;
+  }
+
+  void jump() {
+    end(true);
+    for(Node no: nodes) if(no.targetable & no.label.equals(target)) {
+      if(no.playing) no.end(true);
+      no.turn();
+    }
+  }
+
+  boolean isClickable() {
+    return clickable;
+  }
+
+  int getTarget() {
+    for(Node no: nodes) if(no.targetable & no.label.equals(target)) return no.index;
+    return -1;
   }
 }

@@ -41,7 +41,9 @@ MonitorDevice secondaryDevice() {
     if(Screen.getAllScreens().iterator().next().getMonitorDevices().size() > 1)
       for(MonitorDevice m: Screen.getAllScreens().iterator().next().getMonitorDevices()) if(!m.isPrimary()) return m;
     return Screen.getAllScreens().iterator().next().getPrimaryMonitor();
-  } catch (Exception e) {
+  }
+  catch (Exception e) {
+      println(e.toString());
       println("Get monitor devices error");
       return null;
   }

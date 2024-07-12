@@ -15,8 +15,8 @@ You should have received a copy of the GNU General Public License
 along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
 class Gallery extends Node {
-  String path;
-  boolean centered, aspectRatio, perX, perY, perW, perH;
+  String path, target;
+  boolean centered, aspectRatio, perX, perY, perW, perH, clickable;
   float nX, nY, nW, nH;
   int beginTransitionType, endTransitionType;
 
@@ -28,34 +28,35 @@ class Gallery extends Node {
   int imgIndex = 0;
 
   Gallery(Gallery no) {
-    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, no.highlight, new int[0],
+    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, no.targetable, nodes.size(), no.x + 1, no.y, no.highlight, new int[0],
     no.path, no.loop, no.beginTransition, no.endTransition, no.centered, no.aspectRatio,
     no.nX, no.nY, no.nW, no.nH, no.perX, no.perY, no.perW, no.perH, no.beginTransitionDuration, no.endTransitionDuration,
-    no.beginTransitionType, no.endTransitionType);
+    no.beginTransitionType, no.endTransitionType,
+    no.clickable, no.target);
   }
 
-  Gallery(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int highlight, int[] next,
+  Gallery(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, boolean targetable, int index, int x, int y, int highlight, int[] next,
   String path,
   boolean loop, boolean beginTransition, boolean endTransition, boolean centered, boolean aspectRatio,
   float nX, float nY, float nW, float nH, boolean perX, boolean perY, boolean perW, boolean perH, float beginTransitionDuration, float endTransitionDuration,
-  int beginTransitionType, int endTransitionType) {
-    super("Gallery", label, notes, duration, beginPaused, endPaused, independent, index, x, y, highlight, next, iconGallery);
+  int beginTransitionType, int endTransitionType,
+  boolean clickable, String target) {
+    super("Gallery", label, notes, duration, beginPaused, endPaused, independent, targetable, index, x, y, highlight, next, iconGallery);
     this.path = normalizePath(path);
     this.loop = loop; this.beginTransition = beginTransition; this.endTransition = endTransition; this.centered = centered; this.aspectRatio = aspectRatio;
     this.nX = nX; this.nY = nY; this.nW = nW; this.nH = nH; this.perX = perX; this.perY = perY; this.perW = perW; this.perH = perH;
     this.beginTransitionDuration = beginTransitionDuration; this.endTransitionDuration = endTransitionDuration;
     this.beginTransitionType = beginTransitionType; this.endTransitionType = endTransitionType;
+    this.clickable = clickable; this.target = target;
 
     folder = projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString();
     File f = new File(folder);
     String[] fns = f.list();
     for (String fn: fns) {
-      if(fn.endsWith(".jpg") || fn.endsWith(".jpeg") || fn.endsWith(".png")  || fn.endsWith(".gif")  || fn.endsWith(".bmp")) filenames = append(filenames, fn);
+      if(fn.toLowerCase().endsWith(".jpg") || fn.toLowerCase().endsWith(".jpeg") || fn.toLowerCase().endsWith(".png")  || fn.toLowerCase().endsWith(".gif")  || fn.toLowerCase().endsWith(".bmp")) filenames = append(filenames, fn);
     }
-    if(filenames == null) throw new IllegalArgumentException("There are no images");
+    if(filenames.length == 0) throw new IllegalArgumentException("There are no images");
     Arrays.sort(filenames);
-    image = loadImage(Paths.get(folder, filenames[imgIndex]).toString());
-    if(image.width <= 0) throw new IllegalArgumentException("This is not an Image!");
   }
   
   void calcDim() {
@@ -77,8 +78,17 @@ class Gallery extends Node {
   void turn() {
     if(!playing) {
       initializeTurn();
-      calcDim();
       endTime = int(duration * 1000);
+      try {
+        image = loadImage(Paths.get(folder, filenames[imgIndex]).toString());
+        if(image.width <= 0) throw new IllegalArgumentException("This is not an Image!");
+      }
+      catch(Exception e) {
+        println(e.toString());
+        println(Paths.get(folder, filenames[imgIndex]).toString());
+        presentTime = endTime;
+      }
+      calcDim();
       finalizeTurn();
     }
     else paused = !paused;
@@ -119,9 +129,14 @@ class Gallery extends Node {
         case 5: y = height +  (pY  - height) * (endTime - presentTime) / endTransitionDuration / 1000; break;
       }
     }
-
-    image(image, x, y, w, h);
-
+    try {
+      image(image, x, y, w, h);
+    }
+    catch(Exception e) {
+      println(e.toString());
+      println(Paths.get(folder, filenames[imgIndex]).toString());
+      presentTime = endTime;
+    }
     finalizePlay();
   }
 
@@ -132,10 +147,17 @@ class Gallery extends Node {
       if(presentTime >= endTime) {
         imgIndex++;
         if(imgIndex < filenames.length) {
-          image = loadImage(Paths.get(folder, filenames[imgIndex]).toString());
-          if(image.width <= 0) throw new IllegalArgumentException("This is not an Image!");
-          calcDim();
-          presentTime = 0;
+          try {
+            image = loadImage(Paths.get(folder, filenames[imgIndex]).toString());
+            if(image.width <= 0) throw new IllegalArgumentException("This is not an Image!");
+            calcDim();
+            presentTime = 0;
+          }
+          catch(Exception e) {
+            println(e.toString());
+            println(Paths.get(folder, filenames[imgIndex]).toString());
+            presentTime = endTime;
+          }
         }
 /*        else if(loop && !noLoop && !onEndPause) {
           onLoop = true;
@@ -151,8 +173,13 @@ class Gallery extends Node {
 
   void finalizeEnd(boolean fullStop) {
     imgIndex = 0;
-    image = loadImage(Paths.get(folder, filenames[imgIndex]).toString());
-    if(image.width <= 0) throw new IllegalArgumentException("This is not an Image!");
+    try {
+      image = loadImage(Paths.get(folder, filenames[imgIndex]).toString());
+      if(image.width <= 0) throw new IllegalArgumentException("This is not an Image!");
+    }
+    catch(Exception e) {
+      println(e.toString());
+    }
     super.finalizeEnd(fullStop);
   }
 
@@ -182,6 +209,15 @@ class Gallery extends Node {
     dListEndTransition.setItems(t, 0);
     dListBeginTransition.setSelected(beginTransitionType);
     dListEndTransition.setSelected(endTransitionType);
+    cboxClickable.setSelected(clickable);
+
+    StringList targets;
+    targets = new StringList();
+    targets.append(" ");
+    for(Node no: nodes) if(no.targetable) targets.append(no.label);
+    targets.sort();
+    dListTarget.setItems(targets.toArray(), 0);
+    for(int n = 0; n < targets.size(); n++) if(targets.get(n).equals(target)) dListTarget.setSelected(n);
 
     labelPath.setVisible(true);
     textPath.setVisible(true);
@@ -257,6 +293,8 @@ class Gallery extends Node {
     labelNotes.moveTo(248, 144);
     notesArea.moveTo(248, 160);
     cboxEqualizer.setVisible(false);
+    cboxClickable.setVisible(true);
+    dListTarget.setVisible(true);
     tm.addControls(textPath, textLabel, textX, textY, textW, textH, textDuration, textBeginTransition, textEndTransition, notesArea);
   }
   
@@ -277,11 +315,34 @@ class Gallery extends Node {
     perH = cboxH.isSelected();
     beginTransitionType = dListBeginTransition.getSelectedIndex();
     endTransitionType = dListEndTransition.getSelectedIndex();
+    clickable = cboxClickable.isSelected();
+    if(clickable) target = dListTarget.getSelectedText(); else target = "";
   }
 
   void clear() {
     super.clear();
     g.removeCache(image);
     image = null;
+  }
+
+  boolean isOver() {
+    return clickable & mouseX > pX & mouseX < pX + pW & mouseY > pY & mouseY < pY + pH;
+  }
+
+  void jump() {
+    end(true);
+    for(Node no: nodes) if(no.targetable & no.label.equals(target)) {
+      if(no.playing) no.end(true);
+      no.turn();
+    }
+  }
+
+  boolean isClickable() {
+    return clickable;
+  }
+  
+  int getTarget() {
+    for(Node no: nodes) if(no.targetable & no.label.equals(target)) return no.index;
+    return -1;
   }
 }

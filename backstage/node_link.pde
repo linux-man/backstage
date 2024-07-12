@@ -17,15 +17,15 @@ along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 class Link extends Node {
 
   Link(Link no) {
-    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, no.highlight, new int[0]);
+    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, no.targetable, nodes.size(), no.x + 1, no.y, no.highlight, new int[0]);
   }
 
   Link() {
-    this("", "", 0, false, false, false, nodes.size(), -translation, trackHeight, 0, new int[0]);
+    this("", "", 0, false, false, false, false, nodes.size(), -translation, trackHeight, 0, new int[0]);
   }
 
-  Link(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int highlight, int[] next) {
-    super("Link", label, notes, duration, beginPaused, endPaused, independent, index, x, y, highlight, next, iconLink);
+  Link(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, boolean targetable, int index, int x, int y, int highlight, int[] next) {
+    super("Link", label, notes, duration, beginPaused, endPaused, independent, targetable, index, x, y, highlight, next, iconLink);
   }
   
   void load() {
@@ -82,6 +82,8 @@ class Link extends Node {
     labelNotes.moveTo(248, 144);
     notesArea.moveTo(248, 160);
     cboxEqualizer.setVisible(false);
+    cboxClickable.setVisible(false);
+    dListTarget.setVisible(false);
     tm.addControls(textLabel, textDuration, notesArea);
   }
 }

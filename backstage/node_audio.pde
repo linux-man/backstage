@@ -26,34 +26,34 @@ class Audio extends Node {
   VLCJVideo audio;
 
   Audio(Audio no) {
-    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, no.highlight, new int[0],
+    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, no.targetable, nodes.size(), no.x + 1, no.y, no.highlight, new int[0],
     no.path, no.loop, no.beginTransition, no.endTransition,
     no.beginTransitionDuration, no.endTransitionDuration, no.volume, no.beginAt, no.endAt,
     no.equalizer, no.preset, no.audio.preamp(), no.audio.amps());
   }
 
-  Audio(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int highlight, int[] next,
+  Audio(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, boolean targetable, int index, int x, int y, int highlight, int[] next,
   String path,
   boolean loop, boolean beginTransition, boolean endTransition,
   float beginTransitionDuration, float endTransitionDuration, float volume, float beginAt, float endAt,
   boolean equalizer, int preset, float preamp, float[] amps) {
-    super("Audio", label, notes, duration, beginPaused, endPaused, independent, index, x, y, highlight, next, iconAudio);
+    super("Audio", label, notes, duration, beginPaused, endPaused, independent, targetable, index, x, y, highlight, next, iconAudio);
     this.path = normalizePath(path);
     this.loop = loop; this.beginTransition = beginTransition; this.endTransition = endTransition;
     this.beginTransitionDuration = beginTransitionDuration; this.endTransitionDuration = endTransitionDuration; this.volume = volume; this.beginAt = beginAt; this.endAt = endAt;
-    this.equalizer = equalizer; this.preset = preset; 
+    this.equalizer = equalizer; this.preset = preset;
 
     audio = new VLCJVideo(main);
 
     audio.bind(VLCJVideo.MediaPlayerEventType.LENGTH_CHANGED, new ARunnable(this) { public void run() {
       if(parent.loading) {
         parent.audio.setVolume(0);
-        parent.loading = false;
         parent.duration = audio.duration() / 1000.0;
         if(parent.duration <= 0) throw new IllegalArgumentException("This is not an Audio!");
         if(parent.beginAt < 0 || parent.beginAt >= parent.duration) parent.beginAt = 0;
         if(parent.endAt <= 0 || parent.endAt > parent.duration || parent.endAt <= parent.beginAt) parent.endAt = parent.duration;
         parent.audio.stop();
+        parent.loading = false;
       }
     }});
 
@@ -96,9 +96,16 @@ class Audio extends Node {
     if(paused && audio.isPlaying()) audio.pause();
     
     finalizePlay();
-    if(loop && presentTime == 0 && !paused) {
-      if(!audio.isPlaying()) audio.play();
-      audio.setTime(int(beginAt * 1000));
+    try {
+      if(loop && presentTime == 0 && !paused) {
+        if(!audio.isPlaying()) audio.play();
+        audio.setTime(int(beginAt * 1000));
+      }
+    }
+    catch(Exception e) {
+      println(e.toString());
+      println(projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString());
+      presentTime = endTime;
     }
   }
 
@@ -204,6 +211,8 @@ class Audio extends Node {
     sliderPreamp.setValue(audio.preamp());
     equalizerPanel.moveTo(controlPanel.getX() + controlPanel.getWidth(), controlPanel.getY());
     if(equalizer) equalizerPanel.setVisible(true);
+    cboxClickable.setVisible(false);
+    dListTarget.setVisible(false);
     tm.addControls(textPath, textLabel, textBegin, textEnd, textBeginTransition, textEndTransition, notesArea);
   }
   

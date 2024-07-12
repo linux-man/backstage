@@ -15,8 +15,8 @@ You should have received a copy of the GNU General Public License
 along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
 class Video extends Node {
-  String path;
-  boolean centered, aspectRatio, perX, perY, perW, perH;
+  String path, target;
+  boolean centered, aspectRatio, perX, perY, perW, perH, clickable;
   float nX, nY, nW, nH, volume, beginAt, endAt;
   int beginTransitionType, endTransitionType;
   boolean equalizer;
@@ -28,20 +28,22 @@ class Video extends Node {
   VLCJVideo video;
 
   Video(Video no) {
-    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, no.highlight, new int[0],
+    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, no.targetable, nodes.size(), no.x + 1, no.y, no.highlight, new int[0],
     no.path, no.loop, no.beginTransition, no.endTransition, no.centered, no.aspectRatio,
     no.nX, no.nY, no.nW, no.nH, no.perX, no.perY, no.perW, no.perH, no.beginTransitionDuration, no.endTransitionDuration, no.volume, no.beginAt, no.endAt,
     no.beginTransitionType, no.endTransitionType,
-    no.equalizer, no.preset, no.video.preamp(), no.video.amps());
+    no.equalizer, no.preset, no.video.preamp(), no.video.amps(),
+    no.clickable, no.target);
   }
 
-  Video(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int highlight, int[] next,
+  Video(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, boolean targetable, int index, int x, int y, int highlight, int[] next,
   String path,
   boolean loop, boolean beginTransition, boolean endTransition, boolean centered, boolean aspectRatio,
   float nX, float nY, float nW, float nH, boolean perX, boolean perY, boolean perW, boolean perH, float beginTransitionDuration, float endTransitionDuration, float volume, float beginAt, float endAt,
   int beginTransitionType, int endTransitionType,
-  boolean equalizer, int preset, float preamp, float[] amps) {
-    super("Video", label, notes, duration, beginPaused, endPaused, independent, index, x, y, highlight, next, iconVideo);
+  boolean equalizer, int preset, float preamp, float[] amps,
+  boolean clickable, String target) {
+    super("Video", label, notes, duration, beginPaused, endPaused, independent, targetable, index, x, y, highlight, next, iconVideo);
     this.path = normalizePath(path);
     this.loop = loop; this.beginTransition = beginTransition; this.endTransition = endTransition; this.centered = centered; this.aspectRatio = aspectRatio;
     this.nX = nX; this.nY = nY; this.nW = nW; this.nH = nH; this.perX = perX; this.perY = perY; this.perW = perW; this.perH = perH;
@@ -49,23 +51,25 @@ class Video extends Node {
     this.volume = volume; this.beginAt = beginAt; this.endAt = endAt;
     this.beginTransitionType = beginTransitionType; this.endTransitionType = endTransitionType;
     this.equalizer = equalizer; this.preset = preset;
+    this.clickable = clickable; this.target = target;
 
     video = new VLCJVideo(main);
 
     video.bind(VLCJVideo.MediaPlayerEventType.LENGTH_CHANGED, new VRunnable(this) { public void run() {
       if(parent.loading) {
         parent.video.setVolume(0);
-        parent.loading = false;
         parent.duration = video.duration() / 1000.0;
         if(parent.duration <= 0) throw new IllegalArgumentException("This is not a Video!");
         if(parent.beginAt < 0 || parent.beginAt >= parent.duration) parent.beginAt = 0;
         if(parent.endAt <= 0 || parent.endAt > parent.duration || parent.endAt <= parent.beginAt) parent.endAt = parent.duration;
-        parent.video.stop();
+        parent.loading = false;
       }
     }});
 
     loading = true;
     video.openAndPlay(projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString());
+    while(loading || video.width == 0) delay(10);
+    video.stop();
     if(equalizer) {
       if(preset >= 0) video.setEqualizer(preset);
       else {
@@ -153,7 +157,14 @@ class Video extends Node {
     if(paused && video.isPlaying()) video.pause();
     
     if(!turnStarted || presentTime > 200) {
-      image(video, x, y, w, h);
+      try {
+        image(video, x, y, w, h);
+      }
+      catch(Exception e) {
+        println(e.toString());
+        println(projectPath.getParent().resolve(Paths.get(this.path)).normalize().toString());
+        presentTime = endTime;
+      }
       turnStarted = false;
     }
 
@@ -197,6 +208,15 @@ class Video extends Node {
     dListEndTransition.setItems(t, 0);
     dListBeginTransition.setSelected(beginTransitionType);
     dListEndTransition.setSelected(endTransitionType);
+    cboxClickable.setSelected(clickable);
+
+    StringList targets;
+    targets = new StringList();
+    targets.append(" ");
+    for(Node no: nodes) if(no.targetable) targets.append(no.label);
+    targets.sort();
+    dListTarget.setItems(targets.toArray(), 0);
+    for(int n = 0; n < targets.size(); n++) if(targets.get(n).equals(target)) dListTarget.setSelected(n);
 
     labelPath.setVisible(true);
     textPath.setVisible(true);
@@ -297,6 +317,8 @@ class Video extends Node {
     sliderPreamp.setValue(video.preamp());
     equalizerPanel.moveTo(controlPanel.getX() + controlPanel.getWidth(), controlPanel.getY());
     if(equalizer) equalizerPanel.setVisible(true);
+    cboxClickable.setVisible(true);
+    dListTarget.setVisible(true);
     tm.addControls(textPath, textLabel, textX, textY, textW, textH, textBegin, textEnd, textBeginTransition, textEndTransition, notesArea);
   }
   
@@ -323,6 +345,8 @@ class Video extends Node {
     if(endAt <= 0 || endAt > duration || endAt <= beginAt) endAt = duration;
     equalizer = cboxEqualizer.isSelected();
     preset = dListPresets.getSelectedIndex() - 1;
+    clickable = cboxClickable.isSelected();
+    if(clickable) target = dListTarget.getSelectedText(); else target = "";
   }
 
   void cancel() {
@@ -336,5 +360,26 @@ class Video extends Node {
     video.stop();
     //video.dispose(); //Crashes App
     video = null;
+  }
+
+  boolean isOver() {
+    return clickable & mouseX > pX & mouseX < pX + pW & mouseY > pY & mouseY < pY + pH;
+  }
+
+  void jump() {
+    end(true);
+    for(Node no: nodes) if(no.targetable & no.label.equals(target)) {
+      if(no.playing) no.end(true);
+      no.turn();
+    }
+  }
+
+  boolean isClickable() {
+    return clickable;
+  }
+
+  int getTarget() {
+    for(Node no: nodes) if(no.targetable & no.label.equals(target)) return no.index;
+    return -1;
   }
 }

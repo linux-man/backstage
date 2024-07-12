@@ -15,7 +15,8 @@ You should have received a copy of the GNU General Public License
 along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
 class Rect extends Node {
-  boolean centered, perX, perY, perW, perH;
+  String target;
+  boolean centered, perX, perY, perW, perH, clickable;
   float nX, nY, nW, nH;
   int beginTransitionType, endTransitionType;
   color bColor;
@@ -23,27 +24,30 @@ class Rect extends Node {
   float pX, pY, pW, pH;
 
   Rect(Rect no) {
-    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, no.highlight, new int[0],
+    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, no.targetable, nodes.size(), no.x + 1, no.y, no.highlight, new int[0],
     no.loop, no.beginTransition, no.endTransition, no.centered,
     no.nX, no.nY, no.nW, no.nH, no.perX, no.perY, no.perW, no.perH, no.beginTransitionDuration, no.endTransitionDuration,
-    no.beginTransitionType, no.endTransitionType, no.bColor);
+    no.beginTransitionType, no.endTransitionType, no.bColor,
+    no.clickable, no.target);
   }
 
   Rect() {
-    this("", "", defaultDuration, false, false, false, nodes.size(), -translation, trackHeight, 0, new int[0], false, false, false, false, 0, 0, 100, 100, false, false, true, true, 1, 1, 0, 0, color(128));
+    this("", "", defaultDuration, false, false, false, false, nodes.size(), -translation, trackHeight, 0, new int[0], false, false, false, false, 0, 0, 100, 100, false, false, true, true, 1, 1, 0, 0, color(128), false, "");
   }
 
-  Rect(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int highlight, int[] next,
+  Rect(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, boolean targetable, int index, int x, int y, int highlight, int[] next,
   boolean loop, boolean beginTransition, boolean endTransition, boolean centered,
   float nX, float nY, float nW, float nH, boolean perX, boolean perY, boolean perW, boolean perH, float beginTransitionDuration, float endTransitionDuration,
   int beginTransitionType, int endTransitionType,
-  color bColor) {
-    super("Rect", label, notes, duration, beginPaused, endPaused, independent, index, x, y, highlight, next, iconRect);
+  color bColor,
+  boolean clickable, String target) {
+    super("Rect", label, notes, duration, beginPaused, endPaused, independent, targetable, index, x, y, highlight, next, iconRect);
     this.loop = loop; this.beginTransition = beginTransition; this.endTransition = endTransition; this.centered = centered;
     this.nX = nX; this.nY = nY; this.nW = nW; this.nH = nH; this.perX = perX; this.perY = perY; this.perW = perW; this.perH = perH;
     this.beginTransitionDuration = beginTransitionDuration; this.endTransitionDuration = endTransitionDuration;
     this.beginTransitionType = beginTransitionType; this.endTransitionType = endTransitionType;
     this.bColor = bColor;
+    this.clickable = clickable; this.target = target;
   }
   
   void turn() {
@@ -128,6 +132,15 @@ class Rect extends Node {
     v.beginDraw();
     v.background(bColor);
     v.endDraw();
+    cboxClickable.setSelected(clickable);
+
+    StringList targets;
+    targets = new StringList();
+    targets.append(" ");
+    for(Node no: nodes) if(no.targetable) targets.append(no.label);
+    targets.sort();
+    dListTarget.setItems(targets.toArray(), 0);
+    for(int n = 0; n < targets.size(); n++) if(targets.get(n).equals(target)) dListTarget.setSelected(n);
 
     labelPath.setVisible(false);
     textPath.setVisible(false);
@@ -205,6 +218,8 @@ class Rect extends Node {
     labelNotes.moveTo(248, 144);
     notesArea.moveTo(248, 160);
     cboxEqualizer.setVisible(false);
+    cboxClickable.setVisible(true);
+    dListTarget.setVisible(true);
     tm.addControls(textLabel, textX, textY, textW, textH, textDuration, textBeginTransition, textEndTransition, notesArea);
   }
   
@@ -224,5 +239,28 @@ class Rect extends Node {
     beginTransitionType = dListBeginTransition.getSelectedIndex();
     endTransitionType = dListEndTransition.getSelectedIndex();
     bColor = viewColor.getGraphics().backgroundColor;
+    clickable = cboxClickable.isSelected();
+    if(clickable) target = dListTarget.getSelectedText(); else target = "";
+  }
+
+  boolean isOver() {
+    return clickable & mouseX > pX & mouseX < pX + pW & mouseY > pY & mouseY < pY + pH;
+  }
+
+  void jump() {
+    end(true);
+    for(Node no: nodes) if(no.targetable & no.label.equals(target)) {
+      if(no.playing) no.end(true);
+      no.turn();
+    }
+  }
+
+  boolean isClickable() {
+    return clickable;
+  }
+
+  int getTarget() {
+    for(Node no: nodes) if(no.targetable & no.label.equals(target)) return no.index;
+    return -1;
   }
 }

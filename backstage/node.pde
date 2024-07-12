@@ -17,16 +17,16 @@ along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 class Node {
   String type, label, notes;
   int index, x, y, w, h, highlight; int[] next;
-  boolean beginPaused, endPaused, loop, beginTransition, endTransition, independent;
+  boolean beginPaused, endPaused, loop, beginTransition, endTransition, independent, targetable;
   float duration, beginTransitionDuration, endTransitionDuration;
   
   int track, endTime, presentTime, prevMillis;
   boolean selected, connecting, dragged, mouseOver, playing, paused, onEndPause, noLoop, onLoop;
   PImage icon;
 
-  Node(String type, String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int highlight, int[] next, PImage icon) {
+  Node(String type, String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, boolean targetable, int index, int x, int y, int highlight, int[] next, PImage icon) {
     this.type = type; this.label = label; this.notes = notes; this.duration = duration; this.beginPaused = beginPaused; this.endPaused = endPaused; this.independent = independent;
-    this.index = index; this.x = x; this.y = y; this.highlight = highlight; this.next = next; this.icon = icon;
+    this.targetable = targetable; this.index = index; this.x = x; this.y = y; this.highlight = highlight; this.next = next; this.icon = icon;
     w = max(int(cp.textWidth(label)) + 8, 84);
     h = 40;
     track = tracks - int(round(float(y) / trackHeight));
@@ -136,6 +136,19 @@ class Node {
       float dif =  min(200, max(20, x1 - x2 + abs(y1 - y2)));
       cp.bezier(x1, y1, x1 + dif, y1, x2 - dif, y2, x2, y2);
     }
+
+    if(selected & isClickable() & getTarget() >= 0) {
+      cp.stroke(255);
+      cp.strokeWeight(3);
+      Node no = nodes.get(getTarget());
+      int x1 = x + w/2;
+      int y1 = y;
+      int x2 = no.x + no.w/2;
+      int y2 = no.y;
+      cp.bezier(x1, y1, x1, y1 - 96, x2, y2 - 96, x2, y2);      
+      cp.stroke(strokeColor);
+    }
+    
     for(int n = next.length - 1; n >= 0; n--) {
       try {
         int x1 = x + w + h / next.length / 2;
@@ -174,11 +187,16 @@ class Node {
       cp.rect(x + 39, y + 24, 3, 8);
     }
     if(beginTransition) cp.triangle(x + 44, y + 32, x + 52, y + 32, x + 52, y + 24);
-    if(loop) cp.ellipse(x + 58, y + 28, 8, 8);
+    if(loop) cp.circle(x + 58, y + 28, 8);
     if(endTransition) cp.triangle(x + 64, y + 24, x + 64, y + 32, x + 72, y + 32);
     if(endPaused) {
       cp.rect(x + 74, y + 24, 3, 8);
       cp.rect(x + 79, y + 24, 3, 8);
+    }
+    if(targetable) cp.circle(x + 8, y + 28, 12);
+    if(isClickable()) {
+      cp.fill(0);
+      cp.triangle(x + 8, y + 22, x + 4, y + 34, x + 12, y + 34);
     }
     cp.fill(fillColor);
     cp.stroke(strokeColor);
@@ -302,6 +320,7 @@ class Node {
     cboxBeginTransition.setSelected(beginTransition);
     cboxEndTransition.setSelected(endTransition);
     cboxIndependent.setSelected(independent);
+    cboxTargetable.setSelected(targetable);
 
     textBegin.setLocalColor(7, color(255));
     textEnd.setLocalColor(7, color(255));
@@ -345,6 +364,7 @@ class Node {
     beginTransition = cboxBeginTransition.isSelected();
     endTransition = cboxEndTransition.isSelected();
     independent = cboxIndependent.isSelected();
+    targetable = cboxTargetable.isSelected();
     if(isTime(textBeginTransition.getText())) beginTransitionDuration = stringToTime(textBeginTransition.getText());
     if(isTime(textEndTransition.getText())) endTransitionDuration = stringToTime(textEndTransition.getText());
   }
@@ -364,5 +384,21 @@ class Node {
 
   boolean isEndTransition() {
     return endTransition && endTransitionDuration > 0 && (!loop || noLoop) && presentTime > endTime - endTransitionDuration * 1000;
+  }
+  
+  boolean isOver() {
+    return false;
+  }
+
+  void jump() {
+    //Placeholder for clickable nodes
+  }
+
+  boolean isClickable() {
+    return false;
+  }
+
+  int getTarget() {
+    return -1;
   }
 }

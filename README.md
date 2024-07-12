@@ -121,16 +121,25 @@ New Nodes:
 
 Backstage will auto-start if called with a parameter (stage file path), like "backstage ~/presentation.stage"
 
+### New on 4.0
+
+A Presentation can be interactive. A clickable Node points to a Target Node. Target Node is defined by its Label and is selected on a dropdown list.
+- New property "Target" on all Nodes.
+- New property "Click" on Rect, Image, Gallery and Video Nodes.
+
+A [Backstage Player](https://github.com/linux-man/bplayer) was created, intended for use on Raspberry Pi systems.
+
 ### Issues
 
 Drag n' Drop is disable on FX2D renderer.
-If you install Backstage you can open a project by double clicking the file. On Windows, a console window is opened. You can close it. That happens because Processing apps must be run on their working directories. I couldn't find a registry key to force that, so I had to open a command line and run Backstage after a "change dir". If someone knows how to avoid this please tell me. UPDATE: currently, the installer is not compiled.
+
+If you install Backstage you can open a project by double clicking the file. On Windows, a console window is opened. You can close it. That happens because Processing apps must be run on their working directories. I couldn't find a registry key to force that, so I had to open a command line and run Backstage after a "change dir". If someone knows how to avoid this please tell me. UPDATE: Currently, the installer is not compiled.
 
 On Linux, Java has a tendency to crash when a monitor is connected/disconnected. Looks like a long time [bug](https://www.google.pt/search?q=sun.awt.image.BufImgSurfaceData+cannot+be+cast+to+sun.java2d.xr.XRSurfaceData).
 
 Sometimes at start the theme is not correctly applied.
 
-Sometimes, when loading a video/audio the sound keeps playing. Just stop it.
+Sometimes, when loading a video/audio the sound keeps playing. Just stop it. UPDATE: It appears this issue has been fixed.
 
 During the limited tests I did on Mac, I found that the original Opengl version crash, so I added an alternative DEFAULT (JAVA2D) version.
 

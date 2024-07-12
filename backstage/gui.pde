@@ -90,6 +90,7 @@ public void buttonLoad_click(GButton source, GEvent event) { //_CODE_:buttonLoad
   buttonFiles_click(source, event);
   end(true);
   loadProject(openDialog("Load project"));
+  hideCursor();
 } //_CODE_:buttonLoad:446188:
 
 public void buttonSave_click(GButton source, GEvent event) { //_CODE_:buttonSave:574204:
@@ -138,6 +139,7 @@ public void buttonConfig_click(GButton source, GEvent event) { //_CODE_:buttonCo
   buttonAbout.setVisible(!buttonAbout.isVisible());
   buttonZip.setVisible(!buttonZip.isVisible());
   buttonDefaultDuration.setVisible(!buttonDefaultDuration.isVisible());
+  buttonCursor.setVisible(!buttonCursor.isVisible());
   buttonScheme.setVisible(!buttonScheme.isVisible());
 } //_CODE_:buttonConfig:337398:
 
@@ -191,7 +193,7 @@ public void buttonAdd_click(GButton source, GEvent event) { //_CODE_:buttonAdd:5
 
 public void buttonAddLink_click(GButton source, GEvent event) { //_CODE_:buttonAddLink:458440:
   buttonAdd_click(source, event);
-  nodes.add(new Link());  
+  nodes.add(new Link());
 } //_CODE_:buttonAddLink:458440:
 
 public void buttonAddText_click(GButton source, GEvent event) { //_CODE_:buttonAddText:519134:
@@ -296,6 +298,12 @@ public void buttonAddExec_click(GButton source, GEvent event) { //_CODE_:buttonA
   nodes.add(new Exec());  
 } //_CODE_:buttonAddExec:716116:
 
+public void buttonCursor_click(GButton source, GEvent event) { //_CODE_:buttonCursor:632908:
+  buttonConfig_click(source, event);
+  hideCursor = !hideCursor;
+  hideCursor();
+} //_CODE_:buttonCursor:632908:
+
 
 
 // Create all the GUI controls. 
@@ -378,13 +386,13 @@ public void createGUI(){
   labelText.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
   labelText.setText("Text");
   labelText.setOpaque(false);
-  textArea = new GTextArea(cp, 248, 160, 112, 72, G4P.SCROLLBARS_NONE);
+  textArea = new GTextArea(cp, 248, 160, 112, 48, G4P.SCROLLBARS_NONE);
   textArea.setOpaque(true);
   labelNotes = new GLabel(cp, 488, 144, 64, 16);
   labelNotes.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
   labelNotes.setText("Notes");
   labelNotes.setOpaque(false);
-  notesArea = new GTextArea(cp, 488, 160, 112, 72, G4P.SCROLLBARS_NONE);
+  notesArea = new GTextArea(cp, 488, 160, 112, 48, G4P.SCROLLBARS_NONE);
   notesArea.setOpaque(true);
   viewColor = new GView(cp, 72, 216, 48, 16, JAVA2D);
   buttonColor = new GButton(cp, 8, 216, 64, 16);
@@ -487,7 +495,7 @@ public void createGUI(){
   cboxW.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
   cboxW.setText("%");
   cboxW.setOpaque(false);
-  cboxIndependent = new GCheckbox(cp, 368, 184, 112, 16);
+  cboxIndependent = new GCheckbox(cp, 248, 216, 112, 16);
   cboxIndependent.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
   cboxIndependent.setText("Independent");
   cboxIndependent.setOpaque(false);
@@ -496,8 +504,18 @@ public void createGUI(){
   cboxEqualizer.setText("Equalizer");
   cboxEqualizer.setOpaque(false);
   cboxEqualizer.addEventHandler(this, "cboxEqualizer_click");
-  dListHighlight = new GDropList(cp, 368, 160, 112, 96, 5, 10);
+  dListHighlight = new GDropList(cp, 368, 184, 112, 96, 5, 10);
   dListHighlight.setItems(loadStrings("list_871695"), 0);
+  cboxTargetable = new GCheckbox(cp, 424, 144, 56, 16);
+  cboxTargetable.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
+  cboxTargetable.setText("Target");
+  cboxTargetable.setOpaque(false);
+  dListTarget = new GDropList(cp, 368, 160, 112, 64, 3, 10);
+  dListTarget.setItems(loadStrings("list_223942"), 0);
+  cboxClickable = new GCheckbox(cp, 368, 144, 56, 16);
+  cboxClickable.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
+  cboxClickable.setText("Click");
+  cboxClickable.setOpaque(false);
   controlPanel.addControl(buttonOK);
   controlPanel.addControl(labelLabel);
   controlPanel.addControl(labelPath);
@@ -553,6 +571,9 @@ public void createGUI(){
   controlPanel.addControl(cboxIndependent);
   controlPanel.addControl(cboxEqualizer);
   controlPanel.addControl(dListHighlight);
+  controlPanel.addControl(cboxTargetable);
+  controlPanel.addControl(dListTarget);
+  controlPanel.addControl(cboxClickable);
   buttonResize = new GButton(cp, 872, 0, 24, 24);
   buttonResize.setIcon("resize.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
   buttonLoad = new GButton(cp, 0, 48, 48, 24);
@@ -608,7 +629,7 @@ public void createGUI(){
   buttonAddRect = new GButton(cp, 96, 72, 48, 24);
   buttonAddRect.setIcon("rect.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
   buttonAddRect.addEventHandler(this, "buttonAddRect_click");
-  durationPanel = new GPanel(cp, 144, 24, 104, 80, "Default Duration");
+  durationPanel = new GPanel(cp, 0, 192, 104, 80, "Default Duration");
   durationPanel.setCollapsible(false);
   durationPanel.setText("Default Duration");
   durationPanel.setOpaque(true);
@@ -635,13 +656,13 @@ public void createGUI(){
   buttonNext = new GButton(cp, 288, 0, 48, 24);
   buttonNext.setIcon("step_forward.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
   buttonNext.addEventHandler(this, "buttonNext_click");
-  aboutPanel = new GPanel(cp, 224, 144, 200, 152, "About");
+  aboutPanel = new GPanel(cp, 632, 144, 200, 152, "About");
   aboutPanel.setCollapsible(false);
   aboutPanel.setText("About");
   aboutPanel.setOpaque(true);
   labelTitle = new GLabel(cp, 8, 24, 184, 24);
   labelTitle.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
-  labelTitle.setText("Backstage v.3.1");
+  labelTitle.setText("Backstage v.4.0");
   labelTitle.setOpaque(false);
   labelCopyright = new GLabel(cp, 8, 48, 184, 24);
   labelCopyright.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
@@ -662,7 +683,7 @@ public void createGUI(){
   aboutPanel.addControl(labelGPL);
   aboutPanel.addControl(buttonGithub);
   aboutPanel.addControl(buttonAboutOk);
-  equalizerPanel = new GPanel(cp, 624, 32, 248, 240, "Equalizer");
+  equalizerPanel = new GPanel(cp, 744, 24, 248, 240, "Equalizer");
   equalizerPanel.setCollapsible(false);
   equalizerPanel.setText("Equalizer");
   equalizerPanel.setOpaque(true);
@@ -787,6 +808,9 @@ public void createGUI(){
   buttonAddExec = new GButton(cp, 96, 168, 48, 24);
   buttonAddExec.setIcon("exec.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
   buttonAddExec.addEventHandler(this, "buttonAddExec_click");
+  buttonCursor = new GButton(cp, 48, 96, 48, 24);
+  buttonCursor.setIcon("nocursor.png", 1, GAlign.NORTH, GAlign.CENTER, GAlign.MIDDLE);
+  buttonCursor.addEventHandler(this, "buttonCursor_click");
   cp.loop();
 }
 
@@ -851,6 +875,9 @@ GCheckbox cboxW;
 GCheckbox cboxIndependent; 
 GCheckbox cboxEqualizer; 
 GDropList dListHighlight; 
+GCheckbox cboxTargetable; 
+GDropList dListTarget; 
+GCheckbox cboxClickable; 
 GButton buttonResize; 
 GButton buttonLoad; 
 GButton buttonSave; 
@@ -902,3 +929,4 @@ GDropList dListPresets;
 GButton buttonAddGallery; 
 GButton buttonAddRandom; 
 GButton buttonAddExec; 
+GButton buttonCursor; 

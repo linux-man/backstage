@@ -16,51 +16,47 @@ along with Backstage.  If not, see <http://www.gnu.org/licenses/>.
 */
 class Exec extends Node {
   String command;
-  //boolean wasFullScreen = false;
   Process process;
 
   Exec(Exec no) {
-    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, nodes.size(), no.x + 1, no.y, no.highlight, new int[0],
+    this(no.label, no.notes, no.duration, no.beginPaused, no.endPaused, no.independent, no.targetable, nodes.size(), no.x + 1, no.y, no.highlight, new int[0],
     no.command);
   }
 
   Exec() {
-    this("", "", defaultDuration, false, false, false, nodes.size(), -translation, trackHeight, 0, new int[0], "");
+    this("", "", defaultDuration, false, false, false, false, nodes.size(), -translation, trackHeight, 0, new int[0], "");
   }
 
-  Exec(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, int index, int x, int y, int highlight, int[] next,
+  Exec(String label, String notes, float duration, boolean beginPaused, boolean endPaused, boolean independent, boolean targetable, int index, int x, int y, int highlight, int[] next,
   String command) {
-    super("Exec", label, notes, duration, beginPaused, endPaused, independent, index, x, y, highlight, next, iconExec);
+    super("Exec", label, notes, duration, beginPaused, endPaused, independent, targetable, index, x, y, highlight, next, iconExec);
     this.command = command;
   }
 
-  void initializeTurn() {
-    super.initializeTurn();
+  void finalizeTurn() {
+    super.finalizeTurn();
     String[] params = command.split("\\s+(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
     for(int n = 0; n < params.length; n++) params[n] = params[n].replaceAll("^\"|\"$", "");
-
-    //wasFullScreen = isFullScreen();
-    //surface.setVisible(false);//More testing
-    //if(wasFullScreen) switchFullScreen(false);
 
     try {
       execute(params);
     }
     catch(IOException e) {
       println(e.toString());
+      endTime = 0;
     }
   }
 
   void finalizeEnd(boolean fullStop) {
     super.finalizeEnd(fullStop);
-    try {
-      process.destroy();
+    if(process != null) {
+      try {
+        process.destroy();
+      }
+      catch(Exception e) {
+        println(e.toString());
+      }
     }
-    catch(Exception e) {
-      println(e.toString());
-    }
-    //if(wasFullScreen) switchFullScreen(true);//More testing
-    //surface.setVisible(true);
   }
 
   void load() {
@@ -119,6 +115,8 @@ class Exec extends Node {
     labelNotes.moveTo(248, 144);
     notesArea.moveTo(248, 160);
     cboxEqualizer.setVisible(false);
+    cboxClickable.setVisible(false);
+    dListTarget.setVisible(false);
     tm.addControls(textLabel, textDuration, notesArea);
   }
 

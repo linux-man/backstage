@@ -35,8 +35,10 @@ void initializeCp() {
   buttonZip.moveTo(buttonConfig.getX() + buttonConfig.getWidth() * 1, 0);
   buttonDefaultDuration.setVisible(false);
   buttonDefaultDuration.moveTo(buttonConfig.getX() + buttonConfig.getWidth() * 2, 0);
+  buttonCursor.setVisible(false);
+  buttonCursor.moveTo(buttonConfig.getX() + buttonConfig.getWidth() * 3, 0);
   buttonScheme.setVisible(false);
-  buttonScheme.moveTo(buttonConfig.getX() + buttonConfig.getWidth() * 3, 0);
+  buttonScheme.moveTo(buttonConfig.getX() + buttonConfig.getWidth() * 4, 0);
   buttonAddLink.setVisible(false);
   buttonAddLink.moveTo(buttonAdd.getX() + buttonAdd.getWidth() * 1, 0);
   buttonAddText.setVisible(false);
@@ -409,6 +411,7 @@ void buttonsEnabled(boolean e) {
   buttonConfig.setEnabled(e);
   buttonZip.setEnabled(e);
   buttonDefaultDuration.setEnabled(e);
+  buttonCursor.setEnabled(e);
   buttonScheme.setEnabled(e);
   buttonAdd.setEnabled(e);
   buttonAddLink.setEnabled(e);
